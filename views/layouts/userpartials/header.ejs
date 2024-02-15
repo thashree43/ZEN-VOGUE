@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>zenvogue &mdash; Colorlib e-Commerce Template</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700"> 
+    <link rel="stylesheet" href="fonts/icomoon/style.css">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/jquery-ui.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+    <link rel="stylesheet" href="css/aos.css">
+
+    <link rel="stylesheet" href="css/style.css">
+    
+  </head>
+  <body>
+    <header>
+  <style>
+/*     
+/* Reset some default styles */
+/* body, h1, h2, h3, p, ul, li {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+}
+
+
+.site-navbar {
+  border-bottom: 1px solid #e5e5e5;
+  background-color: #fff;
+  position: relative;
+  z-index: 1000;
+}
+
+.site-navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.site-navbar a {
+  color: #333;
+  text-decoration: none;
+}
+
+.site-logo a {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.site-menu {
+  list-style: none;
+  display: flex;
+}
+
+.site-menu li {
+  margin-right: 20px;
+}
+
+.site-menu a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  transition: color 0.3s ease-in-out;
+}
+
+.site-menu a:hover {
+  color: #ff3366; 
+}
+
+.icons-btn {
+  margin-right: 10px;
+}
+
+
+.submenu {
+  display: none;
+  position: absolute;
+  list-style: none;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown:hover .submenu {
+  display: block;
+}
+
+.submenu li {
+  padding: 10px;
+  text-align: left;
+}
+
+
+.search-wishList {
+  display: flex;
+  align-items: center;
+}
+
+
+@media (max-width: 991.98px) {
+  .site-navigation {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .site-navigation.active {
+    display: block;
+  }
+
+  .site-menu {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .site-menu li {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .icons-btn {
+    margin-right: 0;
+  }
+}
+
+.site-navbar {
+  border-bottom: 1px solid #e5e5e5;
+  background-color: #fff;
+  position: relative;
+  z-index: 1000;
+}
+
+.site-navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.site-menu {
+  list-style: none;
+  display: flex;
+}
+
+.site-menu li {
+  margin-right: 10px; 
+}
+
+.site-menu a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  transition: color 0.3s ease-in-out;
+}
+
+.site-menu a:hover {
+  color: #ff3366; 
+/* } */  
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Style for the dropdown menu */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Style for the dropdown button/link */
+.dropdown a {
+  display: block;
+  text-decoration: none;
+  padding: 15px 20px;
+  background-color: #fff;
+  color: #333;
+  /* font-weight: bold; */
+  position: relative;
+  z-index: 1;
+}
+
+/* Style for the dropdown menu items */
+.submenu {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  z-index: 2;
+  top: 100%;
+  left: 0;
+  width: 200px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+    font-weight: bold;
+}
+
+.submenu a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+  transition: background-color 0.3s;
+}
+
+/* Show the submenu when hovering over the dropdown */
+.dropdown:hover .submenu {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Style for the dropdown menu items on hover */
+.submenu a:hover {
+  background-color: #f1f1f1;
+}
+  </style>
+  <div class="site-wrap">
+    
+
+    <div  class="site-navbar bg-white py-2">
+
+      <div class="search-wrap">
+        <div class="container">
+          <a href="#" class="search-close js-search-close"><span class="icon-close2"></span></a>
+          <form action="#" method="post">
+            <input type="text" class="form-control" placeholder="Search keyword and hit enter...">
+          </form>  
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="logo">
+            <div class="site-logo" class="navhsc">
+              <a href="#" class="js-logo-clone">zenvogue</a>
+            </div>
+          </div>
+          <div class="main-nav d-none d-lg-block">
+            <nav class="site-navigation text-right text-md-center" role="navigation">
+              <ul class="site-menu js-clone-nav d-none d-lg-block">
+                <li class="has-children active">
+                  <a href="/">Home</a>
+                  <!-- <ul class="dropdown">
+                    <li><a href="#">Menu One</a></li>
+                    <li><a href="#">Menu Two</a></li>
+                    <li><a href="#">Menu Three</a></li>
+                    <li class="has-children">
+                      <a href="#">Sub Menu</a>
+                      <ul class="dropdown">
+                        <li><a href="#">Menu One</a></li>
+                        <li><a href="#">Menu Two</a></li>
+                        <li><a href="#">Menu Three</a></li>
+                      </ul>
+                    </li>
+                  </ul> -->
+                </li>
+                
+                <li><a href="/shop">Shop</a></li>
+                <li><a href="#">Catalogue</a></li>
+                <li><a href="#">New Arrivals</a></li>
+                <li><a href="#">Contact</a></li>
+
+                  <li class="dropdown">
+                    <a href="#">Account</a>
+                    <ul class="submenu">
+                      <% if(locals.user) { %>
+                        <li><a href="/logout">Logout</a></li>
+                        <li><a href="/myaccount">My Account</a></li>
+                        <li><a href="/wishList">My wishList</a></li>
+                        <% } else { %>
+                          <li><a href="/login">Login</a></li>
+                          <li><a href="/signup">Register</a></li>
+                          <% } %>
+                    </ul>
+                  </li>
+                
+              </ul>
+
+            </nav>
+          </div>
+          <div class="icons">
+            <div class="search-wishList">
+            <a href="#" class="icons-btn d-inline-block js-search-open"><span class="icon-search"></span></a>
+            <a href="#" class="icons-btn d-inline-block"><span class="icon-heart-o"></span></a>
+            <a href="/cart" class="icons-btn d-inline-block bag">
+              <span class="icon-shopping-bag"></span>
+          
+            </a>
+            <a href="#" class="site-menu-toggle js-menu-toggle ml-3 d-inline-block d-lg-none"><span class="icon-menu"></span></a>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</header>

@@ -1,0 +1,176 @@
+<%- include("../layouts/userpartials/header.ejs") %>
+
+<style>
+  #reloadDiv {
+    width: 100%;
+  }
+
+  #subtotal {
+    width: 100%;
+  }
+</style>
+
+<div class="site-section">
+  <div class="container">
+    <% if (cartdata) { %>
+    <div class="row mb-5" id="reloadDiv">
+      <form class="col-md-12" method="post">
+        <div class="site-blocks-table">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th class="product-thumbnail">Image</th>
+                <th class="product-name">Product</th>
+                <th class="product-price">Price</th>
+                <th class="product-quantity">Quantity</th>
+                <th class="product-total">Total</th>
+                <th class="product-remove">Remove</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% cartdata.product.forEach(product => { %>
+              <tr>
+                <td class="product-thumbnail">
+                  <img src="/public/proImage/<%= product.productId.Image[0] %>" alt="Image" class="img-fluid">
+                </td>
+                <td class="product-name">
+                  <h2 class="h5 text-black">
+                    <%= product.productId.name %>
+                  </h2>
+                </td>
+                <td>
+                  $<%= product.productId.price %>
+                </td>
+                <td>
+                  <div class="input-group mb-3" style="max-width: 120px;">
+                    <div class="input-group-prepend">
+                      <button class="btn btn-outline-primary js-btn-minus" type="button" onclick="updatequantity('<%=product.productId._id %>', -1)">−</button>
+                    </div>
+                    <input type="text" class="form-control text-center" value="<%=product.quantity %>" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" onchange="updateTotal(this, '<%=product.productId._id %>', '<%=product.productId.price %>')">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-primary js-btn-plus" type="button" onclick="updatequantity('<%=product.productId._id %>', 1)">+</button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span id="total_<%= product.productId._id %>"><%= product.productId.price * product.quantity %></span>
+                </td>
+                <td><a href="#" class="btn btn-primary height-auto btn-sm" onclick="removecart('<%=product.productId._id %>')">X</a></td>
+              </tr>
+              <% }) %>
+              <tr>
+            </tbody>
+          </table>
+        </div>
+      </form>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="row mb-5">
+          <div class="col-md-6">
+            <button class="btn btn-outline-primary btn-sm btn-block"><a href="/shop">Continue Shopping</a></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 pl-5">
+        <div class="row justify-content-end">
+          <div id="subtotal" class="col-md-7">
+            <div class="row">
+              <div class="col-md-12 text-right border-bottom mb-5">
+                <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <span class="text-black">Subtotal</span>
+              </div>
+              <div class="col-md-6 text-right">
+                <strong class="text-black"><%= subtotal %></strong>
+              </div>
+            </div>
+            <div class="row mb-5">
+              <div class="col-md-6">
+                <span class="text-black">Total</span>
+              </div>
+              <div class="col-md-6 text-right">
+                <strong class="text-black"><%= subtotal %></strong>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <button class="btn btn-primary btn-lg btn-block" onclick="window.location='/checkout'">Proceed To Checkout</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% } else { %>
+  <h1 style="font-family: Verdana, Geneva, Tahoma, sans-serif;">your cart is empty</h1>
+  <% } %>
+
+  <script>
+    function updatequantity(productId, count) {
+      const data = { productId, count };
+      fetch('/updatecart', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then((response) => {
+          if (response.success) {
+            $("#reloadDiv").load('/cart #reloadDiv');
+            $("#subtotal").load('/cart #subtotal');
+          } else {
+            swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: response.message,
+            });
+          }
+        })
+        .catch(error => console.error('Error in updating cart', error))
+    }
+
+    function removecart(productId) {
+      fetch('/removecart', {
+          method: "post",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ productId }),
+        })
+        .then(response => response.json())
+        .then(response => {
+          if (response.success) {
+            console.log(response.success);
+            $("#reloadDiv").load('/cart #reloadDiv');
+            Swal.fire({
+              title: "Item Removed!",
+              text: "The item has been successfully removed from your cart.",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 5000,
+            });
+          } else {
+            console.error('Error removing item:', response.error);
+          }
+        })
+        .catch(error => {
+          console.error('Error removing item:', error);
+        });
+    }
+
+    function updateTotal(inputElement, productId, price) {
+      const quantity = parseInt(inputElement.value);
+      const total = quantity * price;
+      document.getElementById('total_' + productId).innerText = total.toFixed(2);
+    }
+  </script>
+
+  <%- include("../layouts/userpartials/footer.ejs") %>

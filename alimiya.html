@@ -1,0 +1,541 @@
+<%- include("../layouts/userpartials/header.ejs") %>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+<div class="bg-light py-3">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 mb-0"><a href="/">Home</a> <span class="mx-2 mb-0">/</span> <a href="cart.html">Cart</a>
+          <span class="mx-2 mb-0">/</span> <strong class="text-black">Checkout</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="site-section">
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-md-12">
+          <div class="border p-4 rounded" role="alert">
+            Returning customer? <a href="#">Click here</a> to login
+          </div>
+        </div>
+      </div>
+      <div id="checkout" class="row">
+        <div class="col-md-6 mb-5 mb-md-0">
+          <h2 class="h3 mb-3 text-black">Billing Details</h2>
+          <div class="p-3 p-lg-5 border">
+
+
+
+            <table class="table-shopping-cart">
+              <!-- Table header -->
+              <tr class="table_head ">
+                <h3 class="p-0" style="letter-spacing:6px;">
+                  SELECT ADDRESS
+                </h3>
+              </tr>
+
+              <!-- Check if userData and userData.address are not null -->
+              <% if (Array.isArray(address) && address.length> 0) { %>
+             
+                  <tr class="table_row">
+                    <% address.forEach((value, index)=> { %>
+                        <% if (value && typeof value==='object' ) { %>
+                    <td class="column-1">
+                      <div class="options fw-bold">
+                        <label for="option<%= index + 1 %>" class="op mb-2">
+                          <input type="radio" id="option<%= index + 1 %>" name="options"
+                            value=""
+                            class="me-1" required>
+                          <div class="address-details mt-2">
+                            <span>
+                                <%= value.fname %>
+                                <%= value.sname %>
+                            </span><br>
+                            <span>
+                                <%= value.address %>
+                            </span>&nbsp;&nbsp;
+                            <span>
+                                <%= value.mobile %>
+                            </span><br>
+                            <span>
+                                <%= value.email %>
+                            </span><br>
+                            <span>
+                                <%= value.city %>
+                            </span><br>
+                            <span>
+                                <%= value.pin %>
+                            </span><br>
+                            
+                            <hr>
+                          </div>
+                        </label>
+                        <br>
+                        <div style="display: flex;">
+                            <div>
+                              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrops" onclick=" editAddress('<%= value.fname %>', '<%= value.sname %>', '<%= value.mobile %>', '<%= value.email %>', '<%= value.address %>', '<%= value.city %>', '<%= value.pin %>', '<%= value._id %>');">Edit</button>
+
+                                
+                            </div>
+                            <div style="margin-left: 10px;">
+                                <a class="genric-btn delete-btn"
+                                    href="/deleteAddressCheck?id=<%= value._id %>">Delete</a>
+                            </div>
+                      </div>
+                    </td>
+               
+                    <% } else { %>
+                        <p>Error: Invalid address data at index <%= index %>
+                        </p>
+                        <% } %>
+                            <% }); %>
+                  
+                        </tr>
+                   
+                      <!-- Handle the case where userData or userData.address is null -->
+                      <tr>
+                        <% } else { %>
+                            <p>No addresses available.</p>
+                            <% } %>
+                      </tr>
+                    
+            </table>
+
+
+
+
+            <div class="form-group">
+
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    Add Address
+                  </button>
+             
+
+
+
+                  <!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Address</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          
+        <div class="container">
+            <form id="checkouts" class="row contact_form" action="" method="post"  onsubmit="return validateForm()">
+              <div class="col-md-6 form-group p_star">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="first"
+                  name="fname"
+                  placeholder="First Name"
+                  required
+                />
+                <div id="firstNameMessage" style="color: red;"></div>
+
+              </div>
+          
+              <div class="col-md-6 form-group p_star">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="sname"
+                  name="sname"
+                  placeholder="Last Name"
+                  required
+                />
+                <div id="lastNameMessage" style="color: red;"></div>
+
+              </div>
+          
+              <div class="col-md-6 form-group p_star">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="mobile"
+                  name="mobile"
+                  placeholder="Mobile"
+                  required
+                />
+                <div id="mobileMessage" style="color: red;"></div>
+
+              </div>
+          
+              <div class="col-md-6 form-group p_star">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="email"
+                  name="email"
+                  placeholder="Email"
+                  required
+                />
+                
+                <div id="emailMessage" style="color: red;"></div>
+
+              </div>
+          
+              <div class="col-md-12 form-group p_star">
+                <textarea
+                  class="form-control"
+                  name="address"
+                  id="address"
+                  rows="3"
+                  placeholder="Address"
+                ></textarea>
+                <div id="addressMessage" style="color: red;"></div>
+              </div>
+          
+              <div class="col-md-12 form-group p_star">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="city"
+                  name="city"
+                  placeholder="City"
+                />
+                <div id="cityMessage" style="color: red;"></div>
+
+              </div>
+          
+              <div class="col-md-12 form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="pin"
+                  name="pin"
+                  placeholder="PIN"
+                  required
+                />
+                <div id="pinMessage" style="color: red;"></div>
+              </div>
+          
+              <!-- <div class="col-md-12 py-4 form-group text-center">
+                <button type="submit" class="btn btn_danger py-4 px-5">SUBMIT</button>
+              </div> -->
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary"  onclick="checkaddaddress()">SUBMIT</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal address end here -->
+
+
+  <!-- edit modal start here -->
+
+
+  <div class="modal fade" id="staticBackdrops" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Address</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modals" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          
+        <div class="container">
+            <form id="checkouts" class="row contact_form" action="/editAddresscheck" method="post" >
+              <div class="col-md-6 form-group p_star">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="firsts"
+                  name="fname"
+                  placeholder="First Name"
+                  required
+                />
+                
+                <div id="firstNameMessage" style="color: red;"></div>
+                <input type="hidden" id="addressId" name="addressId">
+              </div>
+          
+              <div class="col-md-6 form-group p_star">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="snames"
+                  name="sname"
+                  placeholder="Last Name"
+                  required
+                />
+                <div id="lastNameMessage" style="color: red;"></div>
+
+              </div>
+          
+              <div class="col-md-6 form-group p_star">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="mobiles"
+                  name="mobile"
+                  placeholder="Mobile"
+                  required
+                />
+                <div id="mobileMessage" style="color: red;"></div>
+
+              </div>
+          
+              <div class="col-md-6 form-group p_star">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="emails"
+                  name="email"
+                  placeholder="Email"
+                  required
+                />
+                
+                <div id="emailMessage" style="color: red;"></div>
+
+              </div>
+          
+              <div class="col-md-12 form-group p_star">
+                <textarea
+                  class="form-control"
+                  name="address"
+                  id="addresss"
+                  rows="3"
+                  placeholder="Address"
+                ></textarea>
+                <div id="addressMessage" style="color: red;"></div>
+              </div>
+          
+              <div class="col-md-12 form-group p_star">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="citys"
+                  name="city"
+                  placeholder="City"
+                />
+                <div id="cityMessage" style="color: red;"></div>
+
+              </div>
+          
+              <div class="col-md-12 form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="pins"
+                  name="pin"
+                  placeholder="PIN"
+                  required
+                />
+                <div id="pinMessage" style="color: red;"></div>
+              </div>
+          
+              <!-- <div class="col-md-12 py-4 form-group text-center">
+                <button type="submit" class="btn btn_danger py-4 px-5">SUBMIT</button>
+              </div> -->
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary"  onclick="checkupdateaddress()">UPDATE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- end here edit modal -->
+            </div>
+
+          </div>
+        </div>
+        <div class="col-md-6">
+
+          <div class="row mb-5">
+            <div class="col-md-12">
+              <h2 class="h3 mb-3 text-black">Coupon Code</h2>
+              <div class="p-3 p-lg-5 border">
+
+                <label for="c_code" class="text-black mb-3">Enter your coupon code if you have one</label>
+                <div class="input-group w-75">
+                  <input type="text" class="form-control" id="c_code" placeholder="Coupon Code" aria-label="Coupon Code"
+                    aria-describedby="button-addon2">
+                  <div class="input-group-append">
+                    <button class="btn btn-primary btn-sm px-4" type="button" id="button-addon2">Apply</button>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-5">
+            <div class="col-md-12">
+              <h2 class="h3 mb-3 text-black">Your Order</h2>
+              <div class="p-3 p-lg-5 border">
+                <table class="table site-block-order-table mb-5">
+                  <thead>
+                    <th>Product</th>
+                    <th>Total</th>
+                  </thead>
+                  <tbody>
+                   
+                      <tr>
+                       
+                      </tr>
+                    
+                        <tr>
+                          <td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
+                          <td class="text-black">₹ <%= subtotal %>/-
+                             </td>
+                        </tr>
+                        <tr>
+                          <td class="text-black font-weight-bold"><strong>Grand Total</strong></td>
+                          <td class="text-black font-weight-bold"><strong>₹ <%= subtotal %>
+                                </strong></td>
+                        </tr>
+
+                  </tbody>
+                </table>
+
+                <div class="border p-3 mb-3">
+                  <h3 class="h6 mb-0">
+                    <a class="d-block" data-toggle="collapse" href="#collapsebank" role="button" aria-expanded="false"
+                      aria-controls="collapsebank">Payment Methods</a>
+                  </h3>
+
+                  <div class="collapse" id="collapsebank">
+                    <div class="py-2">
+                      <label>
+                        <input type="radio" name="paymentMethod" value="COD"> Cash on Delivery
+                      </label>
+                    </div>
+
+                    <div class="py-2">
+                      <label>
+                        <input type="radio" name="paymentMethod" value="RazorPay"> RazorPay
+                      </label>
+                    </div>
+
+                    <div class="py-2">
+                      <label>
+                        <input type="radio" name="paymentMethod" value="Wallet"> Wallet
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+
+
+                <div class="form-group">
+                  <button id="placeOrder" class="btn btn-primary btn-lg btn-block">Place Order</button>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- </form> -->
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+  <script>
+    function checkaddaddress(){
+        const formData = $('#checkouts').serialize();
+        console.log(formData, "gghsghjwghs");
+
+        $.ajax({
+            type: "POST",
+            url: "/addAddresscheck",
+            data: formData ,
+            success: function (response) {
+                if (response.success) {
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Address Adding!',
+                        text: 'Your Address has been added successfully.',
+                    }).then(() => {
+                      
+                       location.reload() 
+                    });
+                }
+            },
+            error: function (error) {
+                console.log("AJAX Error:", error);
+            }
+        });
+    } 
+
+
+    let OrderId;
+ 
+    // ediitaddress
+    function editAddress(fname, sname, mobile, email, address, city, pin,addressId) {
+      OrderId = address
+    document.getElementById('firsts').value = fname;
+    document.getElementById('snames').value = sname;
+    document.getElementById('mobiles').value = mobile;
+    document.getElementById('emails').value = email;
+    document.getElementById('addresss').value = address;
+    document.getElementById('citys').value = city;
+    document.getElementById('pins').value = pin;
+    document.getElementById('addressId').value = addressId;
+  }
+
+  // Function to update an existing address
+  async function checkupdateaddress(addressId) {
+   
+  
+    const formData = {
+      fname: document.getElementById('firsts').value,
+      sname: document.getElementById('snames').value,
+      mobile: document.getElementById('mobiles').value,
+      email: document.getElementById('emails').value,
+      address: document.getElementById('addresss').value,
+      city: document.getElementById('citys').value,
+      pin: document.getElementById('pins').value,
+      id: document.getElementById('addressId').value,
+    };
+console.log(formData);
+    try {
+      const response = await fetch('/editAddresscheck', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData,OrderId)
+      });
+
+      if (response.ok) {
+        // Address updated successfully, close the modal
+        const modal = new bootstrap.Modal(document.getElementById('staticBackdrops'));
+        modal.hide();
+
+        // Reload or update the UI to reflect the changes
+        window.location.reload(); // or any other action needed
+      } else {
+        console.error('Failed to update address');
+      }
+    } catch (error) {
+      console.error('Error updating address:', error);
+    }
+  }
+
+  </script>
+
+
+
+<%- include("../layouts/userpartials/footer.ejs") %>

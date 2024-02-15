@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <style>
+.otp-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  border-radius: 8px;
+  background-color: #f7f7f7;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+h2 {
+  margin-bottom: 15px;
+  font-size: 20px;
+  font-weight: 300;
+  text-align: center;
+  color: #4b2c80;
+}
+
+.user-message,
+h5 {
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.user-message {
+  color: #27ae60;
+}
+
+h5 {
+  color: #e74c3c;
+}
+.otp-input {
+  border: 2px solid #e5e5e5;
+  border-radius: 5px;
+  height: 40px;
+  width: 40px;
+  outline: none;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  background-color: #fff;
+  margin-right: 10px;
+  transition: all 0.2s ease-in-out;
+}
+
+.otp-input:focus {
+  border-color: #4b2c80;
+}
+.submit-btn {
+  background-color: #4b2c80;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.submit-btn:hover {
+  background-color: #39236f;
+}
+
+#resendOTPBtn {
+  color: #4b2c80;
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 10px;
+  text-decoration: none;
+}
+
+#resendOTPBtn:hover {
+  border-color: #4b2c80;
+}
+#timerDisplay {
+  color: #4b2c80;
+  font-size: 14px;
+  margin-left: 5px;
+}
+
+    </style>
+</head>
+<body>
+    <div class="otp-container">
+        <h2>OTP Verification</h2>
+        <div id = "user-message" class="user-message" style="display: none;">Otp Sent Successfully</div>
+        <form id="otpForm" action="/verifyotp" method="post">
+          <input type="text" class="otp-input" maxlength="1" name="one" required oninput="handleInput(this, 'two', 'backspace')">
+          <input type="text" class="otp-input" maxlength="1" name="two" required oninput="handleInput(this, 'three', 'one')">
+          <input type="text" class="otp-input" maxlength="1" name="three" required oninput="handleInput(this, 'four', 'two')">
+          <input type="text" class="otp-input" maxlength="1" name="four" required oninput="handleInput(this, '', 'three')">
+          <input type="hidden" name="email" value="<%=email%>">
+          <button type="submit" class="submit-btn">Submit</button>
+          <button id="resendOTPBtn">Resend OTP</button>
+          <span id="timerDisplay"></span> seconds remaining
+      </form>
+      
+    
+        <% if (typeof message !== 'undefined') { %>
+            <h5 style="color: red;"><%= message %></h5>
+        <% } %>
+    </div>
+    
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+   function handleInput(currentInput, nextInputName, prevInputName) {
+    const maxLength = parseInt(currentInput.getAttribute('maxlength'), 10);
+    const inputValue = currentInput.value;
+
+    if (inputValue.length >= maxLength) {
+        const nextInput = document.getElementsByName(nextInputName)[0];
+
+        if (nextInput) {
+            nextInput.focus();
+        }
+    } else if (inputValue.length === 0) {
+        const prevInput = document.getElementsByName(prevInputName)[0];
+
+        if (prevInput) {
+            prevInput.focus();
+        }
+    }
+}
+
+   
+  </script>
+  <!-- <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      let countdown = 60; // 1 minutes in seconds
+    const otpForm = document.getElementById('otpForm');
+    const resendButton = document.getElementById('resendOTPBtn'); // Changed the id
+    const timerDisplay = document.getElementById('timerDisplay');
+    const userMessage = document.getElementById('user-message');
+    console.log(timerDisplay)
+    
+    let timer;
+    
+    
+    function updateTimerDisplay() {
+        const minutes = Math.floor(countdown / 60);
+        const seconds = countdown % 60;
+        timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+    
+    function startTimer() {
+        timer = setInterval(function () {
+            countdown--;
+            updateTimerDisplay();
+    
+            if (countdown <= 0) {
+                clearInterval(timer);
+                countdown = 0;
+                updateTimerDisplay();
+                resendButton.disabled = false;
+                resendButton.classList.add('afterTimer');
+            }
+        }, 1000);
+    }
+    
+    updateTimerDisplay(); // Initial display
+    
+    // Start the timer when the page loads
+    startTimer();
+    
+    // // Add event listener to the "Resend" button
+    // resendButton.addEventListener('click', function () {
+    //     fetch('/sentOtp'); // Changed the endpoint
+    //     countdown = 60; // Reset the countdown to  minutes
+    //     updateTimerDisplay();
+    //     resendButton.disabled = true;
+    //     resendButton.classList.remove('afterTimer');
+    //     userMessage.style.display = 'block';
+    //     // Disable the button again
+    //     startTimer(); // Start the timer again
+    // });
+    resendButton.addEventListener('click', function () {
+  if (countdown <= 0) {
+    fetch('/sentOtp'); // Changed the endpoint
+    countdown = 60; // Reset the countdown to 1 minutes
+    updateTimerDisplay();
+    resendButton.disabled = true;
+    resendButton.classList.remove('afterTimer');
+    userMessage.style.display = 'block';
+    // Disable the button again
+    startTimer(); // Start the timer again
+  }
+});
+});
+
+  </script> -->
+
+  <script>
+
+document.addEventListener('DOMContentLoaded', function () {
+  let countdown = 60; // 1 minute in seconds
+  const otpForm = document.getElementById('otpForm');
+  const resendButton = document.getElementById('resendOTPBtn'); // Changed the id
+  const timerDisplay = document.getElementById('timerDisplay');
+  const userMessage = document.getElementById('user-message');
+  let timer;
+  let timerRunning = false;
+
+  function updateTimerDisplay() {
+    const minutes = Math.floor(countdown / 60);
+    const seconds = countdown % 60;
+    timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  }
+
+  function startTimer() {
+    timerRunning = true;
+    timer = setInterval(function () {
+      countdown--;
+      updateTimerDisplay();
+
+      if (countdown <= 0) {
+        clearInterval(timer);
+        countdown = 0;
+        updateTimerDisplay();
+        resendButton.disabled = false;
+        resendButton.classList.add('afterTimer');
+        timerRunning = false;
+      }
+    }, 1000);
+  }
+
+  updateTimerDisplay(); // Initial display
+  startTimer(); // Start the timer when the page loads
+
+  // Add event listener to the "Resend" button
+  resendButton.addEventListener('click', function () {
+    if (countdown <= 0) {
+      fetch('/sentOtp'); // Changed the endpoint
+      countdown = 60; // Reset the countdown to 1 minute
+      updateTimerDisplay();
+      resendButton.disabled = true;
+      resendButton.classList.remove('afterTimer');
+      userMessage.style.display = 'block';
+      // Disable the button again
+      startTimer(); // Start the timer again
+    }
+  });
+
+// Add event listener to the "Submit" button
+otpForm.addEventListener('submit', function (event) {
+  event.preventDefault();
+
+  // Your OTP verification logic here
+  const otpInputs = document.querySelectorAll('.otp-input');
+  const enteredOTP = Array.from(otpInputs).map(input => input.value).join('');
+
+  console.log('Entered OTP:', enteredOTP); // Add this line for debugging
+
+  $.ajax({
+  url: '/verifyotp',
+  method: 'POST',
+  contentType: 'application/json',
+  data: JSON.stringify({
+    email: '<%=email%>',
+    one: otpInputs[0].value,
+    two: otpInputs[1].value,
+    three: otpInputs[2].value,
+    four: otpInputs[3].value,
+  }),
+  success: function (data) {
+    console.log('Verification Response:', data);
+
+    if (data.success) {
+      // Redirect to the homepage or another page upon successful OTP verification
+      location.href = '/';
+    } else {
+      
+      // Display an error message if the OTP is incorrect
+      const errorMessage=data.message || 'Invalid OTP. Please try again.';
+      alert(errorMessage);
+
+      console.error('Error: Invalid OTP');
+      console.log('Entered OTP:', JSON.stringify({
+        one: otpInputs[0].value,
+        two: otpInputs[1].value,
+        three: otpInputs[2].value,
+        four: otpInputs[3].value,
+      }));
+     
+      otpInputs.forEach(function (input) {
+      input.value = '';
+    });
+
+    // Focus on the first OTP input for convenience
+    otpInputs[0].focus();
+    }
+  },
+  error: function (xhr, status, error) {
+  console.error('Error:', error);
+
+  // Log the detailed error response from the server
+  console.log('Error Response:', xhr.responseText);
+
+  // Handle error cases here, showing an appropriate message to the user
+  alert('Error verifying OTP. Please try again.');
+},
+  complete: function () {
+    // Only start the timer if OTP verification failed
+    if (!timerRunning) {
+      startTimer();
+    }
+  }
+});
+});
+
+});
+
+  </script>
+
+</body>
+</html>

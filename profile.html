@@ -1,0 +1,765 @@
+<%- include("../layouts/userpartials/header.ejs") %>
+    <style>
+        a.text-decoration-none {
+            color: black;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a.text-decoration-none:hover {
+            color: #277eca;
+        }
+
+        .product_cartitem_pic img {
+            height: 50px;
+            width: 50px;
+        }
+
+        .product_cartitem_text h6,
+        .product_cartitem_text h5 {
+            font-size: 14px;
+        }
+
+        .breadcrumb-option {
+            background-color: #f8f9fa;
+            padding: 20px 0;
+        }
+
+        .breadcrumb__text h4 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .breadcrumb__links a {
+            color: #333;
+        }
+
+        .breadcrumb__links span {
+            color: #777;
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .card-title::after {
+            content: "";
+            display: block;
+            width: 40px;
+            height: 2px;
+            background-color: #ff0000;
+            margin-top: 10px;
+        }
+
+        .row {
+            margin-left: -15px;
+            margin-right: -15px;
+        }
+
+        .col-lg-4,
+        .col-lg-8 {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .rounded-circle {
+            width: 150px;
+            height: 150px;
+        }
+
+        .mb-3 {
+            margin-bottom: 20px;
+        }
+
+        .list-group-item {
+            padding: 20px;
+            border: none;
+        }
+
+        .list-group-item:first-child {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .list-group-item:last-child {
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .btn-primary {
+            background-color: #ff0000;
+            border-color: #ff0000;
+            transition: background-color 0.3s ease-in-out;
+            padding: 10px;
+        }
+
+        .btn-danger {
+            background-color: #081a22;
+            border-color: #3e7df1;
+            transition: background-color 0.3s ease-in-out;
+            padding: 20px;
+        }
+
+        .btn-primary:hover {
+            background-color: #ff0000;
+            border-color: #ff0000;
+
+        }
+
+        .card-body p {
+            color: black;
+        }
+
+        .card-body p.mb-0 {
+            color: #777;
+        }
+
+        .btn-primary.btn-sm {
+            background-color: #ff0000;
+            border-color: #ff0000;
+            transition: background-color 0.3s ease-in-out;
+            padding: 11px;
+        }
+
+        .btn-primary.btn-sm:hover {
+            background-color: #ff0000;
+            border-color: #ff0000;
+
+        }
+
+        .table-sm td,
+        .table-sm th {
+            font-size: 14px;
+            color: #000;
+        }
+
+        .invoice-btn {
+            display: inline-block;
+            text-decoration: none;
+            background-color: #1c7215;
+            border-radius: 30px;
+            padding: 15px;
+            color: #ffffff;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        /* Style for Edit and Delete buttons */
+        .genric-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .genric-btn:hover {
+            background-color: #ff6347;
+            /* Change the background color on hover */
+            color: #fff;
+            /* Change the text color on hover */
+        }
+
+        /* Style for circle arrow */
+        .circle.arrow {
+            border-radius: 50%;
+        }
+
+        /* Additional styles for danger-border */
+        .danger-border {
+            border: 2px solid #ff6347;
+            /* Set a border color for the button */
+            color: #ff6347;
+            /* Set the text color to match the border color */
+        }
+
+        .danger-border:hover {
+            background-color: #ff6347;
+            color: #fff;
+        }
+
+        .deleted-address {
+            display: none;
+        }
+        .action-buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Style for the action buttons */
+    .action-button {
+        padding: 8px 16px;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    }
+
+    /* Button hover state */
+    .action-button:hover {
+        background-color: #ff6347;
+        color: #fff;
+        border-color: #ff6347;
+    }
+
+    /* Style for the return button specifically */
+    .return-button {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+    }
+
+    .return-button:hover {
+        background-color: #f5c6cb;
+        border-color: #f5c6cb;
+        color: #721c24;
+    }
+    </style>
+    <section style="background-color: white">
+        <div class="container py-5">
+            <div class="row pt-5">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text pt-5">
+                        <h4><i class="fas fa-user-circle"></i> Profile</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background-color: white">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <a href="#" class="text-decoration-none" onclick="toggleProfileForm()"><i
+                                            class="fas fa-edit"></i> Edit Profile</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="#" class="text-decoration-none" onclick="toggleOrders()"><i
+                                            class="fas fa-file-alt"></i> Orders</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="#" class="text-decoration-none" onclick="toggleAddress()">
+                                        <i class="fas fa-map-marked-alt"></i>Manage Address
+                                    </a>
+                                </li>
+
+                                <li class="list-group-item">
+                                    <a href="/walletHistory" class="text-decoration-none"><i class="fas fa-wallet"></i>
+                                        Wallet History</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/logout" class="btn btn-primary ml-3"><i class="fas fa-sign-out-alt"></i>
+                                        Logout</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-8">
+                    <div class="card mb-4" id="userDetails">
+                        <div class="card-body">
+                            <h3 class="card-title">User Profile</h3>
+                            <hr />
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Full Name:</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="mb-0">
+                                        <%= profiledata.name %>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Email:</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="mb-0">
+                                        <%= profiledata.email %>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Mobile:</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="mb-0">
+                                        <%= profiledata.mobile %>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr />
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0 mt-2">Actions:</p>
+                                </div>
+                                <div class="col-sm-9">
+
+                                    <a href="/addaddress" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-plus"></i> Add Address
+                                    </a>
+                                </div>
+                                <div class="wallet my-4" style="padding: 1.7rem; border-radius:
+                                        0.25rem; color: #ffffff;">
+                                    <h2><i class="fas fa-wallet" style="color: #fd0404;"></i> My Wallet</h2>
+                                    <p class="" style="font-weight: 900; font-weight: 500;font-size: larger;"><i
+                                            class="fas fa-rupee-sign"></i> Balance: <b
+                                            style="font-weight: 900; font-weight: 500;font-size: larger; color: #ff0000;">
+
+                                        </b>
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4" id="profileForm" style="display: none">
+                        <div class="card-body">
+                            <h5 class="card-title">Update Profile</h5> 
+                            <hr />name
+                            <form action="/myaccount" method="post" onsubmit="return validateForm()">
+                                <div class="form-group">
+                                    <label for="firstName"><i class="fas fa-user"></i> First Name</label>
+                                    <input type="text" class="form-control" name="name" id="firstName"
+                                        value=" <%= profiledata.name %>" placeholder="Enter your first name" required>
+                                    <input type="hidden" name="profiledata._id" value="{{profiledata._id}}">
+                                    <div id="firstNameMessage" style="color: red;"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" readonly
+                                        value=" <%= profiledata.email %>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="mobile"><i class="fas fa-mobile-alt"></i> Mobile</label>
+                                    <input type="text" class="form-control" id="mobile" name="phone"
+                                        value=" <%= profiledata.mobile %>" placeholder="Enter your mobile number"
+                                        required>
+                                        <div id="mobileMessage" style="color: red;"></div>
+                                </div>
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save
+                                    Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- ... address... -->
+                    <div class="card mb-4" id="addressDetails" style="display: none">
+                        <div class="card-body" id="addressdiv">
+                            <h5 class="card-title">Address Details</h5>
+                            <div class="d-flex justify-content-end">
+                                <a href="/addAddress" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Add New
+                                    Address</a>
+                            </div>
+                            <% if(userAddress && userAddress.address.length> 0) { %>
+                                <% userAddress.address.forEach((address, index)=> { %>
+                                    <hr />
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Address <%= index + 1 %>:</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            Name: <%= address.fname %>
+                                                <%= address.sname %><br>
+                                                    Address: <%= address.address %><br>
+                                                        Email: <%= address.email %><br>
+                                                            Mobile: <%= address.mobile %><br>
+                                                                City: <%= address.city %><br>
+                                                                    Pin: <%= address.pin %><br>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-sm-9 offset-sm-3">
+                                            <a class="genric-btn danger-border circle arrow"
+                                                href="/editaddress?id=<%= address._id %>&index=<%= index %>">Edit</a>
+                                            <a class="genric-btn danger-border circle arrow" href="#"
+                                                onclick="deleteAddress('<%= address._id %>', '<%= index %>')">Delete</a>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <% }) %>
+                                        <% } else { %>
+                                            <p>No address found.</p>
+                                            <% } %>
+                        </div>
+                    </div>
+                    <!-- order list started -->
+                    <div class="card mb-4" id="orderDetails" style="display: none">
+                        <div class="card-body">
+                            <h5 class="card-title">Order Details</h5>
+                            <hr />
+                            <div id="cancelledorder" class="shopping_cart_table">
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Order ID</th>
+                                                <th>Payment method</th>
+                                                <th>Total</th>
+                                                <th>Order Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% if(orders && orders.length>0){ %>
+                                                <% orders.forEach((order)=>{ %>
+                                                    <tr class="cart-item">
+                                                        <td>
+                                                            <%= order._id %>
+                                                                <br>
+                                                                <br>
+
+                                                                <!-- <a href="/invoice?orderId=" class="invoice-btn">
+        <span style="font-weight: bold; text-decoration: underline;">Download Invoice</span>
+    </a> -->
+
+                                                        </td>
+                                                        <td>
+                                                            <%= order.paymentmethod %>
+                                                        </td>
+                                                        <td>₹<%= order.subtotal %>
+                                                        </td>
+                                                        <% if (order.status==='placed' ) { %>
+                                                            <td class="text-success">Order Placed</td>
+                                                            <% } %>
+
+                                                                <% if (order.status==='pending' ) { %>
+                                                                    <td class="text-warning">Order Pending</td>
+                                                                    <% } %>
+
+                                                                        <% if (order.status==='delivered' ) { %>
+                                                                            <td class="text-info">Order Delivered</td>
+                                                                            <% } %>
+
+                                                                                <% if (order.status==='Return Approved'
+                                                                                    ) { %>
+                                                                                    <td class="text-secondary">Order
+                                                                                        Returned</td>
+                                                                                    <% } %>
+
+                                                                                        <% if
+                                                                                            (order.status==='waiting for approval'
+                                                                                            ) { %>
+                                                                                            <td class="text-dark">Order
+                                                                                                Waiting for Approval
+                                                                                            </td>
+                                                                                            <% } %>
+
+                                                                                                <% if
+                                                                                                    (order.status==='cancelled'
+                                                                                                    ) { %>
+                                                                                                    <td
+                                                                                                        class="text-danger">
+                                                                                                        Order Cancelled
+                                                                                                    </td>
+                                                                                                    <% } %>
+                                                                                                    <td>
+                                                                                                        <div class="action-buttons">
+                                                                                                            <a class="action-button" href="/orderview?id=<%= order._id %>">View Order</a>
+                                                                                                            <% if (order.status === "delivered") { %>
+                                                                                                                <a onclick="returnOrder('<%= order._id %>')" class="action-button return-button">Return</a>
+                                                                                                            <% } %>
+                                                                                                            <% if (order.status !== 'cancelled' && order.status !== "Return Approved") { %>
+                                                                                                                <a onclick="cancelOrder('<%= order._id %>')" class="action-button danger-border">Cancel</a>
+                                                                                                            <% } %>
+                                                                                                        </div>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            <% }) %>
+                                                                                        <% } else { %>
+                                                                                            <tr>
+                                                                                                <td colspan="5" class="text-danger">No products found</td>
+                                                                                            </tr>
+                                                                                        <% } %>
+                                                                                    </tbody>
+
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Pagination links/buttons -->
+                        <nav aria-label="Order List Pagination">
+                            <ul class="pagination justify-content-center">
+
+                                <li class="page-item">
+                                    <a class="page-link" id="orderDetails" href="" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+
+                                <li class="page-item">
+                                    <a class="page-link" href="">
+
+                                    </a>
+                                </li>
+
+                                <li class="page-item">
+                                    <a class="page-link" href="" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+    </section>
+    <script>
+        function toggleOrders() {
+
+            if (orderDetails.style.display === "block") {
+                window.scrollTo({
+                    top: orderDetails.getBoundingClientRect().top + window.scrollY,
+                    behavior: 'smooth'
+                });
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        const orderDetails = document.getElementById('orderDetails');
+
+        function toggleOrders() {
+            if (orderDetails.style.display === 'block') {
+                orderDetails.style.display = 'none';
+            } else {
+                orderDetails.style.display = 'block';
+
+                window.scrollTo({
+                    top: orderDetails.getBoundingClientRect().top + window.scrollY,
+                    behavior: 'smooth',
+                });
+            }
+        }
+
+        function toggleProfileForm() {
+            var profileForm = document.getElementById("profileForm");
+            var userDetails = document.getElementById("userDetails");
+            var addressDetails = document.getElementById("addressDetails");
+
+            if (profileForm.style.display === "none") {
+                profileForm.style.display = "block";
+                userDetails.style.display = "none";
+                addressDetails.style.display = "none";
+                orderDetails.style.display = "none";
+            } else {
+                profileForm.style.display = "none";
+                userDetails.style.display = "block";
+            }
+        }
+
+        function toggleAddress() {
+            var userDetails = document.getElementById("userDetails");
+            var addressDetails = document.getElementById("addressDetails");
+            var profileForm = document.getElementById("profileForm");
+
+            if (addressDetails.style.display === "none") {
+                addressDetails.style.display = "block";
+                userDetails.style.display = "none";
+                profileForm.style.display = "none";
+                orderDetails.style.display = "none";
+            } else {
+                addressDetails.style.display = "none";
+                userDetails.style.display = "block";
+            }
+        }
+
+        const orderElement = document.getElementById('yourOrderElementId');
+        orderElement.addEventListener('click', toggleOrders);
+    </script>
+
+    <script>
+        async function deleteAddress(addressId, index) {
+            const confirmation = confirm("Are you sure you want to delete this address?");
+            if (confirmation) {
+                try {
+                    const response = await fetch(`/deleteaddress?id=${addressId}&index=${index}`, {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                    })
+                        .then(response => response.json())
+                        .then((response) => {
+                            if (response.success) {
+                                console.log(response)
+                                // window.location.reload()
+                                $('#addressdiv').load('/myaccount #addressdiv');
+                                const addressElement = document.getElementById(`address-${index}`);
+                                if (addressElement) {
+                                    // Add a CSS class to hide the deleted address
+
+                                    addressElement.classList.add("deleted-address");
+
+                                }
+                            } else {
+                                // Handle error cases if needed
+                                console.error("Error:", response.statusText);
+                            }
+                        })
+
+                } catch (error) {
+                    console.error("Error:", error);
+                }
+            }
+        }
+
+    </script>
+
+
+    <script>
+        const cancelOrder = async (orderId) => {
+            try {
+                const result = await Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You are about to cancel the order. Do you want to proceed?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, cancel it!',
+                    cancelButtonText: 'No, keep it',
+                    reverseButtons: true,
+                });
+
+
+                if (result.isConfirmed) {
+
+                    const response = await fetch('/cancelorder', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ orderId: orderId }),
+                    });
+
+
+                    if (response.ok) {
+                        const responseData = await response.json();
+                        if (responseData.success) {
+                            Swal.fire('Cancelled!', 'Your order has been cancelled.', 'success');
+                            console.log('Order successfully cancelled');
+                            $('#cancelledorder').load('/orderlist #cancelledorder')
+                            console.log("done");
+                        } else {
+                            Swal.fire('Error!', 'Failed to cancel order.', 'error');
+                            console.error('Failed to cancel order');
+                        }
+                    } else {
+                        Swal.fire('Error!', `HTTP error: ${response.status}`, 'error');
+                        console.error('HTTP error:', response.status);
+                    }
+                } else {
+                    Swal.fire('Cancelled', 'Your order is safe :)', 'info');
+                }
+            } catch (error) {
+                Swal.fire('Error!', `An error occurred: ${error.message}`, 'error');
+                console.error('Error:', error.message);
+            }
+        };
+        // return order
+        function returnOrder(orderId) {
+            console.log("Function triggered with orderId:", orderId);
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Do it!",
+                cancelButtonText: "Cancel",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch("/returnOrder", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ orderId: orderId }),
+                    })
+                        .then((response) => response.json())
+                        .then((response) => {
+                            if (response.datelimit) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Return Date expired'
+                                })
+                            } else if (response.return) {
+                                location.reload();
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("Fetch error:", error.message);
+                        });
+                }
+            });
+        }
+    </script>
+   <script>
+    function validateForm() {
+        // Get the values of the first name and mobile number inputs
+        var firstName = document.getElementById('firstName').value;
+        var mobileNumber = document.getElementById('mobile').value;
+
+        // Get the elements to display validation messages
+        var firstNameMessage = document.getElementById('firstNameMessage');
+        var mobileMessage = document.getElementById('mobileMessage');
+
+        // Check if the first name value is only spaces
+        if (/^\s*$/.test(firstName)) {
+            firstNameMessage.innerHTML = "First name cannot be just spaces";
+            return false;
+        } else {
+            firstNameMessage.innerHTML = ""; // Clear previous messages
+        }
+
+        // Check if the mobile number value is only spaces or contains non-numeric characters
+        if (/^\s*$/.test(mobileNumber) || !/^\d+$/.test(mobileNumber)) {
+            mobileMessage.innerHTML = "Mobile number should contain only numeric characters";
+            return false;
+        } else {
+            mobileMessage.innerHTML = ""; // Clear previous messages
+        }
+
+        // Additional validation logic can be added for other fields if needed
+
+        return true; // Allow the form submission
+    }
+</script>
+    <%- include("../layouts/userpartials/footer.ejs") %>

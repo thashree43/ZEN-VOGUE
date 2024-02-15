@@ -1,0 +1,216 @@
+
+    <%- include("../layouts/userpartials/header.ejs") %>
+    <style>
+ 
+.contact_form {
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.btn_danger {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn_danger:hover {
+  background-color: #c82333;
+}
+
+/* Add more styles based on your needs */
+
+    
+
+    </style>
+
+
+        <div class="container">
+            <form class="row contact_form" action="" method="post"  onsubmit="return validateForm()">
+              <div class="col-md-6 form-group p_star">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="first"
+                  name="fname"
+                  placeholder="First Name"
+                  required
+                />
+                <div id="firstNameMessage" style="color: red;"></div>
+
+              </div>
+          
+              <div class="col-md-6 form-group p_star">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="sname"
+                  name="sname"
+                  placeholder="Last Name"
+                  required
+                />
+                <div id="lastNameMessage" style="color: red;"></div>
+
+              </div>
+          
+              <div class="col-md-6 form-group p_star">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="mobile"
+                  name="mobile"
+                  placeholder="Mobile"
+                  required
+                />
+                <div id="mobileMessage" style="color: red;"></div>
+
+              </div>
+          
+              <div class="col-md-6 form-group p_star">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="email"
+                  name="email"
+                  placeholder="Email"
+                  required
+                />
+                
+                <div id="emailMessage" style="color: red;"></div>
+
+              </div>
+          
+              <div class="col-md-12 form-group p_star">
+                <textarea
+                  class="form-control"
+                  name="address"
+                  id="address"
+                  rows="3"
+                  placeholder="Address"
+                ></textarea>
+                <div id="addressMessage" style="color: red;"></div>
+              </div>
+          
+              <div class="col-md-12 form-group p_star">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="city"
+                  name="city"
+                  placeholder="City"
+                />
+                <div id="cityMessage" style="color: red;"></div>
+
+              </div>
+          
+              <div class="col-md-12 form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="pin"
+                  name="pin"
+                  placeholder="PIN"
+                  required
+                />
+                <div id="pinMessage" style="color: red;"></div>
+              </div>
+          
+              <div class="col-md-12 py-4 form-group text-center">
+                <button type="submit" class="btn btn_danger py-4 px-5">SUBMIT</button>
+              </div>
+            </form>
+          </div>
+
+          <script>
+            function validateForm() {
+                // Get the values of form inputs
+                var firstName = document.getElementById('first').value.trim();
+                var lastName = document.getElementById('sname').value.trim();
+                var mobile = document.getElementById('mobile').value.trim();
+                var email = document.getElementById('email').value.trim();
+                var address = document.getElementById('address').value.trim();
+                var city = document.getElementById('city').value.trim();
+                var pin = document.getElementById('pin').value.trim();
+        
+                // Get the elements to display validation messages
+                var firstNameMessage = document.getElementById('firstNameMessage');
+                var lastNameMessage = document.getElementById('lastNameMessage');
+                var mobileMessage = document.getElementById('mobileMessage');
+                var emailMessage = document.getElementById('emailMessage');
+                var addressMessage = document.getElementById('addressMessage');
+                var cityMessage = document.getElementById('cityMessage');
+                var pinMessage = document.getElementById('pinMessage');
+        
+                // Check if the first name value is only spaces
+                if (!firstName) {
+                    firstNameMessage.innerHTML = "First name cannot be empty or just spaces";
+                    return false;
+                } else {
+                    firstNameMessage.innerHTML = ""; // Clear previous messages
+                }
+        
+                // Check if the last name value is only spaces
+                if (!lastName) {
+                    lastNameMessage.innerHTML = "Last name cannot be empty or just spaces";
+                    return false;
+                } else {
+                    lastNameMessage.innerHTML = ""; // Clear previous messages
+                }
+        
+                // Check if the mobile number value is only spaces or contains non-numeric characters
+                if (!mobile || !/^\d+$/.test(mobile)) {
+                    mobileMessage.innerHTML = "Mobile number should be a valid number";
+                    return false;
+                } else {
+                    mobileMessage.innerHTML = ""; // Clear previous messages
+                }
+        
+                // Check if the email value is empty or not a valid email format
+                if (!email || !/\S+@\S+\.\S+/.test(email)) {
+                    emailMessage.innerHTML = "Please enter a valid email address";
+                    return false;
+                } else {
+                    emailMessage.innerHTML = ""; // Clear previous messages
+                }
+        
+                // Check if the address value is only spaces
+                if (!address) {
+                    addressMessage.innerHTML = "Address cannot be empty or just spaces";
+                    return false;
+                } else {
+                    addressMessage.innerHTML = ""; // Clear previous messages
+                }
+        
+                // Check if the city value is only spaces
+                if (!city) {
+                    cityMessage.innerHTML = "City cannot be empty or just spaces";
+                    return false;
+                } else {
+                    cityMessage.innerHTML = ""; // Clear previous messages
+                }
+        
+                // Check if the PIN value is only spaces or contains non-numeric characters
+                if (!pin || !/^\d+$/.test(pin)) {
+                    pinMessage.innerHTML = "PIN should be a valid number";
+                    return false;
+                } else {
+                    pinMessage.innerHTML = ""; // Clear previous messages
+                }
+        
+                return true; // Allow the form submission
+            }
+        </script>
+      
+<%- include("../layouts/userpartials/footer.ejs") %>

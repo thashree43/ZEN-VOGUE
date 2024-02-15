@@ -1,0 +1,211 @@
+
+
+        <%- include("../layouts/userpartials/header.ejs") %>
+        <style>
+/* Style for the login part section */
+.login_part {
+    padding: 80px 0;
+}
+
+/* Style for the form container */
+.login_part_form {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for the form iner */
+.login_part_form_iner {
+    text-align: center;
+}
+
+/* Style for the form heading */
+.login_part_form_iner h3 {
+    color: #333;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+/* Style for the form input fields */
+.login_part_form .form-control {
+    background-color: #f7f7f7;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+/* Style for the form submit button */
+.btn_3 {
+    background-color: #f70000;
+    color: #fff;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Style for the "Already have an account?" text */
+.Already {
+    margin-top: 20px;
+}
+
+.Already p {
+    font-size: 14px;
+    color: #333;
+}
+
+.Already a {
+    color: #f70000;
+    text-decoration: none;
+}
+
+.Already a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive styles */
+@media (max-width: 767px) {
+    .login_part_form {
+        padding: 20px;
+    }
+
+    .login_part_form_iner h3 {
+        font-size: 20px;
+    }
+
+    .login_part_form .form-control {
+        padding: 10px;
+    }
+
+    .btn_3 {
+        padding: 10px 20px;
+    }
+
+    .Already p {
+        font-size: 12px;
+    }
+}
+
+        </style>
+        <section class="login_part">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="login_part_form">`
+                            <div class="login_part_form_iner">
+                                <h3>Welcome Back!<br>Please Sign in now</h3>
+                                <!-- Your login form content here -->
+                                <form class="row contact_form" action="" method="post" onsubmit="return validateForm()">
+                                    <div class="col-md-12 form-group p_star">
+                                        <input type="text" class="form-control" id="name" name="name" value=""
+                                            placeholder="Username">
+                                        <span id="nameError" class="error"></span>
+                                    </div>
+                                    <div class="col-md-12 form-group p_star">
+                                        <input type="email" class="form-control" id="email" name="email" value=""
+                                            placeholder="Email">
+                                        <span id="emailError" class="error"></span>
+                                    </div>
+                                    <div class="col-md-12 form-group p_star">
+                                        <input type="text" class="form-control" id="mobileNumber" name="mobileNumber"
+                                            value="" placeholder="Mobile Number">
+                                        <span id="mobileError" class="error"></span>
+                                    </div>
+                                    <div class="col-md-12 form-group p_star">
+                                        <input type="password" class="form-control" id="password" name="password" value=""
+                                            placeholder="Password">
+                                        <span id="passwordError" class="error"></span>
+                                    </div>
+                                    <div class="col-md-12 form-group p_star">
+                                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                                            value="" placeholder="Confirm Password">
+                                        <span id="confirmPasswordError" class="error"></span>
+                                    </div>
+    
+                                    <% if (typeof message !=='undefined' ) { %>
+                                    <h6 style="color: red;">
+                                        <%= message %>
+                                    </h6>
+                                    <% } %>
+    
+                                    <div class="col-md-12 form-group">
+    
+                                        <button type="submit" value="submit" class="btn_3">
+                                            SIGN UP
+                                        </button>
+                                       
+                                    </div>
+                                    <div class="Already">
+                                    <p >Already have account ? <a href="/login">Login</a></p>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+      
+<script>
+ 
+ function validateForm() {
+    // Reset error messages
+    document.getElementById('nameError').innerHTML = '';
+    document.getElementById('emailError').innerHTML = '';
+    document.getElementById('mobileError').innerHTML = '';
+    document.getElementById('passwordError').innerHTML = '';
+    document.getElementById('confirmPasswordError').innerHTML = '';
+
+    // Get form values
+    var name = document.getElementById('name').value;
+    var email = document.getElementById('email').value;
+    var mobileNumber = document.getElementById('mobileNumber').value;
+    var password = document.getElementById('password').value;
+    var confirmPassword = document.getElementById('confirmPassword').value;
+
+    // Validate name
+    if (name.trim() === '') {
+        document.getElementById('nameError').innerHTML = 'Username is required';
+        return false;
+    }
+
+    // Validate email
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        document.getElementById('emailError').innerHTML = 'Invalid email address';
+        return false;
+    }
+
+    // Validate mobile number (you may customize the validation based on your requirements)
+    if (mobileNumber.trim() === '') {
+        document.getElementById('mobileError').innerHTML = 'Mobile Number is required';
+        return false;
+    }
+
+    // Validate password length and strength
+    if (password.length < 8 || !(/[A-Z]/.test(password)) || !(/[!@#$%^&*(),.?":{}|<>]/.test(password))) {
+        document.getElementById('passwordError').innerHTML = 'Password must be at least 8 characters long and include at least one uppercase letter and one special character';
+        return false;
+    }
+
+    // Validate password match
+    if (password !== confirmPassword) {
+        document.getElementById('confirmPasswordError').innerHTML = 'Passwords do not match';
+        return false;
+    }
+
+    // If all validations pass, return true to submit the form
+    return true;
+}
+
+</script>
+<%- include("../layouts/userpartials/footer.ejs") %>
+
+        <!-- </script>
+</body>
+
+</html> -->

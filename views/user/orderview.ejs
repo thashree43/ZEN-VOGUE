@@ -1,0 +1,158 @@
+<%- include("../layouts/userpartials/header.ejs") %>
+<style>
+.confirmation_part {
+  padding: 50px 0;
+}
+
+.order_card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+.product_card {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #e1e1e1;
+}
+
+.product_image {
+  width: 50px;
+  height: 50px;
+  margin-right: 20px;
+  object-fit: cover;
+}
+
+.product_details {
+  flex: 1;
+}
+
+.product_name {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.product_quantity,
+.product_price {
+  color: #525050;
+  margin: 0;
+}
+
+.product_status {
+  font-weight: bold;
+  color: #0099ff;
+}
+
+.payment_details {
+  margin-top: 20px;
+  border-top: 1px solid #666262;
+  padding-top: 20px;
+}
+
+.payment_title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.list_2 {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list_2 li {
+  margin-bottom: 10px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.list_2 a {
+  color: #000000;
+  text-decoration: none;
+  display: block;
+}
+
+.list_2 span {
+  color: #ff1900;
+  font-weight: bold;
+  float: right;
+}
+.invoice-btn {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #1c7215;
+    border-radius: 30px;
+    padding: 15px;
+    color: #ffffff; 
+    font-weight: bold;
+}
+</style>
+<main class="h-full pb-16 overflow-y-auto">
+    <div class="container grid px-6 mx-auto">
+      <div class="customer-section">
+        <h4>Customer Address:</h4>
+        <p>
+     <%= orderdata.deliveryDetails.fname %> <br>
+     <%= orderdata.deliveryDetails.sname %> <br>
+     <%= orderdata.deliveryDetails.address %> <br>
+     <%= orderdata.deliveryDetails.email %> <br>
+     <%= orderdata.deliveryDetails.mobile %> <br>
+     <%= orderdata.deliveryDetails.city %> <br>
+     <%= orderdata.deliveryDetails.pin %>
+        </p>
+
+        <h4>Customer Name: <%= orderdata.username %>
+            
+        </h4>
+
+        <!-- <form action="">
+          <div>
+            <h4>Status</h4>
+             
+          </div>
+        </form>
+      </div> -->
+
+      
+      <% orderdata.product.forEach((value,index)=>{ %>
+        <!-- Product Card -->
+        <div class="product-card bg-white overflow-hidden rounded-lg shadow-xs">
+            <div class="product-image">
+              <img style="max-width: 80px;" src="/proImage/<%= value.productId.Image[0] %> "  alt="Product Image">
+            </div>
+            <div class="product-details p-4">
+              <h4 class="font-bold text-xl">
+                <%= value.productId.name || 'Product Name' %>
+              </h4>
+              <p><span class="font-semibold">Quantity:</span>
+                <%= value.quantity || 0 %>
+              </p>
+              <p><span class="font-semibold">Method:</span>
+                <%= orderdata.paymentmethod || 'Not Available' %>
+              </p>
+              <p><span class="font-semibold">Status:</span>
+                <%= orderdata.status || 'Not Available' %>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-info bg-white overflow-hidden rounded-lg shadow-xs">
+          <div class="p-4">
+            <h4 class="font-bold text-xl">Product Image</h4>
+            <p class="mt-4"><span class="font-semibold">Description:</span>
+              <%= value.productId.description %>
+            </p>
+          </div>
+        </div>
+
+    <% }) %>
+    </div>
+  </main>
+
+
+<%- include("../layouts/userpartials/footer.ejs") %>
