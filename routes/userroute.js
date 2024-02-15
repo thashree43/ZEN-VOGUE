@@ -143,6 +143,7 @@ userRoute.get("/deleteAddressCheck", cartController.deleteaddresscheckout);
 
 // order
 userRoute.post("/checkout", orderController.placetheorder);
+userRoute.post('/verifypayment',orderController.verifypayment)
 userRoute.get("/ordersuccess", userAuth.isLogin, orderController.orderplaced);
 userRoute.get("/orderlist", userAuth.isLogin, orderController.orderlist);
 userRoute.post("/cancelorder", userAuth.isLogin, orderController.cancelorder);

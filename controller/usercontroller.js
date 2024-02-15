@@ -97,6 +97,7 @@ const getSentOtp = async(req,res)=>{
 const loadotp = async (req, res) => {
   try {
     const email = req.query.email;
+    
     res.render("user/verifyotp", { email: email });
   } catch (error) {
     console.log("Error loading OTP page:", error.message);

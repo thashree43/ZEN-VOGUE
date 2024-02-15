@@ -459,8 +459,8 @@
                                           year:'numeric', month: 'short' , day: '2-digit' }).replace(/\//g, '-' ) %>
                                 </p>
                                 <% if(subtotal>coupon[i].criteriaamount){ %>
-                                <button class="btn btn-primary" onclick="applyCoupon('<%= coupon[i]._id %>')">Apply
-                                  Coupon</button>
+                                  <button class="btn btn-primary" onclick="applyCoupon('<%= coupon[i]._id %>')">Apply
+                                    Coupon</button>
                                   <%}else{%>
                                     <p>Not Applicable</p>
                                     <%}%>
@@ -488,35 +488,38 @@
                 <div class="p-3 p-lg-5 border">
                   <table class="table site-block-order-table mb-5">
                     <thead>
-                        <th>Product</th>
-                        <th>Total</th>
+                      <th>Product</th>
+                      <th>Total</th>
                     </thead>
                     <tbody>
-                
-                        <tr>
-                
-                        </tr>
-                
-                        <tr>
-                            <td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
-                            <td class="text-black">₹ <%= subtotal %>/-</td>
-                        </tr>
-                        <input type="hidden" value="<%= subtotal%>" name="subtotal">
-                        <tr>
-                            <td class="text-black font-weight-bold"><strong>Grand Total</strong></td>
-                            <% if(discountAmount !== subtotal) { %>
-                                <td class="text-black font-weight-bold">
-                                    Original Amount: ₹ <del><%= subtotal %></del><br>
-                                    Discount Amount: ₹ <%= discountAmount %>
-                                </td>
-                            <% } else { %>
-                                <td class="text-black font-weight-bold">₹ <%= subtotal %></td>
+
+                      <tr>
+
+                      </tr>
+
+                      <tr>
+                        <td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
+                        <td class="text-black">₹ <%= subtotal %>/-</td>
+                      </tr>
+                      <input type="hidden" value="<%= subtotal%>" name="subtotal">
+                      <tr>
+                        <td class="text-black font-weight-bold"><strong>Grand Total</strong></td>
+                        <% if(discountAmount !==subtotal) { %>
+                          <td class="text-black font-weight-bold">
+                            Original Amount: ₹ <del>
+                              <%= subtotal %>
+                            </del><br>
+                            Discount Amount: ₹ <%= discountAmount %>
+                          </td>
+                          <% } else { %>
+                            <td class="text-black font-weight-bold">₹ <%= subtotal %>
+                            </td>
                             <% } %>
-                        </tr>
-                
+                      </tr>
+
                     </tbody>
-                </table>
-                
+                  </table>
+
 
                   <div class="border p-3 mb-3">
                     <h3 class="h6 mb-0">
@@ -622,7 +625,8 @@
         pin: document.getElementById('pins').value,
         id: document.getElementById('addressId').value,
       };
-      console.log(formData);
+      console.log("the whole form datas may not seen here", formData);
+
       try {
         const response = await fetch('/editAddresscheck', {
           method: 'POST',
@@ -646,47 +650,14 @@
         console.error('Error updating address:', error);
       }
     }
-// address section in checkout Ends here
+    // address section in checkout Ends here
   </script>
 
 
 
-  
-  <script>
-// order placing start here
 
 
-    $('#checkout').on('submit', function (event) {
-      event.preventDefault();
-
-      const formData = $('#checkout').serialize();
-      console.log(formData);
-      $.ajax({
-        type: 'POST',
-        url: '/checkout',
-        data: formData,
-        success: function (response) {
-          console.log('Form submitted successfully:', response);
-          if (response.success) {
-            const id = response.orderId
-            Swal.fire({
-              icon: 'success',
-              title: 'Order Placed!',
-              text: 'Your order has been placed successfully.',
-            }).then(() => {
-
-              window.location.href = `/ordersuccess?id=${id}`;
-            });
-          }
-
-        },
-        error: function (error) {
-          console.error('Error submitting form:', error.message);
-        },
-      });
-    });
-  </script>
-<!-- coupon section start from here -->
+  <!-- coupon section start from here -->
   <script>
     function applyCoupon(id) {
       console.log("the id may here", id)
@@ -763,19 +734,19 @@
         success: (response) => {
           if (response.success) {
             Swal.fire({
-              title:"Coupon has removed",
-              icon:"success",
-              confirmButtonText:"OK"
-            }).then((result)=>{
-              if(result.isConfirmed){
+              title: "Coupon has removed",
+              icon: "success",
+              confirmButtonText: "OK"
+            }).then((result) => {
+              if (result.isConfirmed) {
                 $('#reloadDiv').load('/checkout #reloadDiv');
               }
             })
-          }else{
+          } else {
             Swal.fire({
-              title:"Error While Removing Coupon",
-              icon:"error",
-              confirmButtonText:"Ok"
+              title: "Error While Removing Coupon",
+              icon: "error",
+              confirmButtonText: "Ok"
             })
           }
         }
@@ -783,26 +754,141 @@
 
     }
   </script>
-<!-- coupon section Ends here -->
+  <!-- coupon section Ends here -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#checkout').on('submit', function (event) {
+        event.preventDefault();
 
-<script>
-  const formdata= $('#checkout').serialize()
-  console.log("the formdata mayhere",formdata);
-  $.ajax({
-    url:'/checkout',
-    method:"post",
-    data:formdata,
-    success:function(response){
-      console.log("ajax response is proceeded",response);
-        if(response.success){
-          let orderId = response.orderId
-          console.log("the order id may here",orderId)
+        const formData = $(this).serialize();
+        console.log(formData);
 
-        }
-    }
+        // AJAX request for COD
+        $.ajax({
+          type: 'POST',
+          url: '/checkout',
+          data: formData,
+          success: function (response) {
+            console.log('Form submitted successfully:', response);
+            if (response && response.success) {
+              const id = response.orderId;
+              console.log("The order ID:", id);
+              Swal.fire({
+                icon: 'success',
+                title: 'Order Placed!',
+                text: 'Your order has been placed successfully.'
+              }).then(() => {
+                window.location.href = `/ordersuccess?id=${id}`;
+              });
+            } else {
+              console.error('Form submission failed:', response);
+              Swal.fire({
+                icon: 'error',
+                title: 'Submission Failed',
+                text: 'There was an error processing your order. Please try again later.'
+              });
+            }
+          },
+          error: function (error) {
+            console.error('Error submitting form:', error.message);
+            Swal.fire({
+              icon: 'error',
+              title: 'Submission Failed',
+              text: 'There was an error processing your order. Please try again later.'
+            });
+          }
+        });
+      });
 
-  })
-</script>
+
+
+
+      $('#placeOrder').click(function (event) {
+        event.preventDefault();
+
+        const formdata = $('#checkout').serialize();
+        console.log("the formdata may here", formdata);
+
+        // AJAX request for Razorpay
+        $.ajax({
+          url: '/checkout',
+          method: "post",
+          data: formdata,
+          success: function (response) {
+            console.log("ajax response is proceeded", response);
+            if (response.success) {
+              let orderId = response.orderId;
+              console.log("the order id may here", orderId);
+              location.href = `/ordersuccess?id=${orderId}`;
+            } else if (response.success === false) {
+              console.log('response.success has become false now');
+              razorpaypayment(response.orders);
+            }
+          }
+        });
+      });
+
+      // Function for  Razorpay payment
+      function razorpaypayment(orders) {
+        console.log("here i have reached ");
+        var options = {
+          "key": "rzp_test_gxkxYQEh9554jI",
+          "amount": orders.amount,
+          "currency": "INR",
+          "name": "ZENVOGUE",
+          "description": "Test Transaction",
+          "image": "https://example.com/your_logo",
+          "order_id": orders.id,
+          "handler": function (response) {
+            verifypayment(response, orders);
+          },
+          "prefill": {
+            "name": "Gaurav Kumar",
+            "email": "gaurav.kumar@example.com",
+            "contact": "9000090000"
+          },
+          "notes": {
+            "address": "Razorpay Corporate Office"
+          },
+          "theme": {
+            "color": "#3399cc"
+          }
+        };
+        let raz = new Razorpay(options);
+        raz.open();
+      }
+
+      // Function for verifying Razorpay payment
+      function verifypayment(Payment, orders) {
+        console.log("now im here buddy")
+        $.ajax({
+          url: '/verifypayment',
+          method: 'post',
+          data: {
+            Payment,
+            orders
+          },
+          success: function (response) {
+            console.log("ajax verify payment response", response);
+            if (response.success) {
+              let orderId = response.orderId
+              console.log("the order id may her for the razo pay and ::", orderId)
+              window.location.href = `/ordersuccess?id=${orderId}`
+            } else if (response.onlineSuccess) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Payment has done',
+                showConfirmButton: false,
+                timer: 1500
+              })
+            }
+          }
+        });
+      }
+    });
+  </script>
+
 
 
 

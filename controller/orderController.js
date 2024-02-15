@@ -6,27 +6,31 @@ const Order = require("../model/orderModel");
 const Cart = require("../model/cartModel");
 const dotenv = require("dotenv");
 dotenv.config();
-const Razorpay = require('razorpay');
+const Razorpay = require("razorpay");
+const crypto = require("crypto");
 
 var instance = new Razorpay({
-  key_id: 'rzp_test_gxkxYQEh9554jI',
-  key_secret: 'Tl6uHaZfMoxrPGIZpVZAmtzM',
+  key_id: "rzp_test_gxkxYQEh9554jI",
+  key_secret: process.env.Razorpay_Secret_key,
 });
 
 // place the order
 const placetheorder = async (req, res) => {
-
   try {
     const userId = req.session.userId;
     const { address, subtotal, paymentMethod } = req.body;
-    
-    const userAddress = await Address.findOne({ "address._id":req.body.addressId});
-    
+
+    const userAddress = await Address.findOne({
+      "address._id": req.body.addressId,
+    });
+
     addressObject = userAddress.address[0];
 
     const userdata = await User.findOne({ _id: req.session.userId });
 
-    const cartdata = await Cart.findOne({ user: userId }).populate("coupondiscount");
+    const cartdata = await Cart.findOne({ user: userId }).populate(
+      "coupondiscount"
+    );
 
     for (const cartProduct of cartdata.product) {
       const productdata = await Product.findOne({ _id: cartProduct.productId });
@@ -41,10 +45,11 @@ const placetheorder = async (req, res) => {
 
     const exprdate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
     const products = cartdata.product;
-    const status = paymentMethod == "COD"? "placed" : "pending";
-    const totalprice = cartdata.coupondiscount ? subtotal-cartdata.coupondiscount.discountamount :subtotal
-    
-  
+    const status = paymentMethod == "COD" ? "placed" : "pending";
+    const totalprice = cartdata.coupondiscount
+      ? subtotal - cartdata.coupondiscount.discountamount
+      : subtotal;
+
     const neworder = new Order({
       deliveryDetails: addressObject,
       user: userdata._id,
@@ -59,8 +64,7 @@ const placetheorder = async (req, res) => {
 
     const saveorder = await neworder.save();
     const orderId = saveorder._id;
-    const totalamount=saveorder. subtotal
-
+    const totalamount = saveorder.subtotal;
 
     if (status == "placed") {
       for (const cartProduct of cartdata.product) {
@@ -72,16 +76,15 @@ const placetheorder = async (req, res) => {
 
       const deletefromcart = await Cart.findOneAndDelete({ user: userId });
       console.log("product deleted from cart ", deletefromcart);
-      return res.json({ success: true, orderId, });
-    }else{
-      const orders= await instance.orders.create({
-        amount:totalamount*100,
-        currency:"INR",
-        receipt:""+orderId
-      })
-      console.log("the razopay orders may here",orders);
-      
-      res.json({orders})
+      return res.json({ success: true, orderId });
+    } else {
+      const orders = await instance.orders.create({
+        amount: totalamount * 100,
+        currency: "INR",
+        receipt: "" + orderId,
+      });
+
+      res.json({ success: false, orders });
     }
   } catch (error) {
     console.log(error.message);
@@ -92,20 +95,62 @@ const placetheorder = async (req, res) => {
   }
 };
 
-
 // ---------------------------------------------------------------------------------------------------------
+const verifypayment = async (req, res) => {
+  try {
+    const userId = req.session.userId;
+    const Data = req.body;
 
+    let hmac = crypto.createHmac("sha256", process.env.Razorpay_Secret_key);
+    hmac.update(Data.razorpay_order_id + "|" + Data.razorpay_payment_id);
+    const hmacvalue = hmac.digest("hex");
 
+    if (hmacvalue == Data.razorpay_signature) {
+      for (const Data of Cart.product) {
+        const { productId, quantity } = Data;
+        await Product.findByIdAndUpdate(
+          { _id: productId },
+          { $inc: { quantity: -quantity } }
+        );
+      }
+    }
+
+    const neworder = await Order.findByIdAndUpdate(
+      { _id: Data.orders.receipt },
+      { $set: { status: "placed" } }
+    );
+
+    const cartdata = await Cart.findOne({ user: userId }).populate(
+      "coupondiscount"
+    );
+
+    for (const Data of cartdata.product) {
+      await Product.updateOne(
+        { _id: Data.productId },
+        { $inc: { quantity: -Data.quantity } }
+      );
+    }
+
+    const orderId = await neworder._id;
+
+    const cartdelete = await Cart.deleteOne({ _id: cartdata._id });
+    console.log("the cartdata has been deleted", cartdelete);
+    res.json({ orderId, success: true });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
 // order success page gettinng
 const orderplaced = async (req, res) => {
   try {
     const id = req.query.id;
+    console.log(" the order id may here for ordersuccess page  ", id);
     const userId = req.session.userId;
-
+    console.log("the user if for order success page may here provide", userId);
     const userdata = await User.findOne({ _id: userId });
     const order = await Order.findOne({ _id: id });
-    res.render("user/ordersuccess", { order });
+    res.render("user/ordersuccess", { order: order });
   } catch (error) {
     console.log(error.message);
   }
@@ -183,7 +228,9 @@ const orderview = async (req, res) => {
 
     const userdata = await User.findOne({ _id: user });
 
-    const orderdata = await Order.findById({ _id: id }).populate('product.productId');
+    const orderdata = await Order.findById({ _id: id }).populate(
+      "product.productId"
+    );
     console.log(orderdata);
 
     res.render("user/orderview", { orderdata, userdata, user });
@@ -194,6 +241,7 @@ const orderview = async (req, res) => {
 
 module.exports = {
   placetheorder,
+  verifypayment,
   orderplaced,
   orderlist,
   cancelorder,
