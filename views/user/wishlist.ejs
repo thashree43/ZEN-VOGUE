@@ -1,0 +1,65 @@
+<%- include("../layouts/userpartials/header.ejs") %>
+<style>
+    .addtocartbutton{
+       background-color: #ee4266;
+    }
+</style>
+<div class="site-section">
+    <div class="container">
+      
+      <div class="row mb-5" id="reloadDiv">
+        <form class="col-md-12" method="post">
+          <div class="site-blocks-table">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th class="product-thumbnail">Image</th>
+                  <th class="product-name">Product</th>
+                  <th class="product-price">Price</th>
+                
+                  <th ></th>
+                  <th class="product-remove">Remove</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="product-thumbnail">
+                    <img src="/public/proImage/" alt="Image" class="img-fluid">
+                  </td>
+                  <td class="product-name">
+                    <h2 class="h5 text-black">
+                    </h2>
+                  </td>
+                  <td>
+                    ₹ <span id="price_"></span>
+                  </td>
+                  <td>
+                    <div class="input-group mb-3" style="max-width: 120px;">
+                        <button class="addtocartbutton" type="submit" >
+                            Add To Cart
+                        </button>
+                     
+                    </div>
+                  </td>
+                  
+                  <td><a href="#" class="btn btn-primary height-auto btn-sm" onclick="removecart('')">X</a></td>
+                </tr>
+                <tr>
+              </tbody>
+            </table>
+          </div>
+        </form>
+      </div>
+  
+      <div class="row mb-5">
+        <div class="col-md-6">
+          <button class="btn btn-outline-primary btn-sm btn-block"><a href="/shop">Continue Shopping</a></button>
+        </div>
+      </div>
+  
+     
+
+
+
+<%- include("../layouts/userpartials/footer.ejs") %>
+

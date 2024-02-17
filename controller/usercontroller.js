@@ -442,13 +442,17 @@ const loadshop = async (req, res) => {
 const myaccount = async(req,res)=>{
   try {
     const userid = req.session.userId
+    const users = await User.findOne({_id:userid})
+    console.log("the user data may here",users);
+
+
     const userAddress = await Address.findOne({
       user:req.session.userId
     })
   
     const profiledata = await User.findById({_id:userid})
     const orders = await Order.find({user:userid}).sort({Date:-1})
-    res.render("user/profile",{profiledata,orders,userAddress,user: req.session.userId})
+    res.render("user/profile",{profiledata,users,orders,userAddress,user: req.session.userId})
   } catch (error) {
     console.log(error.message);
   }

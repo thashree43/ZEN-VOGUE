@@ -3,6 +3,7 @@ const Product = require("../model/productmodel");
 const Category = require("../model/categoryModel");
 const Address = require("../model/addressModel");
 const Cart = require("../model/cartModel");
+const Wishlist = require("../model/wishlistModel")
 const Coupon=require("../model/couponModel");
 const { Long } = require("mongodb");
 
@@ -180,6 +181,9 @@ const loadcheckoutpage = async (req, res) => {
     const currentdate = new Date();
 currentdate.setUTCHours(0, 0, 0, 0);
 
+
+const Wallet = await User.findOne({_id:userId})
+
 const coupon = await Coupon.find({
   expiryDate: { $gt: currentdate },
 });
@@ -201,6 +205,7 @@ const coupon = await Coupon.find({
 
 
     res.render("user/checkout", {
+      Wallet,
       address,
       cartdata,
       subtotal,
@@ -290,6 +295,26 @@ const checkeditaddress = async (req, res,addressId) => {
   }
 };
 
+
+// wishlist part-----------------------------
+
+const getwishlist = async (req,res)=>{
+  try {
+    res.render("user/wishlist")
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+const postwishlist = async (req,res)=>{
+  try {
+    const Id=req.body.Id
+    console.log("this be the id from the wishlist",Id);
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 module.exports = {
   cartopen,
   addtocart,
@@ -299,4 +324,6 @@ module.exports = {
   deleteaddresscheckout,
   checkoutaddaddress,
   checkeditaddress,
+  getwishlist,
+  postwishlist,
 };

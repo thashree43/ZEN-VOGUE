@@ -20,6 +20,7 @@ const placetheorder = async (req, res) => {
     const userId = req.session.userId;
     const { address, subtotal, paymentMethod } = req.body;
 
+    console.log("the payment method is ",req.body.paymentMethod);
     const userAddress = await Address.findOne({
       "address._id": req.body.addressId,
     });
@@ -45,10 +46,11 @@ const placetheorder = async (req, res) => {
 
     const exprdate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
     const products = cartdata.product;
-    const status = paymentMethod == "COD" ? "placed" : "pending";
+    const status = paymentMethod == "COD" || paymentMethod == "Wallet" ? "placed" : "pending";
     const totalprice = cartdata.coupondiscount
       ? subtotal - cartdata.coupondiscount.discountamount
       : subtotal;
+    
 
     const neworder = new Order({
       deliveryDetails: addressObject,
@@ -66,7 +68,7 @@ const placetheorder = async (req, res) => {
     const orderId = saveorder._id;
     const totalamount = saveorder.subtotal;
 
-    if (status == "placed") {
+    if (paymentMethod == "COD") {
       for (const cartProduct of cartdata.product) {
         await Product.findByIdAndUpdate(
           { _id: cartProduct.productId },
@@ -75,9 +77,26 @@ const placetheorder = async (req, res) => {
       }
 
       const deletefromcart = await Cart.findOneAndDelete({ user: userId });
-      console.log("product deleted from cart ", deletefromcart);
       return res.json({ success: true, orderId });
-    } else {
+    }else if(paymentMethod=="Wallet"){
+      const WalletData={
+        amount:-totalprice,
+        date:Date.now(),
+        discription:"The Wallet Amouunt has been used to buy"
+      }
+
+      await User.findOneAndUpdate({_id:userId},{$inc:{wallet:-totalprice},$push:{walletHistory:WalletData}})
+      for (const cartProduct of cartdata.product) {
+        await Product.findByIdAndUpdate(
+          { _id: cartProduct.productId },
+          { $inc: { quantity: -cartProduct.quantity } }
+        );
+      }
+
+      await Cart.findOneAndDelete({ user: userId });
+      return res.json({ success: true, orderId });
+
+    }else {
       const orders = await instance.orders.create({
         amount: totalamount * 100,
         currency: "INR",
@@ -175,6 +194,14 @@ const cancelorder = async (req, res) => {
   try {
     const userId = req.session.userId;
     const orderId = req.body.orderId;
+    const orders = await Order.findById({ _id: orderId })
+    
+    const WalletAmount = orders.subtotal
+    const WalletData = {
+      amount:WalletAmount,
+      date:Date.now(),
+      discription:"Refund for order Cancelling order "
+    }
 
     const data = await Order.findOneAndUpdate(
       { _id: orderId, user: userId },
@@ -183,6 +210,9 @@ const cancelorder = async (req, res) => {
     );
 
     if (data) {
+      await User.findOneAndUpdate({_id:userId},
+        {$inc:{wallet:WalletAmount},$push:{walletHistory:WalletData}})
+
       res.json({ success: true });
     } else {
       res.json({
@@ -205,13 +235,26 @@ const returnorder = async (req, res) => {
 
     const orders = await Order.findById({ _id: orderId });
 
+    const WalletAmount  = orders.subtotal
+
+    const WalletData = {
+      amount:WalletAmount,
+      date:Date.now(),
+      discription:"Refund for order Returning order "
+    }
+
     if (Date.now() > orders.exprdate) {
+
       res.json({ datelimit: true });
     } else {
       await Order.findByIdAndUpdate(
         { _id: orderId },
         { $set: { status: "waiting for approval" } }
       );
+       
+      await User.findOneAndUpdate({_id:userId},
+        {$inc:{wallet:WalletAmount},$push:{walletHistory:WalletData}})
+
       res.json({ return: true });
     }
   } catch (error) {

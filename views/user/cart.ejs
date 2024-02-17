@@ -39,7 +39,7 @@
                   </h2>
                 </td>
                 <td>
-                  $<%= product.productId.price %>
+                  ₹ <span id="price_<%= product.productId._id %>"><%= product.productId.price %></span>
                 </td>
                 <td>
                   <div class="input-group mb-3" style="max-width: 120px;">
@@ -65,50 +65,44 @@
       </form>
     </div>
 
-    <div class="row">
+    <div class="row mb-5">
       <div class="col-md-6">
-        <div class="row mb-5">
+        <button class="btn btn-outline-primary btn-sm btn-block"><a href="/shop">Continue Shopping</a></button>
+      </div>
+    </div>
+
+    <div class="row justify-content-end mb-5">
+      <div id="subtotal" class="col-md-5">
+        <div class="border-bottom mb-5">
+          <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
+        </div>
+        <div class="row mb-3">
           <div class="col-md-6">
-            <button class="btn btn-outline-primary btn-sm btn-block"><a href="/shop">Continue Shopping</a></button>
+            <span class="text-black">Subtotal</span>
+          </div>
+          <div class="col-md-6 text-right">
+            <strong class="text-black"><%= subtotal %></strong>
           </div>
         </div>
-      </div>
-      <div class="col-md-6 pl-5">
-        <div class="row justify-content-end">
-          <div id="subtotal" class="col-md-7">
-            <div class="row">
-              <div class="col-md-12 text-right border-bottom mb-5">
-                <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
-              </div>
-            </div>
-            <div class="row mb-3">
-              <div class="col-md-6">
-                <span class="text-black">Subtotal</span>
-              </div>
-              <div class="col-md-6 text-right">
-                <strong class="text-black"><%= subtotal %></strong>
-              </div>
-            </div>
-            <div class="row mb-5">
-              <div class="col-md-6">
-                <span class="text-black">Total</span>
-              </div>
-              <div class="col-md-6 text-right">
-                <strong class="text-black"><%= subtotal %></strong>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <button class="btn btn-primary btn-lg btn-block" onclick="window.location='/checkout'">Proceed To Checkout</button>
-              </div>
-            </div>
+        <div class="row mb-5">
+          <div class="col-md-6">
+            <span class="text-black">Total</span>
+          </div>
+          <div class="col-md-6 text-right">
+            <strong class="text-black"><%= subtotal %></strong>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <button class="btn btn-primary btn-lg btn-block" onclick="window.location='/checkout'">Proceed To Checkout</button>
           </div>
         </div>
       </div>
     </div>
+
   </div>
   <% } else { %>
-  <h1 style="font-family: Verdana, Geneva, Tahoma, sans-serif;">your cart is empty</h1>
+  <h1 style="font-family: Verdana, Geneva, Tahoma, sans-serif;">Your cart is empty</h1>
   <% } %>
 
   <script>

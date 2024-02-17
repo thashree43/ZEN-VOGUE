@@ -255,13 +255,18 @@
                           </div>
                       </div>
 
-                      <i class="far fa-heart" onclick="addToWishlist('<%= data._id %>')"></i>
 
+                      
                       <div class="product-actions">
                           <div class="add_to_cart">
                               <button type="submit" onclick="addToCart('<%= data._id %>')" class="btn btn-danger mx-3">
                                   Add To Cart
                               </button>
+                          </div>
+                          <div class="wishlist add">
+                            <button type="submit" class="btn btn-danger mx-3" onclick="addToWishlist('<%= data._id %>')" >
+                                Add To Wishlist
+                            </button>
                           </div>
                       </div>
                   </div>
@@ -353,36 +358,36 @@
     }
 
 
-    // function addToWishlist(id) {
-    //   console.log(id);
-    //   $.ajax({
-    //     url: "/addToWishlist",
-    //     method: "post",
-    //     encoded: true,
-    //     data: {
-    //       Id: id,
-    //     },
-    //   }).success((response) => {
-    //     if (response.success) {
-    //       Swal.fire({
-    //         position: "center",
-    //         icon: "success",
-    //         title: "Added To Wishlist",
-    //         showConfirmButton: false,
-    //         timer: 1500,
-    //       });
-    //     } else if (response.check) {
-    //       Swal.fire({
-    //         position: "center",
-    //         icon: "warning",
-    //         title: "Oops...",
-    //         text: "Already added to Wishlist!!",
-    //       });
-    //     } else {
-    //       window.location.href = '/login';
-    //       }
-    //   });
-    // } 
+    function addToWishlist(id) {
+      console.log(id);
+      $.ajax({
+        url: "/wishlist",
+        method: "post",
+        encoded: true,
+        data: {
+          Id: id,
+        },
+      }).success((response) => {
+        if (response.success) {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Added To Wishlist",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        } else if (response.check) {
+          Swal.fire({
+            position: "center",
+            icon: "warning",
+            title: "Oops...",
+            text: "Already added to Wishlist!!",
+          });
+        } else {
+          window.location.href = '/login';
+          }
+      });
+    } 
 
 
 

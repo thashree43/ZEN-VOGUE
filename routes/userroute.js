@@ -154,5 +154,8 @@ userRoute.get("/orderview", orderController.orderview);
 userRoute.post("/applycoupon",couponController.applycoupon)
 userRoute.post('/removecoupon',couponController.removecoupon)
 
+// wishlist
+userRoute.get("/wishlist",cartController.getwishlist)
+userRoute.post("/wishlist",cartController.postwishlist)
 // exporting
 module.exports = userRoute;

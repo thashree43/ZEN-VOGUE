@@ -33,7 +33,30 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
+  wallet: {
+    type: Number,
+    default: 0,
+},
+walletHistory: [{
+    date: {
+        type: Date
+    },
+    amount: {
+        type: Number,
+    },
+    discription:{
+      type:String,
+    }
+}]
 });
+
+
+
+
+
+
+
+
 
 
 UserSchema.pre('findOneAndUpdate', async function (next) {
