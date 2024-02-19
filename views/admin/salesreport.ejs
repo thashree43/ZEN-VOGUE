@@ -441,8 +441,11 @@
                 <% order.forEach(orderItem => { %>
                     <tr>
                         <td><%= orderItem._id %></td>
-                        <td><%= orderItem.product[0].productId.quantity %></td>
-                        <td><%= orderItem.Date.toISOString().substring(0, 10) %></td>
+                        <% if (orderItem.product.length > 0 && orderItem.product[0].productId) { %>
+                          <td><%= orderItem.product[0].productId.name %></td>
+                      <% } else { %>
+                          <td>No Product</td>
+                      <% } %>                        <td><%= orderItem.Date.toISOString().substring(0, 10) %></td>
                         <td><%= orderItem.subtotal %></td>
                         <td><%= orderItem.username %></td>
                     </tr>

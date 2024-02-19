@@ -180,16 +180,19 @@ const orderdelivered = async (req, res) => {
   }
 };
 
-const salepage= async(req,res)=>{
+const salepage = async (req, res) => {
   try {
-    const order=await Order.find({status:"delivered"})
-    console.log("the order in sales page is here",order);
-    res.render("admin/salesreport",{order:order})
+    const order = await Order.find({ status: "delivered" })
+      .populate({
+        path: "product.productId",
+        select: "name", // Only select the name field
+      });
+    console.log("the order in sales page is here", order);
+    res.render("admin/salesreport", { order: order });
   } catch (error) {
     console.log(error.message);
   }
-}
-
+};
 module.exports = {
   adminlogin,
   verifyadminlogin,
