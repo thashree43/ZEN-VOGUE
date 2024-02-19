@@ -298,23 +298,68 @@ const checkeditaddress = async (req, res,addressId) => {
 
 // wishlist part-----------------------------
 
-const getwishlist = async (req,res)=>{
+const getwishlist = async (req, res) => {
   try {
-    res.render("user/wishlist")
+    const userId = req.session.userId;
+    const wishlist = await Wishlist.findOne({ user: userId }).populate('product.productId');
+    res.render("user/wishlist", { wishlist: wishlist,user: req.session.userId });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+
+const postwishlist = async (req, res) => {
+  try {
+    if (req.session.userId) {
+      const Id = req.body.Id;
+      console.log("this be the id from the wishlist", Id);
+      const userId = req.session.userId;
+
+      // Check if the product already exists in the wishlist
+      const wishlistProduct = await Wishlist.findOne({ user: userId, "product.productId": Id });
+
+      if (wishlistProduct) {
+        // Product already exists in the wishlist, send response to inform the client
+        res.json({ check: true });
+      } else {
+        // Product doesn't exist in the wishlist, add it
+        const data = {
+          productId: Id
+        };
+
+        const loadWishlist = await Wishlist.findOneAndUpdate(
+          { user: userId },
+          { $addToSet: { product: data } },
+          { upsert: true, new: true }
+        );
+
+        console.log("after adding to the wishlist", loadWishlist);
+        res.json({ success: true, productId: Id });
+      }
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const removewishlist =async (req,res)=>{
+  try {
+    const {proid,ID}= req.body
+    console.log("the id for removing the produuct from wishlist",req.body);
+    
+    const wishlist = await Wishlist.findOneAndUpdate({user:ID},{$pull:{'product':{'productId':proid}}},{new:true})
+    console.log("the wishlist whole data may here",wishlist)
+
+    if(wishlist){
+      res.json({success:true})
+    }
+
   } catch (error) {
     console.log(error.message);
   }
 }
-
-const postwishlist = async (req,res)=>{
-  try {
-    const Id=req.body.Id
-    console.log("this be the id from the wishlist",Id);
-  } catch (error) {
-    console.log(error.message);
-  }
-}
-
 module.exports = {
   cartopen,
   addtocart,
@@ -326,4 +371,5 @@ module.exports = {
   checkeditaddress,
   getwishlist,
   postwishlist,
+  removewishlist,
 };

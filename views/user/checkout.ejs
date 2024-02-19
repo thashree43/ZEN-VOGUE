@@ -539,12 +539,13 @@
                           <input type="radio" name="paymentMethod" value="RazorPay"> RazorPay
                         </label>
                       </div>
-
+                      <% if(subtotal < Wallet.wallet){ %>
                       <div class="py-2">
                         <label>
                           <input type="radio" name="paymentMethod" value="Wallet"> Wallet
                         </label>
                       </div>
+                      <% } %>
                     </div>
                   </div>
 
@@ -659,69 +660,71 @@
 
   <!-- coupon section start from here -->
   <script>
-    function applyCoupon(id) {
-      console.log("the id may here", id)
-      $.ajax({
-        url: "/applycoupon",
-        method: 'post',
-        data: {
-          id
-        },
-        success: (response) => {
-          console.log(response)
-          if (response.coupon == false) {
-            Swal.fire({
-              title: "No Coupon Available",
-              icon: "error",
-              confirmButtonText: "OK",
-            })
-          } else if (response.coupon == "AlreadyUsed") {
-            Swal.fire({
-              title: " The Coupon has alraedy used",
-              icon: "info",
-              confirmButtonText: "OK",
-            })
-          } else if (response.coupon == "Already Applied") {
-            Swal.fire({
-              title: "The Coupon is in Active",
-              icon: "info",
-              confirmButtonText: "OK",
-            })
-          } else if (response.coupon == 'expired') {
-            Swal.fire({
-              title: "Oops",
-              text: "The Coupon has expired",
-              icon: "info",
-              confirmButtonText: "OK",
-            })
-          } else if (response.coupon) {
-            Swal.fire({
-              title: "Success",
-              text: "Coupon added successfully!",
-              icon: "success",
-              confirmButtonText: "OK",
-            }).then((result) => {
-              if (result.isConfirmed) {
-                const code = response.coupondata.couponcode
 
-                console.log(code, 'vdsij');
-                $('#c_code').val(code);
-                $('#exampleModal').modal('hide');
-                $('#reloadDiv').load('/checkout #reloadDiv');
-                // $('#reloadAmount').load('/checkout #reloadAmount');
-              }
-            });
-          } else {
-            Swal.fire({
-              title: "Something Wrong",
-              icon: "error",
-              confirmButtonText: "OK",
 
-            })
+function applyCoupon(id) {
+  console.log("the id may here", id)
+  $.ajax({
+    url: "/applycoupon",
+    method: 'post',
+     data:{ id },
+    success: (response) => {
+      console.log(response)
+      if (response.coupon == false) {
+        Swal.fire({
+          title: "No Coupon Available",
+          icon: "error",
+          confirmButtonText: "OK",
+        })
+      } else if (response.coupon == "AlreadyUsed") {
+        Swal.fire({
+          title: " The Coupon has alraedy used",
+          icon: "info",
+          confirmButtonText: "OK",
+        })
+      } else if (response.coupon == "Already Applied") {
+        Swal.fire({
+          title: "The Coupon is in Active",
+          icon: "info",
+          confirmButtonText: "OK",
+        })
+      } else if (response.coupon == 'expired') {
+        Swal.fire({
+          title: "Oops",
+          text: "The Coupon has expired",
+          icon: "info",
+          confirmButtonText: "OK",
+        })
+      } else if (response.coupon) {
+        console.log("the coupon has place succefully ",response.coupon);
+        Swal.fire({
+          title: "Success",
+          text: "Coupon added successfully!",
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            const code = response.coupondata.couponcode
+            console.log(code, 'vdsij');
+            $('#c_code').val(code);
+            $('#exampleModal').modal('hide');
+            location.reload(); // Reload the entire page
           }
-        }
-      })
+        });
+      } else {
+        Swal.fire({
+          title: "Something Wrong",
+          icon: "error",
+          confirmButtonText: "OK",
+        })
+      }
     }
+  })
+}
+
+
+
+
 
 
     function remove(id) {
@@ -740,6 +743,8 @@
             }).then((result) => {
               if (result.isConfirmed) {
                 $('#reloadDiv').load('/checkout #reloadDiv');
+                $('#reloadAmount').load('/checkout #reloadAmount');
+              
               }
             })
           } else {
@@ -758,50 +763,58 @@
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
     $(document).ready(function () {
-      $('#checkout').on('submit', function (event) {
-        event.preventDefault();
+      
 
-        const formData = $(this).serialize();
-        console.log(formData);
+// the modification may occur here
+$('#checkout').on('submit', function (event) {
+    event.preventDefault();
 
-        // AJAX request for COD
-        $.ajax({
-          type: 'POST',
-          url: '/checkout',
-          data: formData,
-          success: function (response) {
+    const paymentMethod = $("input[name='paymentMethod']:checked").val(); 
+
+    if (!paymentMethod) {
+        showErrorAlert('Please select a payment method before submitting the form.');
+        return;
+    }
+
+    // Proceed with form submission
+    const formData = $(this).serialize();
+    console.log("Form data:", formData);
+
+    $.ajax({
+        type: 'POST',
+        url: '/checkout',
+        data: formData,
+        success: function (response) {
             console.log('Form submitted successfully:', response);
             if (response && response.success) {
-              const id = response.orderId;
-              console.log("The order ID:", id);
-              Swal.fire({
-                icon: 'success',
-                title: 'Order Placed!',
-                text: 'Your order has been placed successfully.'
-              }).then(() => {
-                window.location.href = `/ordersuccess?id=${id}`;
-              });
+                const orderId = response.orderId;
+                console.log("The order ID:", orderId);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Order Placed!',
+                    text: 'Your order has been placed successfully.'
+                }).then(() => {
+                    window.location.href = `/ordersuccess?id=${orderId}`;
+                });
             } else {
-              console.error('Form submission failed:', response);
-              Swal.fire({
-                icon: 'error',
-                title: 'Submission Failed',
-                text: 'There was an error processing your order. Please try again later.'
-              });
+                console.error('Form submission failed:', response);
+                showErrorAlert('There was an error processing your order. Please try again later.');
             }
-          },
-          error: function (error) {
+        },
+        error: function (error) {
             console.error('Error submitting form:', error.message);
-            Swal.fire({
-              icon: 'error',
-              title: 'Submission Failed',
-              text: 'There was an error processing your order. Please try again later.'
-            });
-          }
-        });
-      });
+            showErrorAlert('There was an error processing your order. Please try again later.');
+        }
+    });
+});
 
-
+function showErrorAlert(message) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Submission Failed',
+        text: message
+    });
+}
 
 
       $('#placeOrder').click(function (event) {

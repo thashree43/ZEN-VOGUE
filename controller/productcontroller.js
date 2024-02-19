@@ -109,6 +109,7 @@ const editproduct = async (req, res) => {
           message: "4 Images Only Needed",
           productData,
           Datas,
+          
         });
       } else {
         for (let i = 0; i < req.files.length; i++) {

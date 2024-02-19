@@ -180,6 +180,16 @@ const orderdelivered = async (req, res) => {
   }
 };
 
+const salepage= async(req,res)=>{
+  try {
+    const order=await Order.find({status:"delivered"})
+    console.log("the order in sales page is here",order);
+    res.render("admin/salesreport",{order:order})
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 module.exports = {
   adminlogin,
   verifyadminlogin,
@@ -191,4 +201,5 @@ module.exports = {
   orderstatus,
   orderdelivered,
   ordercancel,
+  salepage,
 };

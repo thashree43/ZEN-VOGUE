@@ -196,8 +196,10 @@ const verifyotp = async (req, res) => {
       res.json({ success: true });
     } else {
       // Returning a JSON response for invalid OTP
-      res.status(400).json({ success: false, message: 'Invalid OTP' });
-    }
+      res.render("user/verifyotp", {
+        message: "Invalid OTP",
+        email,
+      });    }
   } catch (error) {
     console.log("Error in verifyotp:", error.message);
     // Returning a JSON response for internal server error
@@ -408,21 +410,46 @@ const userlogout = async (req, res) => {
 
 
 // To load shop in user side
+// const loadshop = async (req, res) => {
+//   try {
+//     const productdetail = await Product.find({is_Listed: true }).populate(
+//       "category"
+//     );
+//     const products = productdetail.filter((product) => {
+//       if (product.category && product.category.is_Listed == 1) {
+//         return product;
+//       }
+//     });
+//     res.render("user/shop", { products , user: req.session.userId});
+//   } catch (error) {
+//     console.log("Error:", error.message);
+//   }
+// };
+
+
 const loadshop = async (req, res) => {
   try {
-    const productdetail = await Product.find({is_Listed: true }).populate(
-      "category"
-    );
-    const products = productdetail.filter((product) => {
-      if (product.category && product.category.is_Listed == 1) {
-        return product;
+      let query = { is_Listed: true };
+      if (req.query.category) {
+          query.category = req.query.category;
       }
-    });
-    res.render("user/shop", { products , user: req.session.userId});
+
+      const productdetail = await Product.find(query).populate("category");
+      const products = productdetail.filter(product => {
+          if (product.category && product.category.is_Listed == 1) {
+              return product;
+          }
+      });
+
+      // Fetch categories for dropdown
+      const categories = await Category.find({});
+
+      res.render("user/shop", { products, categories, user: req.session.userId });
   } catch (error) {
-    console.log("Error:", error.message);
+      console.log("Error:", error.message);
   }
 };
+
 
 // product details showing 
  const productdetail = async(req,res)=>{

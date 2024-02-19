@@ -138,192 +138,103 @@ h5 {
 
    
   </script>
-  <!-- <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      let countdown = 60; // 1 minutes in seconds
+  
+
+  <script>
+   document.addEventListener('DOMContentLoaded', function () {
+    let countdown = parseInt(localStorage.getItem('otpCountdown')) || 60; // Retrieve countdown value from local storage or set to default (60 seconds)
     const otpForm = document.getElementById('otpForm');
-    const resendButton = document.getElementById('resendOTPBtn'); // Changed the id
+    const resendButton = document.getElementById('resendOTPBtn');
     const timerDisplay = document.getElementById('timerDisplay');
     const userMessage = document.getElementById('user-message');
-    console.log(timerDisplay)
-    
     let timer;
-    
-    
+    let timerRunning = false;
+
     function updateTimerDisplay() {
         const minutes = Math.floor(countdown / 60);
         const seconds = countdown % 60;
         timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     }
-    
+
     function startTimer() {
+        timerRunning = true;
         timer = setInterval(function () {
             countdown--;
             updateTimerDisplay();
-    
+            localStorage.setItem('otpCountdown', countdown); // Store countdown value in local storage
+
             if (countdown <= 0) {
                 clearInterval(timer);
                 countdown = 0;
                 updateTimerDisplay();
                 resendButton.disabled = false;
                 resendButton.classList.add('afterTimer');
+                timerRunning = false;
             }
         }, 1000);
     }
-    
+
     updateTimerDisplay(); // Initial display
-    
-    // Start the timer when the page loads
-    startTimer();
-    
-    // // Add event listener to the "Resend" button
-    // resendButton.addEventListener('click', function () {
-    //     fetch('/sentOtp'); // Changed the endpoint
-    //     countdown = 60; // Reset the countdown to  minutes
-    //     updateTimerDisplay();
-    //     resendButton.disabled = true;
-    //     resendButton.classList.remove('afterTimer');
-    //     userMessage.style.display = 'block';
-    //     // Disable the button again
-    //     startTimer(); // Start the timer again
-    // });
+    startTimer(); // Start the timer when the page loads
+
     resendButton.addEventListener('click', function () {
-  if (countdown <= 0) {
-    fetch('/sentOtp'); // Changed the endpoint
-    countdown = 60; // Reset the countdown to 1 minutes
-    updateTimerDisplay();
-    resendButton.disabled = true;
-    resendButton.classList.remove('afterTimer');
-    userMessage.style.display = 'block';
-    // Disable the button again
-    startTimer(); // Start the timer again
-  }
-});
-});
-
-  </script> -->
-
-  <script>
-
-document.addEventListener('DOMContentLoaded', function () {
-  let countdown = 60; // 1 minute in seconds
-  const otpForm = document.getElementById('otpForm');
-  const resendButton = document.getElementById('resendOTPBtn'); // Changed the id
-  const timerDisplay = document.getElementById('timerDisplay');
-  const userMessage = document.getElementById('user-message');
-  let timer;
-  let timerRunning = false;
-
-  function updateTimerDisplay() {
-    const minutes = Math.floor(countdown / 60);
-    const seconds = countdown % 60;
-    timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-  }
-
-  function startTimer() {
-    timerRunning = true;
-    timer = setInterval(function () {
-      countdown--;
-      updateTimerDisplay();
-
-      if (countdown <= 0) {
-        clearInterval(timer);
-        countdown = 0;
-        updateTimerDisplay();
-        resendButton.disabled = false;
-        resendButton.classList.add('afterTimer');
-        timerRunning = false;
-      }
-    }, 1000);
-  }
-
-  updateTimerDisplay(); // Initial display
-  startTimer(); // Start the timer when the page loads
-
-  // Add event listener to the "Resend" button
-  resendButton.addEventListener('click', function () {
-    if (countdown <= 0) {
-      fetch('/sentOtp'); // Changed the endpoint
-      countdown = 60; // Reset the countdown to 1 minute
-      updateTimerDisplay();
-      resendButton.disabled = true;
-      resendButton.classList.remove('afterTimer');
-      userMessage.style.display = 'block';
-      // Disable the button again
-      startTimer(); // Start the timer again
-    }
-  });
-
-// Add event listener to the "Submit" button
-otpForm.addEventListener('submit', function (event) {
-  event.preventDefault();
-
-  // Your OTP verification logic here
-  const otpInputs = document.querySelectorAll('.otp-input');
-  const enteredOTP = Array.from(otpInputs).map(input => input.value).join('');
-
-  console.log('Entered OTP:', enteredOTP); // Add this line for debugging
-
-  $.ajax({
-  url: '/verifyotp',
-  method: 'POST',
-  contentType: 'application/json',
-  data: JSON.stringify({
-    email: '<%=email%>',
-    one: otpInputs[0].value,
-    two: otpInputs[1].value,
-    three: otpInputs[2].value,
-    four: otpInputs[3].value,
-  }),
-  success: function (data) {
-    console.log('Verification Response:', data);
-
-    if (data.success) {
-      // Redirect to the homepage or another page upon successful OTP verification
-      location.href = '/';
-    } else {
-      
-      // Display an error message if the OTP is incorrect
-      const errorMessage=data.message || 'Invalid OTP. Please try again.';
-      alert(errorMessage);
-
-      console.error('Error: Invalid OTP');
-      console.log('Entered OTP:', JSON.stringify({
-        one: otpInputs[0].value,
-        two: otpInputs[1].value,
-        three: otpInputs[2].value,
-        four: otpInputs[3].value,
-      }));
-     
-      otpInputs.forEach(function (input) {
-      input.value = '';
+        if (countdown <= 0) {
+            fetch('/sentOtp');
+            countdown = 60;
+            updateTimerDisplay();
+            resendButton.disabled = true;
+            resendButton.classList.remove('afterTimer');
+            userMessage.style.display = 'block';
+            startTimer(); // Restart the timer when the "Resend OTP" button is clicked
+        }
     });
 
-    // Focus on the first OTP input for convenience
-    otpInputs[0].focus();
-    }
-  },
-  error: function (xhr, status, error) {
-  console.error('Error:', error);
+    otpForm.addEventListener('submit', function (event) {
+        event.preventDefault();
 
-  // Log the detailed error response from the server
-  console.log('Error Response:', xhr.responseText);
+        const otpInputs = document.querySelectorAll('.otp-input');
+        const enteredOTP = Array.from(otpInputs).map(input => input.value).join('');
 
-  // Handle error cases here, showing an appropriate message to the user
-  alert('Error verifying OTP. Please try again.');
-},
-  complete: function () {
-    // Only start the timer if OTP verification failed
-    if (!timerRunning) {
-      startTimer();
-    }
-  }
+        $.ajax({
+            url: '/verifyotp',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                email: '<%=email%>',
+                one: otpInputs[0].value,
+                two: otpInputs[1].value,
+                three: otpInputs[2].value,
+                four: otpInputs[3].value,
+            }),
+            success: function (data) {
+                if (data.success) {
+                    location.href = '/';
+                } else {
+                    const errorMessage = data.message || 'Invalid OTP. Please try again.';
+                    alert(errorMessage);
+                    otpInputs.forEach(function (input) {
+                        input.value = '';
+                    });
+                    otpInputs[0].focus();
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+                console.log('Error Response:', xhr.responseText);
+                alert('Error verifying OTP. Please try again.');
+            },
+            complete: function () {
+                if (!timerRunning) {
+                    startTimer();
+                }
+            }
+        });
+    });
 });
-});
+</script>
 
-});
-
-  </script>
+    
+    
 
 </body>
 </html>

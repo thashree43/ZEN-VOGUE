@@ -84,9 +84,12 @@ adminRoute.get(
 );
 
 // coupon
-adminRoute.get('/coupon',couponController.loadcoupon)
-adminRoute.get('/addcoupon',couponController.loadaddcoupon)
+adminRoute.get('/coupon',adminauth.isLogin,couponController.loadcoupon)
+adminRoute.get('/addcoupon',adminauth.isLogin,couponController.loadaddcoupon)
 adminRoute.post('/addcoupon',couponController.addcoupon)
 adminRoute.delete('/deletecoupon',couponController.deletecoupon)
+
+// sales
+adminRoute.get('/salesreport',adminController.salepage)
 
 module.exports = adminRoute;

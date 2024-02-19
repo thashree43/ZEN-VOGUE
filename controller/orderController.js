@@ -15,43 +15,163 @@ var instance = new Razorpay({
 });
 
 // place the order
+// const placetheorder = async (req, res) => {
+//   try {
+//     const userId = req.session.userId;
+//     const { address, subtotal, paymentMethod } = req.body;
+
+//     console.log("the payment method is ",req.body.paymentMethod);
+//     const userAddress = await Address.findOne({
+//       "address._id": req.body.addressId,
+//     });
+
+//     addressObject = userAddress.address[0];
+
+//     const userdata = await User.findOne({ _id: req.session.userId });
+
+//     const cartdata = await Cart.findOne({ user: userId }).populate(
+//       "coupondiscount"
+//     );
+
+//     for (const cartProduct of cartdata.product) {
+//       const productdata = await Product.findOne({ _id: cartProduct.productId });
+//       if (cartProduct.quantity > productdata.quantity) {
+//         res.json({
+//           success: false,
+//           message: `Not enough stock available for product: ${productdata.name}`,
+//         });
+//         return;
+//       }
+//     }
+
+//     const exprdate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
+//     const products = cartdata.product;
+//     const status = paymentMethod == "COD" || paymentMethod == "Wallet" ? "placed" : "pending";
+//     const totalprice = cartdata.coupondiscount
+//       ? subtotal - cartdata.coupondiscount.discountamount
+//       : subtotal;
+    
+
+//     const neworder = new Order({
+//       deliveryDetails: addressObject,
+//       user: userdata._id,
+//       username: userdata.name,
+//       paymentmethod: paymentMethod,
+//       product: products,
+//       subtotal: totalprice,
+//       status: status,
+//       Date: Date.now(),
+//       exprdate: exprdate,
+//     });
+
+//     const saveorder = await neworder.save();
+//     const orderId = saveorder._id;
+//     const totalamount = saveorder.subtotal;
+
+//     if (paymentMethod == "COD") {
+//       for (const cartProduct of cartdata.product) {
+//         await Product.findByIdAndUpdate(
+//           { _id: cartProduct.productId },
+//           { $inc: { quantity: -cartProduct.quantity } }
+//         );
+//       }
+
+//       const deletefromcart = await Cart.findOneAndDelete({ user: userId });
+//       return res.json({ success: true, orderId });
+//     }else if(paymentMethod=="Wallet"){
+//       const WalletData={
+//         amount:-totalprice,
+//         date:Date.now(),
+//         discription:"The Wallet Amouunt has been used to buy"
+//       }
+
+//       await User.findOneAndUpdate({_id:userId},{$inc:{wallet:-totalprice},$push:{walletHistory:WalletData}})
+//       for (const cartProduct of cartdata.product) {
+//         await Product.findByIdAndUpdate(
+//           { _id: cartProduct.productId },
+//           { $inc: { quantity: -cartProduct.quantity } }
+//         );
+//       }
+
+//       await Cart.findOneAndDelete({ user: userId });
+//       return res.json({ success: true, orderId });
+
+//     }else {
+//       const orders = await instance.orders.create({
+//         amount: totalamount * 100,
+//         currency: "INR",
+//         receipt: "" + orderId,
+//       });
+
+//       res.json({ success: false, orders });
+//     }
+//   } catch (error) {
+//     console.log(error.message);
+//     res.json({
+//       success: false,
+//       message: "An unexpected error occurred. Please try again.",
+//     });
+//   }
+// };
+
+
 const placetheorder = async (req, res) => {
   try {
     const userId = req.session.userId;
-    const { address, subtotal, paymentMethod } = req.body;
+    const { addressId, subtotal, paymentMethod } = req.body;
 
-    console.log("the payment method is ",req.body.paymentMethod);
+    // Check if addressId and paymentMethod are provided
+    if (!addressId || !paymentMethod) {
+      return res.json({
+        success: false,
+        message: "Please select both address and payment method before placing the order.",
+      });
+    }
+
+    // Fetch user address
     const userAddress = await Address.findOne({
-      "address._id": req.body.addressId,
+      "address._id": addressId,
     });
 
-    addressObject = userAddress.address[0];
+    if (!userAddress) {
+      return res.json({
+        success: false,
+        message: "Invalid address. Please select a valid address.",
+      });
+    }
 
+    const addressObject = userAddress.address[0];
+
+    // Fetch user data
     const userdata = await User.findOne({ _id: req.session.userId });
 
+    // Fetch user cart data
     const cartdata = await Cart.findOne({ user: userId }).populate(
       "coupondiscount"
     );
 
+    // Check if products are in stock
     for (const cartProduct of cartdata.product) {
       const productdata = await Product.findOne({ _id: cartProduct.productId });
       if (cartProduct.quantity > productdata.quantity) {
-        res.json({
+        return res.json({
           success: false,
           message: `Not enough stock available for product: ${productdata.name}`,
         });
-        return;
       }
     }
 
     const exprdate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
     const products = cartdata.product;
-    const status = paymentMethod == "COD" || paymentMethod == "Wallet" ? "placed" : "pending";
+    const status =
+      paymentMethod === "COD" || paymentMethod === "Wallet"
+        ? "placed"
+        : "pending";
     const totalprice = cartdata.coupondiscount
       ? subtotal - cartdata.coupondiscount.discountamount
       : subtotal;
-    
 
+    // Create new order
     const neworder = new Order({
       deliveryDetails: addressObject,
       user: userdata._id,
@@ -68,7 +188,9 @@ const placetheorder = async (req, res) => {
     const orderId = saveorder._id;
     const totalamount = saveorder.subtotal;
 
-    if (paymentMethod == "COD") {
+    // Handle payment methods
+    if (paymentMethod === "COD") {
+      // Deduct product quantities from stock
       for (const cartProduct of cartdata.product) {
         await Product.findByIdAndUpdate(
           { _id: cartProduct.productId },
@@ -76,16 +198,27 @@ const placetheorder = async (req, res) => {
         );
       }
 
+      // Clear user's cart
       const deletefromcart = await Cart.findOneAndDelete({ user: userId });
-      return res.json({ success: true, orderId });
-    }else if(paymentMethod=="Wallet"){
-      const WalletData={
-        amount:-totalprice,
-        date:Date.now(),
-        discription:"The Wallet Amouunt has been used to buy"
-      }
 
-      await User.findOneAndUpdate({_id:userId},{$inc:{wallet:-totalprice},$push:{walletHistory:WalletData}})
+      return res.json({ success: true, orderId });
+    } else if (paymentMethod === "Wallet") {
+      // Deduct total price from user's wallet
+      const WalletData = {
+        amount: -totalprice,
+        date: Date.now(),
+        discription: "The Wallet Amount has been used to buy",
+      };
+
+      await User.findOneAndUpdate(
+        { _id: userId },
+        {
+          $inc: { wallet: -totalprice },
+          $push: { walletHistory: WalletData },
+        }
+      );
+
+      // Deduct product quantities from stock
       for (const cartProduct of cartdata.product) {
         await Product.findByIdAndUpdate(
           { _id: cartProduct.productId },
@@ -93,21 +226,23 @@ const placetheorder = async (req, res) => {
         );
       }
 
+      // Clear user's cart
       await Cart.findOneAndDelete({ user: userId });
-      return res.json({ success: true, orderId });
 
-    }else {
+      return res.json({ success: true, orderId });
+    } else {
+      // Handle other payment methods
       const orders = await instance.orders.create({
         amount: totalamount * 100,
         currency: "INR",
         receipt: "" + orderId,
       });
 
-      res.json({ success: false, orders });
+      return res.json({ success: false, orders });
     }
   } catch (error) {
     console.log(error.message);
-    res.json({
+    return res.json({
       success: false,
       message: "An unexpected error occurred. Please try again.",
     });

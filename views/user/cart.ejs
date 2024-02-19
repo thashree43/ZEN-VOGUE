@@ -12,7 +12,7 @@
 
 <div class="site-section">
   <div class="container">
-    <% if (cartdata) { %>
+    <% if (cartdata && cartdata.product.length > 0) { %>
     <div class="row mb-5" id="reloadDiv">
       <form class="col-md-12" method="post">
         <div class="site-blocks-table">
@@ -58,17 +58,10 @@
                 <td><a href="#" class="btn btn-primary height-auto btn-sm" onclick="removecart('<%=product.productId._id %>')">X</a></td>
               </tr>
               <% }) %>
-              <tr>
             </tbody>
           </table>
         </div>
       </form>
-    </div>
-
-    <div class="row mb-5">
-      <div class="col-md-6">
-        <button class="btn btn-outline-primary btn-sm btn-block"><a href="/shop">Continue Shopping</a></button>
-      </div>
     </div>
 
     <div class="row justify-content-end mb-5">
@@ -99,51 +92,68 @@
         </div>
       </div>
     </div>
+    <% } else { %>
+    <div class="row mb-5">
+      <div class="col-md-12">
+        <h1>Your cart is empty</h1>
+      </div>
+    </div>
+    <% } %>
 
+    <div class="row mb-5">
+      <div class="col-md-6">
+        <button class="btn btn-outline-primary btn-sm btn-block"><a href="/shop">Continue Shopping</a></button>
+      </div>
+    </div>
   </div>
-  <% } else { %>
-  <h1 style="font-family: Verdana, Geneva, Tahoma, sans-serif;">Your cart is empty</h1>
-  <% } %>
+</div>
 
-  <script>
-    function updatequantity(productId, count) {
-      const data = { productId, count };
-      fetch('/updatecart', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then((response) => {
-          if (response.success) {
-            $("#reloadDiv").load('/cart #reloadDiv');
-            $("#subtotal").load('/cart #subtotal');
-          } else {
-            swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: response.message,
-            });
+<script>
+  function updatequantity(productId, count) {
+    const data = { productId, count };
+    fetch('/updatecart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then((response) => {
+        if (response.success) {
+          $("#reloadDiv").load('/cart #reloadDiv');
+          $("#subtotal").load('/cart #subtotal');
+          if (response.cartIsEmpty) {
+            document.querySelector('.container').innerHTML = '<div class="row mb-5"><div class="col-md-12"><h1>Your cart is empty</h1></div></div>';
           }
-        })
-        .catch(error => console.error('Error in updating cart', error))
-    }
+        } else {
+          swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: response.message,
+          });
+        }
+      })
+      .catch(error => console.error('Error in updating cart', error))
+  }
 
-    function removecart(productId) {
-      fetch('/removecart', {
-          method: "post",
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ productId }),
-        })
-        .then(response => response.json())
-        .then(response => {
-          if (response.success) {
-            console.log(response.success);
-            $("#reloadDiv").load('/cart #reloadDiv');
+  function removecart(productId) {
+    fetch('/removecart', {
+        method: "post",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId }),
+      })
+      .then(response => response.json())
+      .then(response => {
+        if (response.success) {
+          console.log(response.success);
+          $("#reloadDiv").load('/cart #reloadDiv');
+          $("#subtotal").load('/cart #subtotal');
+          if (response.cartIsEmpty) {
+            document.querySelector('.container').innerHTML = '<div class="row mb-5"><div class="col-md-12"><h1>Your cart is empty</h1></div></div>';
+          } else {
             Swal.fire({
               title: "Item Removed!",
               text: "The item has been successfully removed from your cart.",
@@ -151,20 +161,22 @@
               showConfirmButton: false,
               timer: 5000,
             });
-          } else {
-            console.error('Error removing item:', response.error);
+            window.location.href='/cart'
           }
-        })
-        .catch(error => {
-          console.error('Error removing item:', error);
-        });
-    }
+        } else {
+          console.error('Error removing item:', response.error);
+        }
+      })
+      .catch(error => {
+        console.error('Error removing item:', error);
+      });
+  }
 
-    function updateTotal(inputElement, productId, price) {
-      const quantity = parseInt(inputElement.value);
-      const total = quantity * price;
-      document.getElementById('total_' + productId).innerText = total.toFixed(2);
-    }
-  </script>
+  function updateTotal(inputElement, productId, price) {
+    const quantity = parseInt(inputElement.value);
+    const total = quantity * price;
+    document.getElementById('total_' + productId).innerText = total.toFixed(2);
+  }
+</script>
 
   <%- include("../layouts/userpartials/footer.ejs") %>

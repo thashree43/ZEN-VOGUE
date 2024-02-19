@@ -28,7 +28,6 @@ const OrderModel = new mongoose.Schema({
         type: Number,
         required: true,
       },
-      
     },
   ],
   // totalamount:{

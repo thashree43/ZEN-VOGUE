@@ -216,3 +216,146 @@ const addtocart = async (req, res) => {
 //     console.log("Error sending OTP email:", error.message);
 //   }
 // };
+
+
+
+
+
+
+
+
+
+
+
+
+// <!-- <script>
+//     document.addEventListener('DOMContentLoaded', function () {
+//       let countdown = 60; // 1 minutes in seconds
+//     const otpForm = document.getElementById('otpForm');
+//     const resendButton = document.getElementById('resendOTPBtn'); // Changed the id
+//     const timerDisplay = document.getElementById('timerDisplay');
+//     const userMessage = document.getElementById('user-message');
+//     console.log(timerDisplay)
+    
+//     let timer;
+    
+    
+//     function updateTimerDisplay() {
+//         const minutes = Math.floor(countdown / 60);
+//         const seconds = countdown % 60;
+//         timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+//     }
+    
+//     function startTimer() {
+//         timer = setInterval(function () {
+//             countdown--;
+//             updateTimerDisplay();
+    
+//             if (countdown <= 0) {
+//                 clearInterval(timer);
+//                 countdown = 0;
+//                 updateTimerDisplay();
+//                 resendButton.disabled = false;
+//                 resendButton.classList.add('afterTimer');
+//             }
+//         }, 1000);
+//     }
+    
+//     updateTimerDisplay(); // Initial display
+    
+    // Start the timer when the page loads
+    // startTimer();
+    
+    // // Add event listener to the "Resend" button
+    // resendButton.addEventListener('click', function () {
+    //     fetch('/sentOtp'); // Changed the endpoint
+    //     countdown = 60; // Reset the countdown to  minutes
+    //     updateTimerDisplay();
+    //     resendButton.disabled = true;
+    //     resendButton.classList.remove('afterTimer');
+    //     userMessage.style.display = 'block';
+    //     // Disable the button again
+    //     startTimer(); // Start the timer again
+    // });
+  //   resendButton.addEventListener('click', function () {
+  // if (countdown <= 0) {
+  //   fetch('/sentOtp'); // Changed the endpoint
+  //   countdown = 60; // Reset the countdown to 1 minutes
+//     updateTimerDisplay();
+//     resendButton.disabled = true;
+//     resendButton.classList.remove('afterTimer');
+//     userMessage.style.display = 'block';
+//     // Disable the button again
+//     startTimer(); // Start the timer again
+//   }
+// });
+// });
+
+//   </script> -->
+
+
+
+    // function applyCoupon(id) {
+    //   console.log("the id may here", id)
+    //   $.ajax({
+    //     url: "/applycoupon",
+    //     method: 'post',
+    //     data: {
+    //       id
+    //     },
+    //     success: (response) => {
+    //       console.log(response)
+    //       if (response.coupon == false) {
+    //         Swal.fire({
+    //           title: "No Coupon Available",
+    //           icon: "error",
+    //           confirmButtonText: "OK",
+    //         })
+    //       } else if (response.coupon == "AlreadyUsed") {
+    //         Swal.fire({
+    //           title: " The Coupon has alraedy used",
+    //           icon: "info",
+    //           confirmButtonText: "OK",
+    //         })
+    //       } else if (response.coupon == "Already Applied") {
+    //         Swal.fire({
+    //           title: "The Coupon is in Active",
+    //           icon: "info",
+    //           confirmButtonText: "OK",
+    //         })
+    //       } else if (response.coupon == 'expired') {
+    //         Swal.fire({
+    //           title: "Oops",
+    //           text: "The Coupon has expired",
+    //           icon: "info",
+    //           confirmButtonText: "OK",
+    //         })
+    //       } else if (response.coupon) {
+    //         console.log("the coupon has place succefully ",response.coupon);
+    //         Swal.fire({
+    //           title: "Success",
+    //           text: "Coupon added successfully!",
+    //           icon: "success",
+    //           confirmButtonText: "OK",
+    //         }).then((result) => {
+    //           if (result.isConfirmed) {
+    //             const code = response.coupondata.couponcode
+
+    //             console.log(code, 'vdsij');
+    //             $('#c_code').val(code);
+    //             $('#exampleModal').modal('hide');
+    //             $('#reloadDiv').load('/checkout #reloadDiv');
+    //             $('#reloadAmount').load('/checkout #reloadAmount');
+    //           }
+    //         });
+    //       } else {
+    //         Swal.fire({
+    //           title: "Something Wrong",
+    //           icon: "error",
+    //           confirmButtonText: "OK",
+
+    //         })
+    //       }
+    //     }
+    //   })
+    // }

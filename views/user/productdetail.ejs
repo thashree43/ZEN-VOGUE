@@ -358,36 +358,44 @@
     }
 
 
+    // adding to wishlist
     function addToWishlist(id) {
-      console.log(id);
-      $.ajax({
-        url: "/wishlist",
-        method: "post",
-        encoded: true,
-        data: {
-          Id: id,
-        },
-      }).success((response) => {
-        if (response.success) {
-          Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "Added To Wishlist",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        } else if (response.check) {
-          Swal.fire({
-            position: "center",
-            icon: "warning",
-            title: "Oops...",
-            text: "Already added to Wishlist!!",
-          });
-        } else {
-          window.location.href = '/login';
-          }
-      });
-    } 
+  console.log(id);
+  $.ajax({
+    url: "/wishlist",
+    method: "post",
+    encoded: true,
+    data: {
+      Id: id,
+    },
+    success: (response) => {
+      if (response.success) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Added To Wishlist",
+          showConfirmButton: false,
+          timer: 1500,
+          
+        });
+        window.location.href = '/wishlist'
+      } else if (response.check) {
+        Swal.fire({
+          position: "center",
+          icon: "warning",
+          title: "Oops...",
+          text: "Already added to Wishlist!!",
+        });
+      } else {
+        window.location.href = '/login';
+      }
+    },
+    error: (jqXHR, textStatus, errorThrown) => {
+      console.log(textStatus, errorThrown);
+      // Handle error if needed
+    }
+  });
+}
 
 
 
