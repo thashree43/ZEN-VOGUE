@@ -334,7 +334,6 @@ const postwishlist = async (req, res) => {
           { upsert: true, new: true }
         );
 
-        console.log("after adding to the wishlist", loadWishlist);
         res.json({ success: true, productId: Id });
       }
     }

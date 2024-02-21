@@ -3,6 +3,7 @@ const adminController = require("../controller/admincontroller");
 const categoryController = require("../controller/categorycontroller");
 const productController = require("../controller/productcontroller");
 const couponController = require("../controller/couponController")
+const offerController = require("../controller/offerController")
 const upload = require("../midlewares/upload");
 const express = require("express");
 
@@ -91,5 +92,9 @@ adminRoute.delete('/deletecoupon',couponController.deletecoupon)
 
 // sales
 adminRoute.get('/salesreport',adminController.salepage)
+adminRoute.post('/salesreport',adminController.salefilter)
 
+
+// offer
+adminRoute.get('/offer',offerController.offeraddmin)
 module.exports = adminRoute;

@@ -171,6 +171,7 @@ const placetheorder = async (req, res) => {
       ? subtotal - cartdata.coupondiscount.discountamount
       : subtotal;
 
+      console.log("the total price is of the order is this ",totalprice);
     // Create new order
     const neworder = new Order({
       deliveryDetails: addressObject,
@@ -210,14 +211,14 @@ const placetheorder = async (req, res) => {
         discription: "The Wallet Amount has been used to buy",
       };
 
-      await User.findOneAndUpdate(
+     const decrease = await User.findOneAndUpdate(
         { _id: userId },
         {
           $inc: { wallet: -totalprice },
           $push: { walletHistory: WalletData },
         }
       );
-
+        console.log("the amount is decreasing from the wallet ",decrease);
       // Deduct product quantities from stock
       for (const cartProduct of cartdata.product) {
         await Product.findByIdAndUpdate(

@@ -182,17 +182,53 @@ const orderdelivered = async (req, res) => {
 
 const salepage = async (req, res) => {
   try {
-    const order = await Order.find({ status: "delivered" })
+    const order = await Order.find()
       .populate({
         path: "product.productId",
-        select: "name", // Only select the name field
-      });
-    console.log("the order in sales page is here", order);
+        select: "name", 
+      })
+      ;
     res.render("admin/salesreport", { order: order });
   } catch (error) {
     console.log(error.message);
   }
 };
+
+const salefilter =async(req,res)=>{
+  try {
+    const fromdate =req.body.fromdate ? new Date(req.body.fromdate) : null
+    fromdate.setHours(0, 0, 0, 0);
+    const todate=req.body.todate ? new Date(req.body.todate) :null
+    todate.setHours(23, 59, 59, 999);
+
+    const currentdate= new Date ()
+
+    console.log("the from date br like this ",fromdate);
+    console.log("the to date be like this ",todate);
+
+    if(fromdate && todate){
+    if(todate < fromdate){
+      let temp =fromdate
+      fromdate = todate
+      todate=temp
+    }
+    }else if(fromdate){
+      todate = currentdate
+    }else if(todate){
+      fromdate = currentdate
+    }
+    
+    const order = await Order.find({Date:{$gte:fromdate,$lte:todate},status:"delivered"})
+    .populate({
+      path: "product.productId",
+      select: "name", 
+    });
+    console.log("the order based on filter",order);
+    res.render("admin/salesreport",{order})
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 module.exports = {
   adminlogin,
   verifyadminlogin,
@@ -205,4 +241,5 @@ module.exports = {
   orderdelivered,
   ordercancel,
   salepage,
+  salefilter,
 };

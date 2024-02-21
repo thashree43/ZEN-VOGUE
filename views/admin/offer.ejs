@@ -27,77 +27,55 @@
   <link rel="shortcut icon" href="/admin/images/favicon.png" />
 
   <style>
-       .container {
-        margin-top: 124px;
-      }
-
-.form-group {
-    margin-bottom: 20px;
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
 }
 
-.table-container {
-    margin-top: 50px;
+.container {
+    max-width: 800px;
+    margin: 20px auto;
 }
 
-.table-container table {
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+.offer-table {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.offer-table table {
     width: 100%;
     border-collapse: collapse;
-    border: 1px solid #ddd;
 }
 
-.table-container th, .table-container td {
-    padding: 8px;
-    border: 1px solid #ddd;
+.offer-table th, .offer-table td {
+    padding: 12px 15px;
     text-align: left;
+    border-bottom: 1px solid #ddd;
 }
 
-.table-container th {
-    background-color: #100126;
+.offer-table th {
+    background-color: #007bff;
+    color: #fff;
+    text-transform: uppercase;
 }
 
-.filter-table {
-    margin-bottom: 20px;
+.offer-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
 }
 
-.filter-table input[type="text"], .filter-table select {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    box-sizing: border-box;
+.offer-table tbody tr:hover {
+    background-color: #e0e0e0;
 }
-
-.button-container {
-    margin-bottom: 20px;
-}
-
-.button-container button {
-    padding: 10px 20px;
-    margin-right: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.button-container button:hover {
-    background-color: #737f74;
-}
-.dropdown-menu .dropdown-item {
-  color: rgb(251, 255, 251);
-  font-weight: 600;
-}
-
-.dropdown-menu .dropdown-item:hover {
-  background-color: lightgreen;
-}
-
-.dropdown-menu .dropdown-item:focus {
-  background-color: lightgreen;
-  outline: none;
-}
-  </style>
+</style>
 
 </head>
 
@@ -180,13 +158,7 @@
             <span class="menu-title">Users</span>
             <!-- <i class="menu-arrow"></i> -->
           </a>
-          <!-- <div class="collapse" id="ui-basic">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="/public//admin/pages/ui-features/buttons.html">Buttons</a></li>
-                <li class="nav-item"> <a class="nav-link" href="/public/admin/pages/ui-features/dropdowns.html">Dropdowns</a></li>
-                <li class="nav-item"> <a class="nav-link" href="/public/admin/pages/ui-features/typography.html">Typography</a></li>
-              </ul>
-            </div> -->
+        
         </li>
         <li class="nav-item menu-items">
           <a class="nav-link" href="/admin/category">
@@ -228,16 +200,7 @@
             <span class="menu-title">Sales Report</span>
             <i class="menu-arrow"></i>
           </a>
-          <!-- <div class="collapse" id="auth">
-            <ul class="nav flex-column sub-menu">
-              <li class="nav-item"> <a class="nav-link" href="/admin/pages/samples/blank-page.html"> Blank Page </a>
-              </li>
-              <li class="nav-item"> <a class="nav-link" href="/admin/pages/samples/error-404.html"> 404 </a></li>
-              <li class="nav-item"> <a class="nav-link" href="/admin/pages/samples/error-500.html"> 500 </a></li>
-              <li class="nav-item"> <a class="nav-link" href="/admin/pages/samples/login.html"> Login </a></li>
-              <li class="nav-item"> <a class="nav-link" href="/admin/pages/samples/register.html"> Register </a></li>
-            </ul>
-          </div> -->
+        
         </li>
         <li class="nav-item menu-items">
           <a class="nav-link"
@@ -413,66 +376,39 @@
         </div>
       </nav>
       <!-- partial -->
+     
+
       <div class="container">
-        <div class="dropdown">
-          <button type="button" class="btn btn-primary dropdown-toggle"
-              data-toggle="dropdown">DOWNLOAD</button>
-          <div class="dropdown-menu">
-              <a class="dropdown-item" href="#" onclick="downloadPDF('printThisDiv')"
-                  style="color: green; font-weight: 600;">Download as PDF</a>
-              <a class="dropdown-item" href="#" onclick="downloadExcel('printThisDiv')"
-                  style="color: green; font-weight: 600;">Download as Excel</a>
-          </div>
-        </div>
-
-
-        <h4 class="text-center">Sales Report</h4>
-        <form id="salesReportForm" class="filter-table" action="/admin/salesreport" method="post">
-          <label for="from-date">From:</label>
-          <input type="date" id="from-date" name="fromdate" required>
-          <label for="to-date">To:</label>
-          <input type="date" id="to-date" name="todate" required>
-          <button type="submit">Filter</button>
-      </form>
-
-<div id="printThisDiv" class="table-container">
-    <% if (order.length > 0) { %>
-        <table>
-            <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Product</th>
-                    <th>Date</th>
-                    <th>PaymentMethod</th>
-                    <th>Status</th>
-                    <th>Total</th>
-                    <th>Customer Name</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% order.forEach(orderItem => { %>
+        <h2>Offers</h2>
+        <div class="offer-table">
+            <table>
+                <thead>
                     <tr>
-                        <td><%= orderItem._id %></td>
-                        <% if (orderItem.product.length > 0 && orderItem.product[0].productId) { %>
-                          <td><%= orderItem.product[0].productId.name %></td>
-                      <% } else { %>
-                          <td>No Product</td>
-                      <% } %>                        
-                        <td><%= orderItem.Date.toISOString().substring(0, 10) %></td>
-                        <td><%= orderItem.paymentmethod %></td>
-                        <td><%= orderItem.status %></td>
-                        <td><%= orderItem.subtotal %></td>
-                        <td><%= orderItem.username %></td>
+                        <th>Offer ID</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Validity</th>
                     </tr>
-                <% }); %>
-            </tbody>
-        </table>
-    <% } else { %>
-        <p>No Sales Have been Occurred</p>
-    <% } %>
-</div>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Special Offer</td>
+                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+                        <td>2024-03-01 to 2024-03-15</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Spring Sale</td>
+                        <td>Nullam ut libero ut quam facilisis mattis.</td>
+                        <td>2024-03-10 to 2024-03-25</td>
+                    </tr>
+                    <!-- Add more rows for additional offers -->
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-</div>
   
         </div>
         </div>
@@ -517,83 +453,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-  <script>
 
-const salesReportForm = document.getElementById('salesReportForm');
-    const fromDateInput = document.getElementById('from-date');
-    const toDateInput = document.getElementById('to-date');
-
-    salesReportForm.addEventListener('submit', (event) => {
-        const fromDate = new Date(fromDateInput.value);
-        const toDate = new Date(toDateInput.value);
-        const today = new Date();
-
-        if (fromDate > today) {
-            event.preventDefault();
-            Swal.fire({
-                icon: 'warning',
-                title: 'Oops...',
-                text: 'From date cannot be greater than today date!',
-            });
-            return;
-        }
-
-        if (toDate > today) {
-            event.preventDefault();
-            Swal.fire({
-                icon: 'warning',
-                title: 'Oops...',
-                text: 'To date cannot be greater than today date!',
-            });
-            return;
-        }
-
-        if (fromDate > toDate) {
-            event.preventDefault();
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'From date cannot be greater than To date.',
-            });
-            return;
-        }
-    });
-
-
-
-       function downloadPDF(divName) {
-            const printContents = document.getElementById(divName).innerHTML;
-            const originalContents = document.body.innerHTML;
-            document.body.innerHTML = printContents;
-            window.print();
-            document.body.innerHTML = originalContents;
-        }
-
-        function downloadExcel(divName) {
-    const table = document.getElementById(divName);
-    const rows = table.getElementsByTagName('tr');
-    let csvContent = "data:text/csv;charset=utf-8,";
-
-    for (const row of rows) {
-        const cells = row.getElementsByTagName('td');
-        const cellValues = [];
-        for (const cell of cells) {
-            cellValues.push(cell.textContent);
-        }
-        csvContent += cellValues.join(',') + '\n';
-    }
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', 'data.csv');
-    document.body.appendChild(link);
-
-    link.click();
-    document.body.removeChild(link);
-}
-
-  </script>
 
 </body>
 
