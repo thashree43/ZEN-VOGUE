@@ -97,4 +97,7 @@ adminRoute.post('/salesreport',adminController.salefilter)
 
 // offer
 adminRoute.get('/offer',offerController.offeraddmin)
+adminRoute.get('/addoffer',offerController.addofferadmin)
+adminRoute.post('/addoffer',offerController.postaddoffer)
+adminRoute.delete('/deleteoffer',offerController.deleteoffer)
 module.exports = adminRoute;

@@ -20,58 +20,53 @@
   <!-- endinject -->
   <!-- Layout styles -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+ 
 
   <link rel="stylesheet" href="/admin/css/style.css">
   <link rel="shortcut icon" href="/admin/images/favicon.png" />
 
   <style>
-    .container {
-      max-width: 1260px;
-      margin: auto;
-      margin-top: 20px;
-    }
+    .content-main {
+    width: 100%;
+}
 
-    .d-flex.justify-content-end {
-      /* Align items to the right */
-      justify-content: flex-end;
-    }
+.card {
+    width: 100%;
+}
 
-    .add_product {
-      /* Green color for the Add Product button */
-      background-color: #28a745;
-      color: #fff;
-      /* White text color */
-      margin-top: 10px;
-      /* Optional: Add some top margin */
-    }
+.card-body {
+    padding: 20px;
+}
 
-    .table thead th {
-      background-color: #f2f2f2;
-      text-align: center;
-    }
+.form-group {
+    margin-bottom: 20px;
+}
 
-    .table tbody tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
+.error-message {
+    color: red;
+}
 
-    .table tbody td:first-child {
-      width: 100px;
-    }
+.container {
+    text-align: center;
+    margin-top: 20px;
+}
 
-    .table tbody td {
-      text-align: center;
-      padding: 10px;
-    }
+.btn-primary {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 
-    .table tbody .btn {
-      margin: 2px;
-    }
+.btn-primary:hover {
+    background-color: #0056b3;
+}
 
-    h2 {
-      color: #333;
-      /* Dark text color */
-    }
-  </style>
+</style>
 
 </head>
 
@@ -154,13 +149,7 @@
             <span class="menu-title">Users</span>
             <!-- <i class="menu-arrow"></i> -->
           </a>
-          <!-- <div class="collapse" id="ui-basic">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="/public//admin/pages/ui-features/buttons.html">Buttons</a></li>
-                <li class="nav-item"> <a class="nav-link" href="/public/admin/pages/ui-features/dropdowns.html">Dropdowns</a></li>
-                <li class="nav-item"> <a class="nav-link" href="/public/admin/pages/ui-features/typography.html">Typography</a></li>
-              </ul>
-            </div> -->
+        
         </li>
         <li class="nav-item menu-items">
           <a class="nav-link" href="/admin/category">
@@ -202,16 +191,7 @@
             <span class="menu-title">Sales Report</span>
             <i class="menu-arrow"></i>
           </a>
-          <!-- <div class="collapse" id="auth">
-            <ul class="nav flex-column sub-menu">
-              <li class="nav-item"> <a class="nav-link" href="/admin/pages/samples/blank-page.html"> Blank Page </a>
-              </li>
-              <li class="nav-item"> <a class="nav-link" href="/admin/pages/samples/error-404.html"> 404 </a></li>
-              <li class="nav-item"> <a class="nav-link" href="/admin/pages/samples/error-500.html"> 500 </a></li>
-              <li class="nav-item"> <a class="nav-link" href="/admin/pages/samples/login.html"> Login </a></li>
-              <li class="nav-item"> <a class="nav-link" href="/admin/pages/samples/register.html"> Register </a></li>
-            </ul>
-          </div> -->
+        
         </li>
         <li class="nav-item menu-items">
           <a class="nav-link"
@@ -244,49 +224,7 @@
             </li>
           </ul>
           <ul class="navbar-nav navbar-nav-right">
-            <!-- <li class="nav-item dropdown d-none d-lg-block">
-              <a class="nav-link btn btn-success create-new-button" id="createbuttonDropdown" data-toggle="dropdown"
-                aria-expanded="false" href="#">+ Create New Project</a>
-              <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
-                aria-labelledby="createbuttonDropdown">
-                <h6 class="p-3 mb-0">Projects</h6>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
-                  <div class="preview-thumbnail">
-                    <div class="preview-icon bg-dark rounded-circle">
-                      <i class="mdi mdi-file-outline text-primary"></i>
-                    </div>
-                  </div>
-                  <div class="preview-item-content">
-                    <p class="preview-subject ellipsis mb-1">Software Development</p>
-                  </div>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
-                  <div class="preview-thumbnail">
-                    <div class="preview-icon bg-dark rounded-circle">
-                      <i class="mdi mdi-web text-info"></i>
-                    </div>
-                  </div>
-                  <div class="preview-item-content">
-                    <p class="preview-subject ellipsis mb-1">UI Development</p>
-                  </div>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
-                  <div class="preview-thumbnail">
-                    <div class="preview-icon bg-dark rounded-circle">
-                      <i class="mdi mdi-layers text-danger"></i>
-                    </div>
-                  </div>
-                  <div class="preview-item-content">
-                    <p class="preview-subject ellipsis mb-1">Software Testing</p>
-                  </div>
-                </a>
-                <div class="dropdown-divider"></div>
-                <p class="p-3 mb-0 text-center">See all projects</p>
-              </div>
-            </li> -->
+           
             <li class="nav-item nav-settings d-none d-lg-block">
               <a class="nav-link" href="#">
                 <i class="mdi mdi-view-grid"></i>
@@ -429,91 +367,51 @@
         </div>
       </nav>
       <!-- partial -->
-      <div class="main-panel">
-        <div class="container mt-4">
-          <div class="d-flex justify-content-end mb-3">
-            <!-- Move the Add Product button to the right -->
-            <a href="/admin/addproduct"> <button class="add_product btn btn-success">Add Product</button></a>
-          </div>
-          <h2>Product List</h2>
-
-          <div class="table-responsive">
-            <table class="table table-bordered table-hover">
-              <thead>
-                <tr>
-                  <th>Image</th>
-                  <th>Product Name</th>
-                  <th>Price</th>
-                  <th>Quantity</th>    
-                  <th></th>
-                  <th>Action</th>
-                  
-                </tr>
-              </thead>
-              <tbody>
-                <% if(Products.length>0){%>
-                  <% for(let i=0;i<Products.length;i++){ %>
-                    <tr>
-                      <td>
-                        <img src="/proImage/<%= Products[i].Image[0] %>" alt="">
-                      </td>
-                      <td>
-                        <%= Products[i].name %>
-                      </td>
-                      <td>
-                        <%= Products[i].price %>
-                      </td>
-                      <td>
-                        <%= Products[i].quantity %>
-                      </td>
-                      <td>
-                        <button class="btn btn-inverse-primary btn-sm"><a
-                            href="/admin/editProduct?productId=<%= Products[i]._id %>">Edit</a></button>
-                        <button class="btn btn-inverse-danger delete-btn btn-sm"
->
-                         <a href="/admin/deleteproduct?id=<%= Products[i]._id %>"> Delete</a> </button>
-                      </td>
-                      <td>
-                        <% if (Products[i].is_Listed == false) { %>
-                          <form action="/admin/Listproduct" method="post">
-                            <input type="hidden" name="id" value="<%= Products[i]._id %>">
-                            <button type="submit" class="btn btn-light rounded btn-sm font-sm" style="background-color: #3bff09;">
-                              <i>List</i>
-                            </button>
-                          </form>
-                        <% } else { %>
-                          <form action="/admin/Unlistproduct" method="post">
-                            <input type="hidden" name="id" value="<%= Products[i]._id %>">
-                            <button type="submit" class="btn btn-light rounded btn-sm font-sm" style="background-color: rgb(231, 14, 14);">
-                              <i>Unlist</i>
-                            </button>
-                          </form>
-                        <% } %>
-                        
-                    </td>
-                    
-                    </tr>
-                   <% } %>
-                    <%}else{%>
-                      <tr>
-                        <td colspan="5">Products not found</td>
-                    </tr>
-                   <% } %>
-
-              </tbody>
-            </table>
-          </div> 
-        </div>
-      </div>
-
-      <!-- content-wrapper ends-------------------------------------------------------------------------------------- -->
-      <!-- partial:partials/_footer.html -->
-      <!-- <footer class="footer">
-            <div class="d-sm-flex justify-content-center justify-content-sm-between">
-              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
-              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin templates</a> from Bootstrapdash.com</span>
+     
+      <section class="content-main py-4">
+        <div class="container-fluid">
+            <div class="row">
+                <h2 class="text-center">Add Offer</h2>
+                <div class="col-12 col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form action="" method="post" id="offerForm" onsubmit="return validateOfferForm()">
+                                <div class="form-group">
+                                    <label for="name">Offer name</label>
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        placeholder="Type here">
+                                    <div id="nameError" class="error-message"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="discount">Discount percentage</label>
+                                    <input type="text" class="form-control" id="discount" name="discount"
+                                        placeholder="Type here">
+                                    <div id="discountError" class="error-message"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="activationDate">Activation Date</label>
+                                    <input type="date" class="form-control" id="activationDate"
+                                        name="activationDate">
+                                    <div id="activationDateError" class="error-message"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="expiryDate">Expiry Date</label>
+                                    <input type="date" class="form-control" id="expiryDate" name="expiryDate">
+                                    <div id="expiryDateError" class="error-message"></div>
+                                </div>
+                                <div class="container">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </footer> -->
+        </div>
+    </section>
+     
+        </div>
+        </div>
       <!-- partial -->
     </div>
     <!-- main-panel ends -->
@@ -534,6 +432,10 @@
   <script src="/admin/vendors/jvectormap/jquery-jvectormap.min.js"></script>
   <script src="/admin/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
   <script src="/admin/vendors/owl-carousel-2/owl.carousel.min.js"></script>
+  <!-- Bootstrap JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoJtKh7z7lGz7fuP4F8nfdFvAOA6Gg/z6Y5J6XqqyGXYM2ntX5" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 
   <!-- End plugin js for this page -->
   <!-- inject:js -->
@@ -547,7 +449,7 @@
   <script src="/admin/js/dashboard.js"></script>
   <!-- End custom js for this page -->
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 

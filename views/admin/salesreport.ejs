@@ -241,11 +241,11 @@
         </li>
         <li class="nav-item menu-items">
           <a class="nav-link"
-            href="http://www.bootstrapdash.com/demo/corona-free/jquery/documentation/documentation.html">
+            href="/admin/offer">
             <span class="menu-icon">
               <i class="mdi mdi-file-document-box"></i>
             </span>
-            <span class="menu-title">Documentation</span>
+            <span class="menu-title">OFFER</span>
           </a>
         </li>
       </ul>
@@ -461,7 +461,7 @@
                         <td><%= orderItem.Date.toISOString().substring(0, 10) %></td>
                         <td><%= orderItem.paymentmethod %></td>
                         <td><%= orderItem.status %></td>
-                        <td><%= orderItem.subtotal %></td>
+                        <td>₹<%= orderItem.subtotal %>/-</td>
                         <td><%= orderItem.username %></td>
                     </tr>
                 <% }); %>

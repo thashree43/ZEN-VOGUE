@@ -27,54 +27,45 @@
   <link rel="shortcut icon" href="/admin/images/favicon.png" />
 
   <style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-}
-
-.container {
-    max-width: 800px;
-    margin: 20px auto;
-}
-
-h2 {
-    text-align: center;
-    color: #333;
-}
-
-.offer-table {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-}
-
-.offer-table table {
+  .offer-form table {
+   
     width: 100%;
     border-collapse: collapse;
 }
+.container button {
+  padding: 8px 16px;
+  background-color: #009e2a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
 
-.offer-table th, .offer-table td {
-    padding: 12px 15px;
+.container button:hover {
+  background-color: #009e2a;
+}
+.container{
+  margin-top: 121px;
+}
+
+.offer-form th, .offer-form td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+.offer-form th {
+    background-color: #080720;
     text-align: left;
-    border-bottom: 1px solid #ddd;
 }
 
-.offer-table th {
-    background-color: #007bff;
-    color: #fff;
-    text-transform: uppercase;
-}
-
-.offer-table tbody tr:nth-child(even) {
+/* .offer-form tbody tr:nth-child(even) {
     background-color: #f2f2f2;
-}
+} */
 
-.offer-table tbody tr:hover {
-    background-color: #e0e0e0;
-}
+/* .offer-form tbody tr:hover {
+    background-color: #ddd;
+} */
+
 </style>
 
 </head>
@@ -204,11 +195,11 @@ h2 {
         </li>
         <li class="nav-item menu-items">
           <a class="nav-link"
-            href="http://www.bootstrapdash.com/demo/corona-free/jquery/documentation/documentation.html">
+            href="/admin/offer">
             <span class="menu-icon">
               <i class="mdi mdi-file-document-box"></i>
             </span>
-            <span class="menu-title">Documentation</span>
+            <span class="menu-title">OFFER</span>
           </a>
         </li>
       </ul>
@@ -379,35 +370,51 @@ h2 {
      
 
       <div class="container">
+        <a href="/admin/addoffer"> <button class="add_coupon btn btn-success">Add Offer</button></a>
         <h2>Offers</h2>
-        <div class="offer-table">
+        <div class="offer-form">
+          
             <table>
+              <% if(offers.length > 0){ %>
                 <thead>
                     <tr>
+                        <th>No</th>
                         <th>Offer ID</th>
-                        <th>Title</th>
-                        <th>Description</th>
-                        <th>Validity</th>
+                        <th>Name</th>
+                        <th>Discount</th>
+                        <th>Activation Date</th>
+                        <th>Expiration Date</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
+                  <% for (let i=0;i<offers.length;i++){ %>
                     <tr>
-                        <td>1</td>
-                        <td>Special Offer</td>
-                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
-                        <td>2024-03-01 to 2024-03-15</td>
+                        <td><%= i+ 1 %></td>
+                        <td><%= offers[i]._id %></td>
+                        <td><%= offers[i].name %></td>
+                        <td><%= offers[i].discountamount %>%</td>
+                        <td><%= offers[i].activationdate.toLocaleDateString('en-US', {
+                          year:'numeric', month: 'short' , day: '2-digit'
+                        }).replace(/\//g, '-' ) %></td>
+                        <td><%= offers[i].expireddate.toLocaleDateString('en-US', {
+                          year:'numeric', month: 'short' , day: '2-digit'
+                        }).replace(/\//g, '-' ) %></td>
+                        
+                        <td>
+                          <form class="deletebutton" onsubmit="deleteoffer(event, '<%= offers[i]._id %>')" method="POST">
+                            <button type="submit" style="background-color: red;">Delete</button> </td>
                     </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Spring Sale</td>
-                        <td>Nullam ut libero ut quam facilisis mattis.</td>
-                        <td>2024-03-10 to 2024-03-25</td>
-                    </tr>
-                    <!-- Add more rows for additional offers -->
+                  <% } %>
+                   
                 </tbody>
+              <% }else { %>
+                <p>no offer is there</p>
+             <% } %>
             </table>
         </div>
     </div>
+    
 
   
         </div>
@@ -421,7 +428,40 @@ h2 {
  
 
     
-    
+  <script>
+  async function deleteoffer(event, offerId) {
+  event.preventDefault(); 
+  console.log(offerId)
+  // Prevent default form submission behavior
+  try {
+      const response = await fetch('/admin/deleteoffer', {
+          method: "delete",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ offerId }),
+      })
+      .then(response => response.json())
+      
+      if(response.success){
+          Swal.fire({
+            title:"Offer Removed!",
+            text: "The Offer has been successfully removed ",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 5000,
+          })
+          // Redirect the user back to the page they were on
+          window.location.href="/admin/offer"
+      }
+  } catch (error) {
+      console.log(error.message);
+  }
+}
+  </script>
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
+
+<!-- Latest compiled JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
   <!-- container-scroller -->
   <!-- plugins:js -->
   <script src="/admin/vendors/js/vendor.bundle.base.js"></script>

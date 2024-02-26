@@ -119,6 +119,7 @@ const placetheorder = async (req, res) => {
   try {
     const userId = req.session.userId;
     const { addressId, subtotal, paymentMethod } = req.body;
+    console.log("oiihfohihfsoidfhfhsoidfhsoifhiohfo",paymentMethod);
 
     // Check if addressId and paymentMethod are provided
     if (!addressId || !paymentMethod) {

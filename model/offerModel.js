@@ -19,7 +19,7 @@ const OfferSchema = new mongoose.Schema({
     },
     is_Blocked:{
         type:Boolean,
-        required:true
+        required:false
     }
 })
 
