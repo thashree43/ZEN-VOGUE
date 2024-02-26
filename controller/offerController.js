@@ -25,7 +25,7 @@ const postaddoffer = async(req,res)=>{
     try {
         const data = new Offer({
             name:req.body.name,
-            discountamount:req.body.discount,
+            discount:req.body.discount,
             activationdate:req.body.activationDate,
             expireddate:req.body.expiryDate
         })
@@ -48,9 +48,22 @@ const deleteoffer = async(req,res)=>{
         console.log(error.message);
     }
 }
+
+const applycategoryoffer=async(req,res)=>{
+    try {
+        console.log("hloooo");
+        const id = req.body.id
+        console.log("the offer id may here",id);
+        
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 module.exports = {
     offeraddmin,
     addofferadmin,
     postaddoffer,
     deleteoffer,
+    applycategoryoffer,
 }

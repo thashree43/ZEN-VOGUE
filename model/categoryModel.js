@@ -12,8 +12,8 @@ const CategoryModel = new mongoose.Schema({
     type:mongoose.Schema.Types.ObjectId,
     ref: 'offer',
 },
-// discountedPrice: Number
-// ,
+discountedPrice: Number
+,
   is_Listed: {
     type: Number,
     default: 0,

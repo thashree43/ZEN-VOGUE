@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
 
 const ProductsModel = new mongoose.Schema({
@@ -9,6 +10,10 @@ const ProductsModel = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: "category",
     required: true,
+  },
+  offer:{
+    type:ObjectId,
+    ref:"offer"
   },
   Image: {
     type: [String],

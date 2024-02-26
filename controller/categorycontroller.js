@@ -1,9 +1,13 @@
 const categories = require("../model/categoryModel");
+const Offer = require("../model/offerModel")
 
 const loadcategory = async (req, res) => {
   try {
-    const Data = await categories.find();
-    res.render("admin/category", { Data: Data });
+    const offerdata = await Offer.find()
+    const Data = await categories.find().populate("offer");
+ 
+
+    res.render("admin/category", { Data: Data,offerdata:offerdata });
   } catch (error) {
     console.log(error.message);
   }

@@ -6,8 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Corona Admin</title>
     <!-- plugins:css -->
+
     <link rel="stylesheet" href="/admin/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="/admin/vendors/css/vendor.bundle.base.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- endinject -->
     <!-- Plugin css for this page -->
     <link rel="stylesheet" href="/admin/vendors/jvectormap/jquery-jvectormap.css">
@@ -69,6 +72,69 @@ th {
 .btn-light {
     background-color: #f8f9fa;
     color: #212529;
+}
+.modal-content {
+  background-color: #fff; /* Background color for the modal content */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Box shadow */
+}
+
+/* Modal header */
+.modal-header {
+  border-bottom: none; /* Remove border from the bottom */
+  padding: 20px; /* Add some padding */
+}
+
+/* Modal title */
+.modal-title {
+  color: #333; /* Title color */
+  font-size: 1.5rem; /* Title font size */
+}
+
+/* Modal body */
+.modal-body {
+  padding: 20px; /* Add some padding */
+}
+
+/* Card */
+.card {
+  border: 1px solid #ddd; /* Border color */
+  border-radius: 10px; /* Rounded corners */
+  margin-bottom: 20px; /* Margin at the bottom */
+}
+
+/* Card body */
+.card-body {
+  padding: 20px; /* Add some padding */
+}
+
+/* Card title */
+.card-title {
+  color: #333; /* Title color */
+  font-size: 1.25rem; /* Title font size */
+  font-weight: bold; /* Bold font weight */
+  margin-bottom: 10px; /* Margin at the bottom */
+}
+
+/* Card text */
+.card-text {
+  color: #666; /* Text color */
+}
+
+/* Apply Offer button */
+.btn-primary {
+  background-color: #007bff; /* Button background color */
+  border-color: #007bff; /* Button border color */
+}
+
+.btn-primary:hover {
+  background-color: #0056b3; /* Button hover background color */
+  border-color: #0056b3; /* Button hover border color */
+}
+
+/* No Offer message */
+.no-offer-message {
+  color: #fff; /* Text color */
 }
 
   </style>
@@ -444,9 +510,9 @@ th {
                                             <td><%= Data[i].name %></td>
                                             <td><%= Data[i].description %></td>
                                             <td><a href="/admin/edit?id=<%= Data[i]._id %>" class="btn btn-sm font-sm rounded btn-brand"> <i class="material-icons md-edit"></i> Edit </a></td>
-                                            <td><a  href="" class="btn btn-sm font-sm btn-light rounded"> <button type="button" style="background-color: #3bb77e;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                            <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="background-color: rgb(35, 241, 128);">
                                               Apply Offer
-                                            </button> </a></td>
+                                            </button></td>
 
                                             <td><a href="/admin/delete?id=<%= Data[i]._id %>" class="btn btn-sm font-sm btn-light rounded"> <i class="material-icons md-delete_forever"></i> Delete </a></td>
                                             <td class="text-end">
@@ -474,7 +540,45 @@ th {
                 </div>
             </div>
         </div>
+        <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="card">
+                  <% if(offerdata){%>
+                 
+                  <div class="card-body">
+                    <% for(let i=0;i<offerdata.length;i++){ %>
+                      <h5 class="card-title"><%= offerdata[i].name %></h5>
+                      <p class="card-text"><%= offerdata[i].activationdate.toLocaleDateString('en-US', {
+                        year:'numeric', month: 'short' , day: '2-digit' }).replace(/\//g, '-' ) %></p>
+                      <p class="card-text"><%= offerdata[i].expireddate.toLocaleDateString('en-US', {
+                        year:'numeric', month: 'short' , day: '2-digit' }).replace(/\//g, '-' ) %></p>
+                      <p class="card-text"> <%= offerdata[i].discount %>%</p>
+                      <!-- Apply Offer button -->
+                      <button type="button" class="btn btn-primary" onclick="applyoffer('<%= offerdata[i]._id %>')">Apply Offer</button>
+                      <% } %>
+                  </div>
+              </div>
+              <% }else { %>
+                <p style="color: white;">No Offer Found</p>
+                <% } %>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <!-- <button type="button" class="btn btn-primary">Understood</button> -->
+              </div>
+          </div>
+      </div>
+  </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
           </div>
           <!-- content-wrapper ends-------------------------------------------------------------------------------------- -->
           <!-- partial:partials/_footer.html -->
@@ -507,12 +611,22 @@ th {
     <script src="/admin/js/misc.js"></script>
     <script src="/admin/js/settings.js"></script>
     <script src="/admin/js/todolist.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- endinject -->
     <!-- Custom js for this page -->
     <script src="/admin/js/dashboard.js"></script>
     <!-- End custom js for this page -->
-  
-    
-
+  <script>
+    function applyoffer(id) {
+      console.log("the applyoffer id may here", id);
+      $.ajax({
+          url: '/admin/applyoffer',
+          method: "POST",
+          data: { 
+            id },
+          
+      });
+  }
+</script>
   </body>
 </html>
