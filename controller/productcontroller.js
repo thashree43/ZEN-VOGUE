@@ -4,13 +4,16 @@ const path = require("path");
 const fs = require("fs");
 const sharp = require("sharp");
 const product = require("../model/productmodel");
+const Offer = require("../model/offerModel")
 const mongoose = require("mongoose");
 
 const loadproduct = async (req, res) => {
   try {
-    const Products = await products.find({});
+    const offerdata = await Offer.find()
+   
+    const Products = await products.find({}).populate("offers");
 
-    res.render("admin/product", { Products });
+    res.render("admin/product", { Products ,offerdata});
   } catch (error) {
     console.log(error.message);
   }

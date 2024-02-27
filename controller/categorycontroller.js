@@ -4,7 +4,7 @@ const Offer = require("../model/offerModel")
 const loadcategory = async (req, res) => {
   try {
     const offerdata = await Offer.find()
-    const Data = await categories.find().populate("offer");
+    const Data = await categories.find().populate("offers").exec();
  
 
     res.render("admin/category", { Data: Data,offerdata:offerdata });

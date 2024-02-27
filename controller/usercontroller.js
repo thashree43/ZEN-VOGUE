@@ -434,8 +434,11 @@ const loadshop = async (req, res) => {
           query.category = req.query.category;
       }
 
-      const productdetail = await Product.find(query).populate("category");
-      const products = productdetail.filter(product => {
+      const productdetail = await Product.find(query).populate({
+        path: 'category',
+        populate: { path: 'offers' }
+      }).populate("offers"); 
+           const products = productdetail.filter(product => {
           if (product.category && product.category.is_Listed == 1) {
               return product;
           }
@@ -452,19 +455,23 @@ const loadshop = async (req, res) => {
 
 
 // product details showing 
- const productdetail = async(req,res)=>{
-  try {
+  const productdetail = async(req,res)=>{
+    try {
+      
+    const productId = req.query.id
+    console.log("uifvufvnfuvuvuivui",productId);
+    const product= await Product.findById({_id:productId}).populate({
+      path: 'category',
+      populate: { path: 'offers' }
+    }).populate("offers"); 
     
-   const productId = req.query.id
-   console.log("uifvufvnfuvuvuivui",productId);
-   const product= await Product.findById({_id:productId})
-  .populate("category")
-   res.render("user/productdetail",{data:product,user: req.session.userId})
-  } catch (error) {
-    console.log(error.message);
+    console.log("the productdetail may here",product);
+    res.render("user/productdetail",{data:product,user: req.session.userId})
+    } catch (error) {
+      console.log(error.message);
+    }
+    
   }
-  
- }
 // my account--------profile&editprofile---------------
 const myaccount = async(req,res)=>{
   try {

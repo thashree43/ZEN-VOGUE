@@ -482,104 +482,106 @@ th {
         </nav>
         <!-- partial -->
         <div class="main-panel">
-        
- 
           <div class="content-wrapper">
             <div class="col-lg-12 stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        </p>
-                        <div class="table-responsive">
-                          <table class="table table-bordered table-contextual" id="cati">
-                            <h2>Categories</h2>
-                            <a href="/admin/addcategory"><button class="moveaside">AddCategory</button></a>
-                            <thead>
-                                <tr>
-                                    <th>NAME</th>
-                                    <th>DESCRIPTIONn</th>
-                                    <th>EDIT</th>
-                                    <th>OFFER</th>
-                                    <th>DELETE</th>
-                                    <th class="text-end">ACTION</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% if (Data.length > 0) { %>
-                                    <% for (let i = 0; i < Data.length; i++) { %>
-                                        <tr>
-                                            <td><%= Data[i].name %></td>
-                                            <td><%= Data[i].description %></td>
-                                            <td><a href="/admin/edit?id=<%= Data[i]._id %>" class="btn btn-sm font-sm rounded btn-brand"> <i class="material-icons md-edit"></i> Edit </a></td>
-                                            <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="background-color: rgb(35, 241, 128);">
-                                              Apply Offer
-                                            </button></td>
-
-                                            <td><a href="/admin/delete?id=<%= Data[i]._id %>" class="btn btn-sm font-sm btn-light rounded"> <i class="material-icons md-delete_forever"></i> Delete </a></td>
-                                            <td class="text-end">
-                                                <div class="dropdown">
-                                                  <% if (Data[i].is_Listed == 1) { %>
-                                                    <a href="/admin/UnList?id=<%= Data[i]._id %>" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm" style="background-color: #3bb77e;"> <i>UnList</i> </a>
-                                                    <% } else { %>
-                                                      <a href="/admin/List?id=<%= Data[i]._id %>" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm" style="background-color: red;"> <i>List</i> </a>
-                                                <% } %>
-                                                
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    <% } %>
+              <div class="card">
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-bordered table-contextual" id="cati">
+                      <h2>Categories</h2>
+                      <a href="/admin/addcategory"><button class="moveaside">AddCategory</button></a>
+                      <thead>
+                        <tr>
+                          <th>NAME</th>
+                          <th>DESCRIPTIONn</th>
+                          <th>EDIT</th>
+                          <th>OFFER</th>
+                          <th>DELETE</th>
+                          <th class="text-end">ACTION</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% if (Data.length > 0) { %>
+                          <% for (let i = 0; i < Data.length; i++) { %>
+                            <tr>
+                              <td><%= Data[i].name %></td>
+                              <td><%= Data[i].description %></td>
+                              <td><a href="/admin/edit?id=<%= Data[i]._id %>" class="btn btn-sm font-sm rounded btn-brand"> <i class="material-icons md-edit"></i> Edit </a></td>
+                              <% if (Data[i].offers.length > 0) { %>
+                                <td>
+                                  <button type="button" class="btn btn-danger" onclick="removeOffer('<%= Data[i].offers[0]._id %>')">Remove Offer</button>
+                                  <br>
+                                  <br>
+                                  <% Data[i].offers.forEach(function(offer) { %>
+                                    <p>OFF : <%= offer.discount %>%</p>
+                                  <% }); %>
+                                </td>
                                 <% } else { %>
-                                    <tr>
-                                        <td colspan="5">Category not Found</td>
-                                    </tr>
-                                <% } %>
-                            </tbody>
-                        </table>
-                        
-                        </div>
-                    </div>
+                              <td><!-- Ensure that the correct category ID is passed to the showModal function -->
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="background-color: rgb(35, 241, 128);" onclick="showModal('<%= Data[i]._id %>')">Select Offer</button>
+                              </td>
+                              <%}%>
+                              <td><a href="/admin/delete?id=<%= Data[i]._id %>" class="btn btn-sm font-sm btn-light rounded"> <i class="material-icons md-delete_forever"></i> Delete </a></td>
+                              <td class="text-end">
+                                <div class="dropdown">
+                                  <% if (Data[i].is_Listed == 1) { %>
+                                    <a href="/admin/UnList?id=<%= Data[i]._id %>" class="btn btn-light rounded btn-sm font-sm" style="background-color: #3bb77e;"> <i>UnList</i> </a>
+                                  <% } else { %>
+                                    <a href="/admin/List?id=<%= Data[i]._id %>" class="btn btn-light rounded btn-sm font-sm" style="background-color: red;"> <i>List</i> </a>
+                                  <% } %>
+                                </div>
+                              </td>
+                            </tr>
+                          <% } %>
+                        <% } else { %>
+                          <tr>
+                            <td colspan="5">Category not Found</td>
+                          </tr>
+                        <% } %>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
+        
         <!-- Modal -->
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog">
-          <div class="modal-content">
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
               <div class="modal-header">
-                  <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 <div class="card">
-                  <% if(offerdata){%>
-                 
-                  <div class="card-body">
-                    <% for(let i=0;i<offerdata.length;i++){ %>
-                      <h5 class="card-title"><%= offerdata[i].name %></h5>
-                      <p class="card-text"><%= offerdata[i].activationdate.toLocaleDateString('en-US', {
-                        year:'numeric', month: 'short' , day: '2-digit' }).replace(/\//g, '-' ) %></p>
-                      <p class="card-text"><%= offerdata[i].expireddate.toLocaleDateString('en-US', {
-                        year:'numeric', month: 'short' , day: '2-digit' }).replace(/\//g, '-' ) %></p>
-                      <p class="card-text"> <%= offerdata[i].discount %>%</p>
-                      <!-- Apply Offer button -->
-                      <button type="button" class="btn btn-primary" onclick="applyoffer('<%= offerdata[i]._id %>')">Apply Offer</button>
-                      <% } %>
-                  </div>
-              </div>
-              <% }else { %>
-                <p style="color: white;">No Offer Found</p>
-                <% } %>
+                  <% if(offerdata){ %>
+                    <div class="card-body">
+                      <% offerdata.forEach(function(offer) { %>
+                        <h5 class="card-title"><%= offer.name %></h5>
+                        <p class="card-text"><%= offer.activationdate.toLocaleDateString('en-US', { year:'numeric', month: 'short' , day: '2-digit' }).replace(/\//g, '-' ) %></p>
+                        <p class="card-text"><%= offer.expireddate.toLocaleDateString('en-US', { year:'numeric', month: 'short' , day: '2-digit' }).replace(/\//g, '-' ) %></p>
+                        <p class="card-text"><%= offer.discount %>%</p>
+                        <!-- Apply Offer button -->
+                        <button type="button" class="btn btn-primary apply-offer-btn" data-offerid="<%= offer._id %>">Apply Offer</button>
+                        <% }); %>
+                    </div>
+                  <% } else { %>
+                    <p style="color: white;">No Offer Found</p>
+                  <% } %>
+                </div>
               </div>
               <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <!-- <button type="button" class="btn btn-primary">Understood</button> -->
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
               </div>
+            </div>
           </div>
-      </div>
-  </div>
-
+        </div>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
-          </div>
+          
           <!-- content-wrapper ends-------------------------------------------------------------------------------------- -->
           <!-- partial:partials/_footer.html -->
           <!-- <footer class="footer">
@@ -615,18 +617,97 @@ th {
     <!-- endinject -->
     <!-- Custom js for this page -->
     <script src="/admin/js/dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- End custom js for this page -->
-  <script>
-    function applyoffer(id) {
-      console.log("the applyoffer id may here", id);
+    <script>
+      function showModal(categoryId) {
+        console.log("Category ID:", categoryId);
+        $("#staticBackdrop").modal("show");
+    
+        const applyOfferBtns = document.querySelectorAll('.apply-offer-btn');
+        applyOfferBtns.forEach(btn => {
+          btn.addEventListener('click', function() {
+            const offerId = this.dataset.offerid;
+            enterOffer(offerId, categoryId); // Pass both offerId and categoryId
+          });
+        });
+      }
+    
+      async function enterOffer(offerId, categoryId) {
+        $("#staticBackdrop").modal("hide");
+        try {
+          const response = await $.ajax({
+            url: '/admin/applyoffer',
+            method: 'POST',
+            data: JSON.stringify({ id: offerId, catid: categoryId }), // Correct keys for offerId and categoryId
+            contentType: 'application/json',
+            success: function(response) {
+              if (response.success) {
+                Swal.fire({
+                  title: "Offer applied",
+                  icon: "success",
+                  confirmButtonText: "Ok"
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    window.location = '/admin/category';
+                  }
+                });
+              }
+            },
+            error: function(xhr, status, error) {
+              console.error('Error applying offer:', error);
+              Swal.fire({
+                title: 'Error',
+                text: 'Failed to apply offer. Please try again.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+              });
+            }
+          });
+        } catch (error) {
+          console.error('Error applying offer:', error);
+          Swal.fire({
+            title: 'Error',
+            text: 'Failed to apply offer. Please try again.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
+      }
+    </script>
+   <script>
+    function removeOffer(offerId) {
       $.ajax({
-          url: '/admin/applyoffer',
-          method: "POST",
-          data: { 
-            id },
-          
+        url: '/admin/removeoffer',
+        method: 'DELETE',
+        data: {
+          id: offerId,
+        },
+        success: function(response) {
+          if (response.success) {
+            Swal.fire({
+              title: "Offer has been removed",
+              icon: "success",
+              confirmButtonText: "OK"
+            }).then(() => {
+              window.location.href = '/admin/category';
+            });
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error('Error removing offer:', error);
+          Swal.fire({
+            title: 'Error',
+            text: 'Failed to remove offer. Please try again.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
       });
-  }
-</script>
+    }
+    </script>
+    
+    
   </body>
 </html>

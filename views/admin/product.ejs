@@ -15,6 +15,8 @@
   <link rel="stylesheet" href="/admin/vendors/flag-icon-css/css/flag-icon.min.css">
   <link rel="stylesheet" href="/admin/vendors/owl-carousel-2/owl.carousel.min.css">
   <link rel="stylesheet" href="/admin/vendors/owl-carousel-2/owl.theme.default.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <!-- End plugin css for this page -->
   <!-- inject:css -->
   <!-- endinject -->
@@ -444,7 +446,8 @@
                   <th>Image</th>
                   <th>Product Name</th>
                   <th>Price</th>
-                  <th>Quantity</th>    
+                  <th>Quantity</th>  
+                  <th>Offer</th>  
                   <th></th>
                   <th>Action</th>
                   
@@ -466,6 +469,20 @@
                       <td>
                         <%= Products[i].quantity %>
                       </td>
+                      <% if (Products[i].offers.length > 0) { %>
+                        <td>
+                          <button type="button" class="btn btn-danger" onclick="removeOffer('<%= Products[i].offers[0]._id %>')">Remove Offer</button>
+                          <br>
+                          <br>
+                          <% Products[i].offers.forEach(function(offer) { %>
+                            <p>OFF : <%= offer.discount %>%</p>
+                          <% }); %>
+                        </td>
+                      <%}else{ %>
+                      <td>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="background-color: rgb(35, 241, 128);" onclick="showModal('<%= Products[i]._id %>')">Select Offer</button>
+                    </td>
+                    <% } %>
                       <td>
                         <button class="btn btn-inverse-primary btn-sm"><a
                             href="/admin/editProduct?productId=<%= Products[i]._id %>">Edit</a></button>
@@ -504,8 +521,43 @@
             </table>
           </div> 
         </div>
+   <!-- Modal -->
+   <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="card">
+            <% if(offerdata){ %>
+              <div class="card-body">
+                <% offerdata.forEach(function(offer) { %>
+                  <h5 class="card-title"><%= offer.name %></h5>
+                  <p class="card-text"><%= offer.activationdate.toLocaleDateString('en-US', { year:'numeric', month: 'short' , day: '2-digit' }).replace(/\//g, '-' ) %></p>
+                  <p class="card-text"><%= offer.expireddate.toLocaleDateString('en-US', { year:'numeric', month: 'short' , day: '2-digit' }).replace(/\//g, '-' ) %></p>
+                  <p class="card-text"><%= offer.discount %>%</p>
+                  <!-- Apply Offer button -->
+                  <button type="button" class="btn btn-primary apply-offer-btn" data-offerid="<%= offer._id %>">Apply Offer</button>
+                  <% }); %>
+              </div>
+            <% } else { %>
+              <p style="color: white;">No Offer Found</p>
+            <% } %>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
       </div>
+    </div>
+  </div>
 
+      </div>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+     
       <!-- content-wrapper ends-------------------------------------------------------------------------------------- -->
       <!-- partial:partials/_footer.html -->
       <!-- <footer class="footer">
@@ -542,6 +594,8 @@
   <script src="/admin/js/misc.js"></script>
   <script src="/admin/js/settings.js"></script>
   <script src="/admin/js/todolist.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
   <!-- endinject -->
   <!-- Custom js for this page -->
   <script src="/admin/js/dashboard.js"></script>
@@ -552,7 +606,93 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
 
-
+  <script>
+    function showModal(proid) {
+      console.log("product ID:", proid);
+      $("#staticBackdrop").modal("show");
+  
+      const applyOfferBtns = document.querySelectorAll('.apply-offer-btn');
+      applyOfferBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const offerId = this.dataset.offerid;
+          enterOffer(offerId, proid); // Pass both offerId and categoryId
+        });
+      });
+    }
+  
+    async function enterOffer(offerId, proid) {
+      $("#staticBackdrop").modal("hide");
+      try {
+        const response = await $.ajax({
+          url: '/admin/applyproductoffer',
+          method: 'POST',
+          data: JSON.stringify({ id: offerId, proid: proid }), // Correct keys for offerId and categoryId
+          contentType: 'application/json',
+          success: function(response) {
+            if (response.success) {
+              Swal.fire({
+                title: "Offer applied",
+                icon: "success",
+                confirmButtonText: "Ok"
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  window.location = '/admin/product';
+                }
+              });
+            }
+          },
+          error: function(xhr, status, error) {
+            console.error('Error applying offer:', error);
+            Swal.fire({
+              title: 'Error',
+              text: 'Failed to apply offer. Please try again.',
+              icon: 'error',
+              confirmButtonText: 'OK'
+            });
+          }
+        });
+      } catch (error) {
+        console.error('Error applying offer:', error);
+        Swal.fire({
+          title: 'Error',
+          text: 'Failed to apply offer. Please try again.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      }
+    }
+  </script>
+  <script>
+    function removeOffer(offerId) {
+      $.ajax({
+        url: '/admin/removeproductoffer',
+        method: 'DELETE',
+        data: {
+          id: offerId,
+        },
+        success: function(response) {
+          if (response.success) {
+            Swal.fire({
+              title: "Offer has been removed",
+              icon: "success",
+              confirmButtonText: "OK"
+            }).then(() => {
+              window.location.href = '/admin/product';
+            });
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error('Error removing offer:', error);
+          Swal.fire({
+            title: 'Error',
+            text: 'Failed to remove offer. Please try again.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
+      });
+    }
+    </script>
 </body>
 
 </html>

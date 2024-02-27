@@ -101,5 +101,8 @@ adminRoute.get('/addoffer',offerController.addofferadmin)
 adminRoute.post('/addoffer',offerController.postaddoffer)
 adminRoute.delete('/deleteoffer',offerController.deleteoffer)
 adminRoute.post('/applyoffer',adminauth.isLogin,offerController.applycategoryoffer)
+adminRoute.delete('/removeoffer',offerController.removecategoryoffer)
+adminRoute.post('/applyproductoffer',offerController.applyproductoffer)
+adminRoute.delete('/removeproductoffer',offerController.removeproductoffer)
 
 module.exports = adminRoute;
