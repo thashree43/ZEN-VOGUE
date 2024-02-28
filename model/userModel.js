@@ -47,13 +47,20 @@ walletHistory: [{
     discription:{
       type:String,
     }
-}]
+}],
+referralCode: { type: String, unique: true },
+referredBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 });
 
 
 
 
-
+UserSchema.pre('save', function(next) {
+  if (!this.referralCode) {
+    this.referralCode = generateReferralCode();
+  }
+  next();
+});
 
 
 

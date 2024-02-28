@@ -57,7 +57,7 @@ const sendOtpVerificationMail = async ({ email }, res) => {
 
     console.log("OTP Email sent successfully");
 
-    res.redirect(`user/verifyotp?email=${email}`);
+    res.redirect(`/user/verifyotp?email=${email}`);
   } catch (error) {
     console.log("Error sending OTP email:", error.message);
   }

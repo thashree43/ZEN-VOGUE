@@ -25,20 +25,18 @@ const cartopen = async (req, res) => {
         (acc, val) => acc + val.total,
         0
       );
-        let total = 0;
+      let total = 0;
 
       cartdata.product.forEach((product)=>{
 
-        if(product.productId.offers){
-
+        if(product.productId.offers && product.productId.offers.length > 0){
           let offer = product.productId.offers[0].discount;
           total += (product.productId.price-((product.productId.price * offer)/100))*product.quantity;
-
-        }else if(product.productId.category.offers){
-
+        } else if(product.productId.category.offers && product.productId.category.offers.length > 0){
           let offer = product.productId.category.offers[0].discount;
           total += (product.productId.price-((product.productId.price * offer)/100))*product.quantity;
-
+        
+        
         }else{
 
           total += product.productId.price*product.quantity;

@@ -43,45 +43,121 @@ const securepassword = async (password) => {
   }
 };
 
-// ----verify registration----
+// // ----verify registration----
+// const verifyRegister = async (req, res) => {
+//   try {
+//     const existuser = await User.findOne({ email: req.body.email });
+//     if (existuser && existuser.is_Verified) {
+//       const message = "Email already registered";
+//       res.render("user/Register", { message });
+//     } else if (existuser && !existuser.is_Verified) {
+//       const message =
+//         "Email already registered but not verified. So send OTP to email and verify the email";
+//       res.render("user/Register", { message });
+//     } else {
+//       const bodypassword = req.body.password;
+//       const confirmPassword = req.body.confirmPassword;
+//       const spassword = await securepassword(bodypassword);
+//       const user = new User({
+//         name: req.body.name,
+//         email: req.body.email,
+//         mobile: req.body.mobileNumber,
+//         password: spassword,
+//         confirmPassword: confirmPassword,
+//         is_Admin: 0,
+//       });
+
+//       if (bodypassword !== confirmPassword) {
+//         return res.render("user/Register", {
+//           message: "Passwords do not match",
+//         });
+//       }
+
+//       const userdata = await user.save();
+//       req.session.email = req.body.email;
+//       await sendOtpVerificationMail(userdata, res);
+//     }
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// };
+
+function generateReferralCode() {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const length = 8;
+  let referralCode = '';
+  for (let i = 0; i < length; i++) {
+    referralCode += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return referralCode;
+}
+
+// after implementing referal 
 const verifyRegister = async (req, res) => {
   try {
     const existuser = await User.findOne({ email: req.body.email });
     if (existuser && existuser.is_Verified) {
       const message = "Email already registered";
-      res.render("user/Register", { message });
+      return res.render("user/Register", { message });
     } else if (existuser && !existuser.is_Verified) {
       const message =
         "Email already registered but not verified. So send OTP to email and verify the email";
-      res.render("user/Register", { message });
+      return res.render("user/Register", { message });
     } else {
-      const bodypassword = req.body.password;
-      const confirmPassword = req.body.confirmPassword;
-      const spassword = await securepassword(bodypassword);
-      const user = new User({
-        name: req.body.name,
-        email: req.body.email,
-        mobile: req.body.mobileNumber,
-        password: spassword,
-        confirmPassword: confirmPassword,
-        is_Admin: 0,
-      });
+      const { name, email, mobileNumber, password, confirmPassword, referralCode } = req.body;
 
-      if (bodypassword !== confirmPassword) {
-        return res.render("user/Register", {
-          message: "Passwords do not match",
-        });
+      // Check if passwords match
+      if (password !== confirmPassword) {
+        return res.render("user/Register", { message: "Passwords do not match" });
       }
 
+      // Check if referral code is provided
+      let referredBy = null;
+      if (referralCode) {
+        referredBy = await User.findOne({ referralCode });
+        if (!referredBy) {
+          return res.render("user/Register", { message: "Invalid referral code" });
+        }
+      }
+
+      // Generate referral code for new user
+      const referralCodeForNewUser = generateReferralCode();
+
+      // Create new user
+      const spassword = await securepassword(password);
+      const user = new User({
+        name,
+        email,
+        mobile: mobileNumber,
+        password: spassword,
+        confirmPassword,
+        is_Admin: 0,
+        referralCode: referralCodeForNewUser,
+        referredBy: referredBy ? referredBy._id : null,
+      });
+
+      // Save user to database
       const userdata = await user.save();
-      req.session.email = req.body.email;
+
+      // Award bonuses for referral
+      if (referredBy) {
+        // Add bonus amount to the referrer's wallet
+        referredBy.wallet += 100; 
+        await referredBy.save();
+        // Add bonus amount to the new user's wallet
+        user.wallet += 50;
+        await user.save();
+      }
+
+      // Send verification email
+      req.session.email = email;
       await sendOtpVerificationMail(userdata, res);
     }
   } catch (error) {
     console.log(error.message);
+    res.render("user/Register", { message: "An error occurred" });
   }
 };
-
 
 
 // impoting from utilis

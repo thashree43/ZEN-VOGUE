@@ -525,7 +525,8 @@ tbody tr:hover {
             <h5 class="card-title">Order Details</h5>
             <hr />
             <div id="cancelledorder" class="shopping_cart_table">
-              <div class="table-responsive">
+              <!-- here i have call the id -->
+              <div class="table-responsive" id="printThisDiv"> 
                 <table class="table table-sm">
                   <thead>
                     <tr>
@@ -543,9 +544,8 @@ tbody tr:hover {
                       <td>
                         <%= order._id %>
                         <br /><br />
-                        <!-- <a href="/invoice?orderId=" class="invoice-btn">
-                                                                <span style="font-weight: bold; text-decoration: underline;">Download Invoice</span>
-                                                            </a> -->
+                        <a href="#" class="invoice-btn" onclick="downloadPDF('printThisDiv')">
+                        <span style="font-weight: bold; text-decoration: underline;">Download Invoice</span></a>
                       </td>
                       <td><%= order.paymentmethod %></td>
                       <td>₹<%= order.subtotal %></td>
@@ -909,4 +909,32 @@ tbody tr:hover {
     return true; // Allow the form submission
   }
 </script>
+<script>
+  function downloadPDF(orderId) {
+    // Send an AJAX request to fetch the invoice details for the specific order
+    fetch(`/getInvoice?orderId=${orderId}`)
+      .then(response => response.blob())
+      .then(blob => {
+        // Create a Blob object from the invoice data
+        const url = window.URL.createObjectURL(blob);
+
+        // Create a link element to trigger the download
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `invoice_${orderId}.pdf`;
+
+        // Append the link to the body and trigger the download
+        document.body.appendChild(a);
+        a.click();
+
+        // Clean up
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      })
+      .catch(error => {
+        console.error('Error fetching invoice:', error);
+      });
+  }
+</script>
+
 <%- include("../layouts/userpartials/footer.ejs") %>
