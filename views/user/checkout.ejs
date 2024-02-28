@@ -404,12 +404,12 @@
 
 
                     <div class="input-group-append">
-                      <%if(cartdata.coupondiscount){%>
+                      <%if(cartC.coupondiscount){%>
 
                         <input type="text" class="form-control" id="c_code" placeholder="Coupon Code"
                           aria-label="Coupon Code" aria-describedby="button-addon2"
-                          value="<%=cartdata.coupondiscount.couponcode%>">
-                        <button type="button" onclick="remove('<%=cartdata.coupondiscount._id %>')"
+                          value="<%=cartC.coupondiscount.couponcode%>">
+                        <button type="button" onclick="remove('<%=cartC.coupondiscount._id %>')"
                           class="btn btn-primary">
                           REMOVE
                         </button>

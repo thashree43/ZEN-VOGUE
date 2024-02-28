@@ -117,6 +117,7 @@ var instance = new Razorpay({
 
 const placetheorder = async (req, res) => {
   try {
+    
     const userId = req.session.userId;
     const { addressId, subtotal, paymentMethod } = req.body;
     console.log("oiihfohihfsoidfhfhsoidfhsoifhiohfo",paymentMethod);
@@ -174,6 +175,8 @@ const placetheorder = async (req, res) => {
 
       console.log("the total price is of the order is this ",totalprice);
     // Create new order
+    
+
     const neworder = new Order({
       deliveryDetails: addressObject,
       user: userdata._id,

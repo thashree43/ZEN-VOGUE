@@ -13,92 +13,108 @@
 <div class="site-section">
   <div class="container">
     <% if (cartdata && cartdata.product.length > 0) { %>
-    <div class="row mb-5" id="reloadDiv">
-      <form class="col-md-12" method="post">
-        <div class="site-blocks-table">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th class="product-thumbnail">Image</th>
-                <th class="product-name">Product</th>
-                <th class="product-price">Price</th>
-                <th class="product-quantity">Quantity</th>
-                <th class="product-total">Total</th>
-                <th class="product-remove">Remove</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% cartdata.product.forEach(product => { %>
-              <tr>
-                <td class="product-thumbnail">
-                  <img src="/public/proImage/<%= product.productId.Image[0] %>" alt="Image" class="img-fluid">
-                </td>
-                <td class="product-name">
-                  <h2 class="h5 text-black">
-                    <%= product.productId.name %>
-                  </h2>
-                </td>
-                <td>
-                  ₹ <span id="price_<%= product.productId._id %>"><%= product.productId.price %></span>
-                </td>
-                <td>
-                  <div class="input-group mb-3" style="max-width: 120px;">
-                    <div class="input-group-prepend">
-                      <button class="btn btn-outline-primary js-btn-minus" type="button" onclick="updatequantity('<%=product.productId._id %>', -1)">−</button>
+      <div class="row mb-5" id="reloadDiv">
+        <form class="col-md-12" method="post">
+          <div class="site-blocks-table">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th class="product-thumbnail">Image</th>
+                  <th class="product-name">Product</th>
+                  <th class="product-price">Price</th>
+                  <th class="product-quantity">Quantity</th>
+                  <th class="product-total">Total</th>
+                  <th class="product-remove">Remove</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% cartdata.product.forEach(product => { %>
+                <tr>
+                  <td class="product-thumbnail">
+                    <img src="/public/proImage/<%= product.productId.Image[0] %>" alt="Image" class="img-fluid">
+                  </td>
+                  <td class="product-name">
+                    <h2 class="h5 text-black">
+                      <%= product.productId.name %>
+                    </h2>
+                  </td>
+                  <td>
+                    <% let discountedPrice = product.productId.price; %> <!-- Default value -->
+                    <% if (product.productId.offers && product.productId.offers.length > 0) { %>
+                      <% discountedPrice = product.productId.price - (product.productId.price * product.productId.offers[0].discount / 100); %>
+                      <span id="price_<%= product.productId._id %>"><del>₹<%= product.productId.price %></del> <br>₹<%= discountedPrice.toFixed(2) %></span>
+                    <% } else if(product.productId.category.offers && product.productId.category.offers.length > 0){ %>
+                      <% discountedPrice = product.productId.price - (product.productId.price * product.productId.category.offers[0].discount / 100); %>
+                      <span id="price_<%= product.productId._id %>"><del>₹<%= product.productId.price %></del> <br>₹<%= discountedPrice.toFixed(2) %></span>
+                    <% } else if(product.productId.category.offers && product.productId.category.offers.length > 0 && product.productId.offers && product.productId.offers.length > 0){ %>
+                      <% let productDiscount = product.productId.offers[0].discount; %>
+                      <% let categoryDiscount = product.productId.category.offers[0].discount; %>
+                      <% let combinedDiscount = productDiscount + categoryDiscount; %>
+                      <% discountedPrice = product.productId.price - (product.productId.price * combinedDiscount / 100); %>
+                      <span id="price_<%= product.productId._id %>"><del>₹<%= product.productId.price %></del> <br>₹<%= discountedPrice.toFixed(2) %></span>
+                    <% } else { %>
+                      ₹ <span id="price_<%= product.productId._id %>"><%= discountedPrice %></span>
+                    <% } %>
+                  </td>
+                  <td>
+                    <div class="input-group mb-3" style="max-width: 120px;">
+                      <div class="input-group-prepend">
+                        <button class="btn btn-outline-primary js-btn-minus" type="button" onclick="updatequantity('<%=product.productId._id %>', -1)">−</button>
+                      </div>
+                      <input type="text" class="form-control text-center" value="<%=product.quantity %>" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" onchange="updateTotal(this, '<%=product.productId._id %>', '<%=product.productId.price %>')">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-primary js-btn-plus" type="button" onclick="updatequantity('<%=product.productId._id %>', 1)">+</button>
+                      </div>
                     </div>
-                    <input type="text" class="form-control text-center" value="<%=product.quantity %>" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" onchange="updateTotal(this, '<%=product.productId._id %>', '<%=product.productId.price %>')">
-                    <div class="input-group-append">
-                      <button class="btn btn-outline-primary js-btn-plus" type="button" onclick="updatequantity('<%=product.productId._id %>', 1)">+</button>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <span id="total_<%= product.productId._id %>"><%= product.productId.price * product.quantity %></span>
-                </td>
-                <td><a href="#" class="btn btn-primary height-auto btn-sm" onclick="removecart('<%=product.productId._id %>')">X</a></td>
-              </tr>
-              <% }) %>
-            </tbody>
-          </table>
-        </div>
-      </form>
-    </div>
-
-    <div class="row justify-content-end mb-5">
-      <div id="subtotal" class="col-md-5">
-        <div class="border-bottom mb-5">
-          <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
-        </div>
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <span class="text-black">Subtotal</span>
+                  </td>
+                  <td>
+                    <span id="total_<%= product.productId._id %>"><%= discountedPrice * product.quantity %></span>
+                  </td>
+                  
+                  <td><a href="#" class="btn btn-primary height-auto btn-sm" onclick="removecart('<%=product.productId._id %>')">X</a></td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
           </div>
-          <div class="col-md-6 text-right">
-            <strong class="text-black"><%= subtotal %></strong>
+        </form>
+      </div>
+  
+      <div class="row justify-content-end mb-5">
+        <div id="subtotal" class="col-md-5">
+          <div class="border-bottom mb-5">
+            <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
           </div>
-        </div>
-        <div class="row mb-5">
-          <div class="col-md-6">
-            <span class="text-black">Total</span>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <span class="text-black">Subtotal</span>
+            </div>
+            <div class="col-md-6 text-right">
+              <strong class="text-black"><%= subtotal %></strong>
+            </div>
           </div>
-          <div class="col-md-6 text-right">
-            <strong class="text-black"><%= subtotal %></strong>
+          <div class="row mb-5">
+            <div class="col-md-6">
+              <span class="text-black">Total</span>
+            </div>
+            <div class="col-md-6 text-right">
+              <strong class="text-black"><%= total %></strong>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <button class="btn btn-primary btn-lg btn-block" onclick="window.location='/checkout'">Proceed To Checkout</button>
+          <div class="row">
+            <div class="col-md-12">
+              <button class="btn btn-primary btn-lg btn-block" onclick="window.location='/checkout'">Proceed To Checkout</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <% } else { %>
-    <div class="row mb-5">
-      <div class="col-md-12">
-        <h1>Your cart is empty</h1>
+      <% } else { %>
+      <div class="row mb-5">
+        <div class="col-md-12">
+          <h1>Your cart is empty</h1>
+        </div>
       </div>
-    </div>
-    <% } %>
+      <% } %>
 
     <div class="row mb-5">
       <div class="col-md-6">

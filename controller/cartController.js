@@ -16,13 +16,38 @@ const cartopen = async (req, res) => {
       const cartdata = await Cart.findOne({ user: userId }).populate({
         path: "product.productId",
         model: "Product",
+        populate: [
+          { path: "category", model: "Category", populate: { path: "offers" } },
+          { path: "offers" }
+        ]
       });
       const subtotal = cartdata?.product.reduce(
         (acc, val) => acc + val.total,
         0
       );
+        let total = 0;
 
-      res.render("user/cart", { cartdata, subtotal, user: req.session.userId });
+      cartdata.product.forEach((product)=>{
+
+        if(product.productId.offers){
+
+          let offer = product.productId.offers[0].discount;
+          total += (product.productId.price-((product.productId.price * offer)/100))*product.quantity;
+
+        }else if(product.productId.category.offers){
+
+          let offer = product.productId.category.offers[0].discount;
+          total += (product.productId.price-((product.productId.price * offer)/100))*product.quantity;
+
+        }else{
+
+          total += product.productId.price*product.quantity;
+
+        }
+      });
+      console.log('discountTotal:',total);
+
+      res.render("user/cart", { cartdata, subtotal,total, user: req.session.userId });
     } else {
       res.redirect("/login");
     }
@@ -100,6 +125,7 @@ const addtocart = async (req, res) => {
   }
 };
 
+
 const updatecart = async (req, res) => {
   try {
     console.log("reached");
@@ -157,22 +183,24 @@ const updatecart = async (req, res) => {
   }
 };
 
-const removecart = async (req, res) => {
-  try {
-    const userId = req.session.userId;
 
-    const productId = req.body.productId;
+// remove cart
+  const removecart = async (req, res) => {
+    try {
+      const userId = req.session.userId;
 
-    const result = await Cart.findOneAndUpdate(
-      { user: userId },
+      const productId = req.body.productId;
 
-      { $pull: { product: { productId: productId } } }
-    );
-    res.json({ success: true });
-  } catch (error) {
-    console.log(error.message);
-  }
-};
+      const result = await Cart.findOneAndUpdate(
+        { user: userId },
+
+        { $pull: { product: { productId: productId } } }
+      );
+      res.json({ success: true });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
 // checkout page
 const loadcheckoutpage = async (req, res) => {
@@ -189,18 +217,49 @@ const coupon = await Coupon.find({
 });
 
     const address1 = await Address.findOne({ user: userId });
+    
+    
     const cartdata = await Cart.findOne({ user: userId }).populate({
       path: "product.productId",
       model: "Product",
-    }).populate('coupondiscount');
+      populate: [
+        { path: "category", model: "Category", populate: { path: "offers" } },
+        { path: "offers" }
+      ],
+    });
+
+    const cartC = await Cart.findOne({ user: userId }).populate('coupondiscount');
+
 
     const address = address1.address;
-    const subtotal = cartdata.product.reduce((acc, val) => acc + val.total, 0);
+    
+    let subtotal = 0;
 
-    const couponDiscount = cartdata.coupondiscount ? cartdata.coupondiscount.discountamount : 0;
+    cartdata.product.forEach((product)=>{
+
+      if(product.productId.offers){
+
+        let offer = product.productId.offers[0].discount;
+        subtotal += (product.productId.price-((product.productId.price * offer)/100))*product.quantity;
+
+      }else if(product.productId.category.offers){
+
+        let offer = product.productId.category.offers[0].discount;
+        subtotal += (product.productId.price-((product.productId.price * offer)/100))*product.quantity;
+
+      }else{
+
+        subtotal += product.productId.price*product.quantity;
+
+      }
+    });
+
+
+    const couponDiscount = cartC.coupondiscount ? cartC.coupondiscount.discountamount : 0;
     
     const discountAmount = subtotal-couponDiscount
-
+    
+  
 
 
 
@@ -208,6 +267,7 @@ const coupon = await Coupon.find({
       Wallet,
       address,
       cartdata,
+      cartC,
       subtotal,
       coupon,
       discountAmount,
