@@ -1,18 +1,18 @@
 <%- include("../layouts/userpartials/header.ejs") %>
 
-<style>
-  #reloadDiv {
-    width: 100%;
-  }
+  <style>
+    #reloadDiv {
+      width: 100%;
+    }
 
-  #subtotal {
-    width: 100%;
-  }
-</style>
+    #subtotal {
+      width: 100%;
+    }
+  </style>
 
   <div class="site-section">
     <div class="container">
-      <% if (cartdata && cartdata.product.length > 0) { %>
+      <% if (cartdata && cartdata.product.length> 0) { %>
         <div class="row mb-5" id="reloadDiv">
           <form class="col-md-12" method="post">
             <div class="site-blocks-table">
@@ -28,58 +28,77 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <% cartdata.product.forEach(product => { %>
-                  <tr>
-                    <td class="product-thumbnail">
-                      <img src="/public/proImage/<%= product.productId.Image[0] %>" alt="Image" class="img-fluid">
-                    </td>
-                    <td class="product-name">
-                      <h2 class="h5 text-black">
-                        <%= product.productId.name %>
-                      </h2>
-                    </td>
-                    <td>
-                      <% let discountedPrice = product.productId.price; %> <!-- Default value -->
-                      <% if (product.productId.offers && product.productId.offers.length > 0) { %>
-                        <% discountedPrice = product.productId.price - (product.productId.price * product.productId.offers[0].discount / 100); %>
-                        <span id="price_<%= product.productId._id %>"><del>₹<%= product.productId.price %></del> <br>₹<%= discountedPrice.toFixed(2) %></span>
-                      <% } else if (product.productId.category && product.productId.category.offers && product.productId.category.offers.length > 0) { %>
-                        <% discountedPrice = product.productId.price - (product.productId.price * product.productId.category.offers[0].discount / 100); %>
-                        <span id="price_<%= product.productId._id %>"><del>₹<%= product.productId.price %></del> <br>₹<%= discountedPrice.toFixed(2) %></span>
-                      <% } else if (product.productId.category && product.productId.category.offers && product.productId.category.offers.length > 0 && product.productId.offers && product.productId.offers.length > 0) { %>
-                        <% let productDiscount = product.productId.offers[0].discount; %>
-                        <% let categoryDiscount = product.productId.category.offers[0].discount; %>
-                        <% let combinedDiscount = productDiscount + categoryDiscount; %>
-                        <% discountedPrice = product.productId.price - (product.productId.price * combinedDiscount / 100); %>
-                        <span id="price_<%= product.productId._id %>"><del>₹<%= product.productId.price %></del> <br>₹<%= discountedPrice.toFixed(2) %></span>
-                      <% } else { %>
-                        ₹ <span id="price_<%= product.productId._id %>"><%= discountedPrice %></span>
-                      <% } %>
-                    </td>
-                    <td>
-                      <div class="input-group mb-3" style="max-width: 120px;">
-                        <div class="input-group-prepend">
-                          <button class="btn btn-outline-primary js-btn-minus" type="button" onclick="updatequantity('<%=product.productId._id %>', -1)">−</button>
+                  <% cartdata.product.forEach(product=> { %>
+                    <tr>
+                      <td class="product-thumbnail">
+                        <img src="/public/proImage/<%= product.productId.Image[0] %>" alt="Image" class="img-fluid">
+                      </td>
+                      <td class="product-name">
+                        <h2 class="h5 text-black">
+                          <%= product.productId.name %>
+                        </h2>
+                      </td>
+                      <td>
+                        <% let discountedPrice=product.productId.price; %> <!-- Default value -->
+                          <% if (product.productId.offers && product.productId.offers.length> 0) { %>
+                            <% discountedPrice=product.productId.price - (product.productId.price *
+                              product.productId.offers[0].discount / 100); %>
+                              <span id="price_<%= product.productId._id %>"><del>₹<%= product.productId.price %></del>
+                                <br>₹<%= discountedPrice.toFixed(2) %></span>
+                              <% } else if (product.productId.category && product.productId.category.offers &&
+                                product.productId.category.offers.length> 0) { %>
+                                <% discountedPrice=product.productId.price - (product.productId.price *
+                                  product.productId.category.offers[0].discount / 100); %>
+                                  <span id="price_<%= product.productId._id %>"><del>₹<%= product.productId.price %>
+                                        </del> <br>₹<%= discountedPrice.toFixed(2) %></span>
+                                  <% } else if (product.productId.category && product.productId.category.offers &&
+                                    product.productId.category.offers.length> 0 && product.productId.offers &&
+                                    product.productId.offers.length > 0) { %>
+                                    <% let productDiscount=product.productId.offers[0].discount; %>
+                                      <% let categoryDiscount=product.productId.category.offers[0].discount; %>
+                                        <% let combinedDiscount=productDiscount + categoryDiscount; %>
+                                          <% discountedPrice=product.productId.price - (product.productId.price *
+                                            combinedDiscount / 100); %>
+                                            <span id="price_<%= product.productId._id %>"><del>₹<%=
+                                                  product.productId.price %></del> <br>₹<%= discountedPrice.toFixed(2)
+                                                %></span>
+                                            <% } else { %>
+                                              ₹ <span id="price_<%= product.productId._id %>">
+                                                <%= discountedPrice %>
+                                              </span>
+                                              <% } %>
+                      </td>
+                      <td>
+                        <div class="input-group mb-3" style="max-width: 120px;">
+                          <div class="input-group-prepend">
+                            <button class="btn btn-outline-primary js-btn-minus" type="button"
+                              onclick="updatequantity('<%=product.productId._id %>', -1)">−</button>
+                          </div>
+                          <input type="text" class="form-control text-center" value="<%=product.quantity %>"
+                            placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1"
+                            onchange="updateTotal(this, '<%=product.productId._id %>', '<%=product.productId.price %>')">
+                          <div class="input-group-append">
+                            <button class="btn btn-outline-primary js-btn-plus" type="button"
+                              onclick="updatequantity('<%=product.productId._id %>', 1)">+</button>
+                          </div>
                         </div>
-                        <input type="text" class="form-control text-center" value="<%=product.quantity %>" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" onchange="updateTotal(this, '<%=product.productId._id %>', '<%=product.productId.price %>')">
-                        <div class="input-group-append">
-                          <button class="btn btn-outline-primary js-btn-plus" type="button" onclick="updatequantity('<%=product.productId._id %>', 1)">+</button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <span id="total_<%= product.productId._id %>"><%= discountedPrice * product.quantity %></span>
-                    </td>
-                    
-                    <td><a href="#" class="btn btn-primary height-auto btn-sm" onclick="removecart('<%=product.productId._id %>')">X</a></td>
-                  </tr>
-                  <% }) %>
+                      </td>
+                      <td>
+                        <span id="total_<%= product.productId._id %>">
+                          <%= discountedPrice * product.quantity %>
+                        </span>
+                      </td>
+
+                      <td><a href="#" class="btn btn-primary height-auto btn-sm"
+                          onclick="removecart('<%=product.productId._id %>')">X</a></td>
+                    </tr>
+                    <% }) %>
                 </tbody>
               </table>
             </div>
           </form>
         </div>
-    
+
         <div class="row justify-content-end mb-5">
           <div id="subtotal" class="col-md-5">
             <div class="border-bottom mb-5">
@@ -87,10 +106,12 @@
             </div>
             <div class="row mb-3">
               <div class="col-md-6">
-                <span class="text-black">Subtotal</span>
+                <span class="text-black">Amount</span>
               </div>
               <div class="col-md-6 text-right">
-                <strong class="text-black"><%= subtotal %></strong>
+                <strong class="text-black">
+                  <%= subtotal %>
+                </strong>
               </div>
             </div>
             <div class="row mb-5">
@@ -98,101 +119,104 @@
                 <span class="text-black">Total</span>
               </div>
               <div class="col-md-6 text-right">
-                <strong class="text-black"><%= total %></strong>
+                <strong class="text-black">
+                  <%= total %>
+                </strong>
               </div>
             </div>
             <div class="row">
               <div class="col-md-12">
-                <button class="btn btn-primary btn-lg btn-block" onclick="window.location='/checkout'">Proceed To Checkout</button>
+                <button class="btn btn-primary btn-lg btn-block" onclick="window.location='/checkout'">Proceed To
+                  Checkout</button>
               </div>
             </div>
           </div>
         </div>
         <% } else { %>
-        <div class="row mb-5">
-          <div class="col-md-12">
-            <h1>Your cart is empty</h1>
+          <div class="row mb-5">
+            <div class="col-md-12">
+              <h1>Your cart is empty</h1>
+            </div>
           </div>
-        </div>
-        <% } %>
+          <% } %>
 
-      <div class="row mb-5">
-        <div class="col-md-6">
-          <button class="btn btn-outline-primary btn-sm btn-block"><a href="/shop">Continue Shopping</a></button>
-        </div>
-      </div>
+            <div class="row mb-5">
+              <div class="col-md-6">
+                <button class="btn btn-outline-primary btn-sm btn-block"><a href="/shop">Continue Shopping</a></button>
+              </div>
+            </div>
     </div>
   </div>
 
-<script>
-  function updatequantity(productId, count) {
-    const data = { productId, count };
-    fetch('/updatecart', {
+  <script>
+    function updatequantity(productId, count) {
+      const data = { productId, count };
+      fetch('/updatecart', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data)
       })
-      .then(response => response.json())
-      .then((response) => {
-        if (response.success) {
-          $("#reloadDiv").load('/cart #reloadDiv');
-          $("#subtotal").load('/cart #subtotal');
-          if (response.cartIsEmpty) {
-            document.querySelector('.container').innerHTML = '<div class="row mb-5"><div class="col-md-12"><h1>Your cart is empty</h1></div></div>';
+        .then(response => response.json())
+        .then((response) => {
+          if (response.success) {
+            $("#reloadDiv").load('/cart #reloadDiv');
+            $("#subtotal").load('/cart #subtotal');
+            if (response.cartIsEmpty) {
+              document.querySelector('.container').innerHTML = '<div class="row mb-5"><div class="col-md-12"><h1>Your cart is empty</h1></div></div>';
+            }
+          } else {
+            swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: response.message,
+            });
           }
-        } else {
-          swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: response.message,
-          });
-        }
-      })
-      .catch(error => console.error('Error in updating cart', error))
-  }
+        })
+        .catch(error => console.error('Error in updating cart', error))
+    }
 
-  function removecart(productId) {
-    fetch('/removecart', {
+    function removecart(productId) {
+      fetch('/removecart', {
         method: "post",
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ productId }),
       })
-      .then(response => response.json())
-      .then(response => {
-        if (response.success) {
-          console.log(response.success);
-          $("#reloadDiv").load('/cart #reloadDiv');
-          $("#subtotal").load('/cart #subtotal');
-          if (response.cartIsEmpty) {
-            document.querySelector('.container').innerHTML = '<div class="row mb-5"><div class="col-md-12"><h1>Your cart is empty</h1></div></div>';
+        .then(response => response.json())
+        .then(response => {
+          if (response.success) {
+            console.log(response.success);
+            $("#reloadDiv").load('/cart #reloadDiv');
+            $("#subtotal").load('/cart #subtotal');
+            if (response.cartIsEmpty) {
+              document.querySelector('.container').innerHTML = '<div class="row mb-5"><div class="col-md-12"><h1>Your cart is empty</h1></div></div>';
+            } else {
+              Swal.fire({
+                title: "Item Removed!",
+                text: "The item has been successfully removed from your cart.",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 5000,
+              });
+              window.location.href = '/cart'
+            }
           } else {
-            Swal.fire({
-              title: "Item Removed!",
-              text: "The item has been successfully removed from your cart.",
-              icon: "success",
-              showConfirmButton: false,
-              timer: 5000,
-            });
-            window.location.href='/cart'
+            console.error('Error removing item:', response.error);
           }
-        } else {
-          console.error('Error removing item:', response.error);
-        }
-      })
-      .catch(error => {
-        console.error('Error removing item:', error);
-      });
-  }
+        })
+        .catch(error => {
+          console.error('Error removing item:', error);
+        });
+    }
 
-  function updateTotal(inputElement, productId, price) {
-    const quantity = parseInt(inputElement.value);
-    const total = quantity * price;
-    document.getElementById('total_' + productId).innerText = total.toFixed(2);
-  }
-</script>
+    function updateTotal(inputElement, productId, price) {
+      const quantity = parseInt(inputElement.value);
+      const total = quantity * price;
+      document.getElementById('total_' + productId).innerText = total.toFixed(2);
+    }
+  </script>
 
   <%- include("../layouts/userpartials/footer.ejs") %>

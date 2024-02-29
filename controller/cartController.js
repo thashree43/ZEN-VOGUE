@@ -12,6 +12,9 @@ const { Long } = require("mongodb");
 const cartopen = async (req, res) => {
   try {
     const userId = req.session.userId;
+    console.log(
+      "hdgj yhee useId may in cart open",userId
+    );
     if (userId) {
       const cartdata = await Cart.findOne({ user: userId }).populate({
         path: "product.productId",
@@ -21,6 +24,7 @@ const cartopen = async (req, res) => {
           { path: "offers" }
         ]
       });
+      console.log("the cartdat may here in cartopen",cartdata);
       const subtotal = cartdata?.product.reduce(
         (acc, val) => acc + val.total,
         0
@@ -233,25 +237,27 @@ const coupon = await Coupon.find({
     
     let subtotal = 0;
 
-    cartdata.product.forEach((product)=>{
-
-      if(product.productId.offers){
-
-        let offer = product.productId.offers[0].discount;
-        subtotal += (product.productId.price-((product.productId.price * offer)/100))*product.quantity;
-
-      }else if(product.productId.category.offers){
-
-        let offer = product.productId.category.offers[0].discount;
-        subtotal += (product.productId.price-((product.productId.price * offer)/100))*product.quantity;
-
-      }else{
-
-        subtotal += product.productId.price*product.quantity;
-
+    cartdata.product.forEach((product) => {
+      let offer;
+      if (product.productId.offers?.length > 0) {
+          offer = product.productId.offers[0].discount;
+      } else if (product.productId.category?.offers?.length > 0) {
+          offer = product.productId.category.offers[0].discount;
       }
-    });
+  
+      if (offer !== undefined) {
+          subtotal += (product.productId.price - ((product.productId.price * offer) / 100)) * product.quantity;
+      } else {
+          subtotal += product.productId.price * product.quantity;
+      }
+  });
 
+      let shippingCharge = 0;
+      if (subtotal > 1000) {
+      shippingCharge = 50;
+      }
+
+      await Cart.findOneAndUpdate({ user: userId }, { shippingCharge: shippingCharge });
 
     const couponDiscount = cartC.coupondiscount ? cartC.coupondiscount.discountamount : 0;
     
@@ -269,6 +275,7 @@ const coupon = await Coupon.find({
       subtotal,
       coupon,
       discountAmount,
+      shippingCharge,
       user: req.session.userId,
     });
   } catch (error) {

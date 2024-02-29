@@ -119,10 +119,10 @@ const placetheorder = async (req, res) => {
   try {
     
     const userId = req.session.userId;
-    const { addressId, subtotal, paymentMethod } = req.body;
-    console.log("oiihfohihfsoidfhfhsoidfhsoifhiohfo",paymentMethod);
+    const { addressId, subtotal, paymentMethod ,shippingCharge} = req.body;
+    console.log("oiihfohihfsoidfhfhsoidfhsoifhiohfo",shippingCharge);
+    console.log("the subtotal value ",subtotal);
 
-    // Check if addressId and paymentMethod are provided
     if (!addressId || !paymentMethod) {
       return res.json({
         success: false,
@@ -130,7 +130,6 @@ const placetheorder = async (req, res) => {
       });
     }
 
-    // Fetch user address
     const userAddress = await Address.findOne({
       "address._id": addressId,
     });
@@ -144,15 +143,12 @@ const placetheorder = async (req, res) => {
 
     const addressObject = userAddress.address[0];
 
-    // Fetch user data
     const userdata = await User.findOne({ _id: req.session.userId });
 
-    // Fetch user cart data
     const cartdata = await Cart.findOne({ user: userId }).populate(
       "coupondiscount"
     );
 
-    // Check if products are in stock
     for (const cartProduct of cartdata.product) {
       const productdata = await Product.findOne({ _id: cartProduct.productId });
       if (cartProduct.quantity > productdata.quantity) {
@@ -169,12 +165,17 @@ const placetheorder = async (req, res) => {
       paymentMethod === "COD" || paymentMethod === "Wallet"
         ? "placed"
         : "pending";
-    const totalprice = cartdata.coupondiscount
-      ? subtotal - cartdata.coupondiscount.discountamount
-      : subtotal;
+        
+        const subtotalWithShippingCharge = parseInt(subtotal) + parseInt(shippingCharge);
+
+        const totalprice = cartdata.coupondiscount
+          ? (subtotalWithShippingCharge - cartdata.coupondiscount.discountamount)
+          : subtotalWithShippingCharge;
+    
+      
+      
 
       console.log("the total price is of the order is this ",totalprice);
-    // Create new order
     
 
     const neworder = new Order({
@@ -193,9 +194,7 @@ const placetheorder = async (req, res) => {
     const orderId = saveorder._id;
     const totalamount = saveorder.subtotal;
 
-    // Handle payment methods
     if (paymentMethod === "COD") {
-      // Deduct product quantities from stock
       for (const cartProduct of cartdata.product) {
         await Product.findByIdAndUpdate(
           { _id: cartProduct.productId },
@@ -203,12 +202,10 @@ const placetheorder = async (req, res) => {
         );
       }
 
-      // Clear user's cart
       const deletefromcart = await Cart.findOneAndDelete({ user: userId });
 
       return res.json({ success: true, orderId });
     } else if (paymentMethod === "Wallet") {
-      // Deduct total price from user's wallet
       const WalletData = {
         amount: -totalprice,
         date: Date.now(),
@@ -223,7 +220,6 @@ const placetheorder = async (req, res) => {
         }
       );
         console.log("the amount is decreasing from the wallet ",decrease);
-      // Deduct product quantities from stock
       for (const cartProduct of cartdata.product) {
         await Product.findByIdAndUpdate(
           { _id: cartProduct.productId },

@@ -1,171 +1,227 @@
+<%- include("../layouts/userpartials/header.ejs") %>
+  <style>
+    .item-entry {
+      position: relative;
+    }
 
+    .product-item {
+      position: relative;
+      overflow: hidden;
+    }
 
-            <%- include("../layouts/userpartials/header.ejs") %>
-            <style>
-              .item-entry {
-    position: relative;
-  }
+    .product-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
 
-  .product-item {
-    position: relative;
-    overflow: hidden;
-  }
+    .item-title {
+      margin-top: 10px;
+      font-size: 16px;
+      font-weight: bold;
+    }
 
-  .product-item img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
+    .item-price {
+      display: block;
+      font-size: 18px;
+      color: #ff4500;
+      margin-top: 5px;
+      padding-left: 64px;
+    }
 
-  .item-title {
-    margin-top: 10px;
-    font-size: 16px;
-    font-weight: bold;
-  }
+    .item-entry .item-title a {
+      color: rgb(10, 1, 1);
+      padding-left: 61px;
+    }
 
-  .item-price {
-    display: block;
-    font-size: 18px;
-    color: #ff4500; 
-    margin-top: 5px;
-    padding-left: 64px;
-  }
-  .item-entry .item-title a {
-    color: rgb(10, 1, 1);
-    padding-left: 61px;
-}
-            </style>
-            <a href="#" class="site-menu-toggle js-menu-toggle ml-3 d-inline-block d-lg-none"><span class="icon-menu"></span></a>
-          </div>
-        </div>
-      </div>  
-    </div>
-    
-    <div class="site-blocks-cover inner-page" data-aos="fade">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6 ml-auto order-md-2 align-self-start">
-            <div class="site-block-cover-content">
+    .search-form {
+      display: flex;
+      justify-content: center;
+    }
+
+    .search-form .form-group {
+      display: flex;
+      align-items: center;
+    }
+
+    .search-form input[type="text"] {
+      width: 300px;
+      /* Adjust width as needed */
+      padding: 10px;
+      border-radius: 5px 0 0 5px;
+      border: 1px solid #ccc;
+    }
+
+    .search-form button {
+      padding: 10px 20px;
+      background-color: #a83275;
+      /* Adjust to your preferred button color */
+      border: none;
+      color: #fff;
+      border-radius: 0 5px 5px 0;
+      cursor: pointer;
+    }
+
+    .search-form button:hover {
+      background-color: #a83275;
+      /* Adjust to your preferred button hover color */
+    }
+  </style>
+  <a href="#" class="site-menu-toggle js-menu-toggle ml-3 d-inline-block d-lg-none"><span class="icon-menu"></span></a>
+  </div>
+  </div>
+  </div>
+  </div>
+
+  <div class="site-blocks-cover inner-page" data-aos="fade">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 ml-auto order-md-2 align-self-start">
+          <div class="site-block-cover-content">
             <h2 class="sub-title">#New Summer Collection 2019</h2>
             <h1>Arrivals Sales</h1>
             <p><a href="#" class="btn btn-black rounded-0">Shop Now</a></p>
+          </div>
+        </div>
+        <div class="col-md-6 order-1 align-self-end">
+          <img src="images/model_4.png" alt="Image" class="img-fluid">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="custom-border-bottom py-3">
+    <div class="container">
+
+    </div>
+  </div>
+
+
+  <div class="site-section">
+    <div class="container">
+      <!-- Search bar -->
+      <div class="row mb-3">
+        <div class="col-md-12">
+          <form action="/shop" method="GET" class="search-form">
+            <div class="form-group">
+              <input type="text" class="form-control" name="search" placeholder="Search products...">
+              <button type="submit" class="btn btn-primary">Search</button>
             </div>
-          </div>
-          <div class="col-md-6 order-1 align-self-end">
-            <img src="images/model_4.png" alt="Image" class="img-fluid">
-          </div>
+          </form>
         </div>
       </div>
-    </div>
 
-    <div class="custom-border-bottom py-3">
-      <div class="container">
-        
-      </div>
-    </div>
+      <div class="row mb-5">
+        <div class="col-md-9 order-1">
 
-
-    <div class="site-section">
-      <div class="container">
-
-        <div class="row mb-5">
-          <div class="col-md-9 order-1">
-
-            <div class="row align">
-              <div class="col-md-12 mb-5">
-                  <div class="float-md-left">
-                      <h2 class="text-black h5">All Products</h2>
-                  </div>
-                  <div class="d-flex">
-                      <div class="dropdown mr-1 ml-md-auto">
-                          <button type="button" class="btn btn-white btn-sm dropdown-toggle px-4" id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              Category
-                          </button>
-                          <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
-                              <a class="dropdown-item" href="/shop">All</a>
-                              <% categories.forEach(category => { %>
-                                  <a class="dropdown-item" href="/shop?category=<%= category._id %>"><%= category.name %></a>
-                              <% }); %>
-                          </div>
-                      </div>
-                  </div>
+          <div class="row align">
+            <div class="col-md-12 mb-5">
+              <div class="float-md-left">
+                <h2 class="text-black h5">All Products</h2>
               </div>
-          </div>
-          
-
-
-            
-          <div class="row mb-5">
-            <% if(products.length > 0){ %>
-                <% for(let i = 0; i < products.length; i++){ %>
-                    <div class="col-lg-4 col-md-6 item-entry mb-4">
-                        <a href="/productdetail?id=<%= products[i]._id %>" class="product-item md-height bg-gray d-block">
-                            <img src="proImage/<%= products[i].Image[0]%>" alt="Image" class="img-fluid">
-                        </a>
-                        <h2 class="item-title"><a href="#"><%= products[i].name %></a></h2>
-                        <% if (products[i].offers && products[i].offers.length > 0) { %>
-                          <% let discountedPrice = products[i].price - (products[i].price * products[i].offers[0].discount / 100); %>
-                          <a class="item-price"><span><del>₹<%= products[i].price.toFixed(2) %>/-</del> ₹<%= discountedPrice.toFixed(2) %> /-</span></a>
-                          <% } else if(products[i].category && products[i].category.offers && products[i].category.offers.length > 0 && products[i].category.offers[0].discount !== undefined) { %>
-                            <% let discount = products[i].category.offers[0].discount; %>
-                            <% let discountedPrice = products[i].price - (products[i].price * discount / 100); %>
-                            <a class="item-price"><span><del> ₹<%= products[i].price.toFixed(2) %> /-</del> ₹<%= discountedPrice.toFixed(2) %> /-</span></a>
-                            <% } else if(products[i].offers && products[i].offers.length > 0 && products[i].category && products[i].category.offers && products[i].category.offers.length > 0) { %>
-                              <% let productDiscount = products[i].offers[0].discount; %>
-                              <% let categoryDiscount = products[i].category.offers[0].discount; %>
-                              <% let combinedDiscount = productDiscount + categoryDiscount; %>
-                              <% let discountedPrice = products[i].price - (products[i].price * combinedDiscount / 100); %>
-                              <a class="item-price"><span><del> ₹<%= products[i].price.toFixed(2) %> /-</del> ₹<%= discountedPrice.toFixed(2) %> /-</span></a>
-                        <% } else { %>
-                            <a class="item-price"><span> ₹<%= products[i].price.toFixed(2) %> /-</span></a>
-                        <% } %>
-                        
-                        
-                      
-                    </div>
-                    <% if ((i + 1) % 3 === 0) { %>
-                        </div><div class="row mb-5">
-                    <% } %>
-                <% } %>
-            <% } else { %>
-                <h3>No products found</h3>
-            <% } %>
-        </div>
-        
-
-
-
-
-   <!-- -------------------------------------------pagination -->
-            <div class="row">
-              <div class="col-md-12 text-center">
-             
-                <div class="site-block-27">
-                  <ul>
-                    <li><a href="#">&lt;</a></li>
-                    <li class="active"><span>1</span></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                    <li><a href="#">&gt;</a></li>
-                  </ul>
+              <div class="d-flex">
+                <div class="dropdown mr-1 ml-md-auto">
+                  <button type="button" class="btn btn-white btn-sm dropdown-toggle px-4" id="dropdownMenuOffset"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Category
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
+                    <a class="dropdown-item" href="/shop">All</a>
+                    <% categories.forEach(category=> { %>
+                      <a class="dropdown-item" href="/shop?category=<%= category._id %>">
+                        <%= category.name %>
+                      </a>
+                      <% }); %>
+                  </div>
                 </div>
               </div>
             </div>
-
-
-
-
           </div>
 
-        
+
+
+
+          <div class="row mb-5">
+            <% if(products.length> 0){ %>
+              <% for(let i=0; i < products.length; i++){ %>
+                <div class="col-lg-4 col-md-6 item-entry mb-4">
+                  <a href="/productdetail?id=<%= products[i]._id %>" class="product-item md-height bg-gray d-block">
+                    <img src="proImage/<%= products[i].Image[0]%>" alt="Image" class="img-fluid">
+                  </a>
+                  <h2 class="item-title"><a href="#">
+                      <%= products[i].name %>
+                    </a></h2>
+                  <% if (products[i].offers && products[i].offers.length> 0) { %>
+                    <% let discountedPrice=products[i].price - (products[i].price * products[i].offers[0].discount /
+                      100); %>
+                      <a class="item-price"><span><del>₹<%= products[i].price.toFixed(2) %>/-</del> ₹<%=
+                            discountedPrice.toFixed(2) %> /-</span></a>
+                      <% } else if(products[i].category && products[i].category.offers &&
+                        products[i].category.offers.length> 0 && products[i].category.offers[0].discount !== undefined)
+                        { %>
+                        <% let discount=products[i].category.offers[0].discount; %>
+                          <% let discountedPrice=products[i].price - (products[i].price * discount / 100); %>
+                            <a class="item-price"><span><del> ₹<%= products[i].price.toFixed(2) %> /-</del> ₹<%=
+                                  discountedPrice.toFixed(2) %> /-</span></a>
+                            <% } else if(products[i].offers && products[i].offers.length> 0 && products[i].category &&
+                              products[i].category.offers && products[i].category.offers.length > 0) { %>
+                              <% let productDiscount=products[i].offers[0].discount; %>
+                                <% let categoryDiscount=products[i].category.offers[0].discount; %>
+                                  <% let combinedDiscount=productDiscount + categoryDiscount; %>
+                                    <% let discountedPrice=products[i].price - (products[i].price * combinedDiscount /
+                                      100); %>
+                                      <a class="item-price"><span><del> ₹<%= products[i].price.toFixed(2) %> /-</del> ₹
+                                          <%= discountedPrice.toFixed(2) %> /-</span></a>
+                                      <% } else { %>
+                                        <a class="item-price"><span> ₹<%= products[i].price.toFixed(2) %> /-</span></a>
+                                        <% } %>
+
+
+
+                </div>
+                <% if ((i + 1) % 3===0) { %>
+          </div>
+          <div class="row mb-5">
+            <% } %>
+              <% } %>
+                <% } else { %>
+                  <h3>No products found</h3>
+                  <% } %>
+          </div>
+
+
+
+
+
+          <!-- -------------------------------------------pagination -->
+          <div class="row">
+            <div class="col-md-12 text-center">
+
+              <div class="site-block-27">
+                <ul>
+                  <li><a href="#">&lt;</a></li>
+                  <li class="active"><span>1</span></li>
+                  <li><a href="#">2</a></li>
+                  <li><a href="#">3</a></li>
+                  <li><a href="#">4</a></li>
+                  <li><a href="#">5</a></li>
+                  <li><a href="#">&gt;</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+
+
+
         </div>
 
+
       </div>
+
     </div>
+  </div>
 
-   
 
-    <%- include("../layouts/userpartials/footer.ejs") %>
-   
+
+  <%- include("../layouts/userpartials/footer.ejs") %>

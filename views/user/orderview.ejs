@@ -92,8 +92,10 @@
 }
 </style>
 <main class="h-full pb-16 overflow-y-auto">
-    <div class="container grid px-6 mx-auto">
+  
+    <div class="container grid px-6 mx-auto" id="printThisDiv">
       <div class="customer-section">
+        <button style="background-color: green;" onclick="downloadPDF('printThisDiv')">Download Invoice</button>
         <h4>Customer Address:</h4>
         <p>
      <%= orderdata.deliveryDetails.fname %> <br>
@@ -137,6 +139,9 @@
               <p><span class="font-semibold">Status:</span>
                 <%= orderdata.status || 'Not Available' %>
               </p>
+              <p><span class="font-semibold">Amount:</span>
+                ₹<%= orderdata.subtotal || 'Not Available' %>/-
+              </p>
             </div>
           </div>
         </div>
@@ -153,6 +158,15 @@
     <% }) %>
     </div>
   </main>
+  <script>
+    function downloadPDF(divName) {
+       const printContents = document.getElementById(divName).innerHTML;
+       const originalContents = document.body.innerHTML;
+       document.body.innerHTML = printContents;
+       window.print();
+       document.body.innerHTML = originalContents;
+   }
+</script>
 
 
 <%- include("../layouts/userpartials/footer.ejs") %>

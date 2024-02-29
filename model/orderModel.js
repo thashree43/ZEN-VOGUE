@@ -13,7 +13,7 @@ const OrderModel = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-  },
+  }, 
   paymentmethod: {
     type: String,
   },

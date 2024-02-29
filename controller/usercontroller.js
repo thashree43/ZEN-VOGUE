@@ -510,6 +510,11 @@ const loadshop = async (req, res) => {
           query.category = req.query.category;
       }
 
+      // for search
+      if (req.query.search) {
+        query.name = { $regex: new RegExp(req.query.search, 'i') }; // Case-insensitive search
+    }
+
       const productdetail = await Product.find(query).populate({
         path: 'category',
         populate: { path: 'offers' }
