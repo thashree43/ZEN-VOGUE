@@ -102,14 +102,15 @@
       <!-- Search bar -->
       <div class="row mb-3">
         <div class="col-md-12">
-          <form action="/shop" method="GET" class="search-form">
+          <form id="searchForm" class="search-form">
             <div class="form-group">
-              <input type="text" class="form-control" name="search" placeholder="Search products...">
+              <input type="text" id="searchInput" class="form-control" name="search" placeholder="Search products...">
               <button type="submit" class="btn btn-primary">Search</button>
             </div>
           </form>
         </div>
       </div>
+      
 
       <div class="row mb-5">
         <div class="col-md-9 order-1">
@@ -222,6 +223,35 @@
     </div>
   </div>
 
+<script>
+ document.addEventListener('DOMContentLoaded', function () {
+  const searchForm = document.getElementById('searchForm');
+  const searchInput = document.getElementById('searchInput');
 
+  // Populate the input field with the search query if it exists in the URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const searchQuery = urlParams.get('search');
+  if (searchQuery) {
+    searchInput.value = searchQuery;
+  }
+
+  // Prevent default form submission behavior and handle it via JavaScript
+  searchForm.addEventListener('submit', function (event) {
+    event.preventDefault(); // Prevent default form submission
+
+    // Get the value from the input field
+    const inputValue = searchInput.value.trim();
+
+    // If the input field is not empty, update the URL query parameter
+    if (inputValue) {
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.set('search', inputValue);
+      window.location.href = newUrl.href; // Redirect to the updated URL
+    }
+  });
+});
+
+
+</script>
 
   <%- include("../layouts/userpartials/footer.ejs") %>

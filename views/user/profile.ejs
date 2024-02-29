@@ -590,8 +590,12 @@ tbody tr:hover {
                           <a
                             onclick="cancelOrder('<%= order._id %>')"
                             class="action-button danger-border"
-                            >Cancel</a
-                          >
+                            >Cancel</a>
+                          <% } %> <% if(order.status === "pending"){ %>
+                            <a
+                            onclick="payOrder('<%= order._id %>','<%= order.subtotal %>')"
+                            class="action-button danger-border"
+                            >PAY</a>
                           <% } %>
                         </div>
                       </td>
@@ -918,6 +922,85 @@ tbody tr:hover {
     return true; // Allow the form submission
   }
 </script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="your_script.js"></script>
 
+<!-- if its pending  -->
+<script>
+function payOrder(orderId,totalamount){
+console.log("the details ",orderId,totalamount)
+    $.ajax({
+      url:"/pay",
+      method:'post',
+      data:{
+        orderId:orderId,
+        totalamount:totalamount
+      },
+      success:(response)=>{
+        if(response.success){
+          console.log('response.success has become true now');
+              razorpaypayment(response.orders);
+        }
+      }
+    })
+}
+
+function razorpaypayment(orders) {
+        console.log("here i have reached ");
+        var options = {
+          "key": "rzp_test_gxkxYQEh9554jI",
+          "amount": orders.amount,
+          "currency": "INR",
+          "name": "ZENVOGUE",
+          "description": "Test Transaction",
+          "image": "https://example.com/your_logo",
+          "order_id": orders.id,
+          "handler": function (response) {
+            verifypayment(response, orders);
+          },
+          "prefill": {
+            "name": "Gaurav Kumar",
+            "email": "gaurav.kumar@example.com",
+            "contact": "9000090000"
+          },
+          "notes": {
+            "address": "Razorpay Corporate Office"
+          },
+          "theme": {
+            "color": "#3399cc"
+          }
+        };
+        let raz = new Razorpay(options);
+        raz.open();
+      }
+
+      // Function for verifying Razorpay payment
+      function verifypayment(Payment, orders) {
+        console.log("now im here buddy")
+        $.ajax({
+          url: '/verifypayment',
+          method: 'post',
+          data: {
+            Payment,
+            orders
+          },
+          success: function (response) {
+            console.log("ajax verify payment response", response);
+            if (response.success) {
+              let orderId = response.orderId
+              console.log("the order id may her for the razo pay and ::", orderId)
+              window.location.href = `/ordersuccess?id=${orderId}`
+            } else if (response.onlineSuccess) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Payment has done',
+                showConfirmButton: false,
+                timer: 1500
+              })
+            }
+          }
+        });
+      }
+</script>
 
 <%- include("../layouts/userpartials/footer.ejs") %>

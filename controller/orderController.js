@@ -418,6 +418,25 @@ const orderview = async (req, res) => {
   }
 };
 
+const payorder = async(req,res)=>{
+  try {
+    const { orderId,totalamount} = req.body
+    console.log("the order id for pay order",orderId);
+    console.log("the order id for pay order",totalamount);
+      
+    const orders = await instance.orders.create({
+      amount: totalamount * 100,
+      currency: "INR",
+      receipt: "" + orderId,
+    });
+     console.log("the orders for pay order",orders);
+    return res.json({ success: true, orders });
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+
 module.exports = {
   placetheorder,
   verifypayment,
@@ -426,4 +445,5 @@ module.exports = {
   cancelorder,
   returnorder,
   orderview,
+  payorder,
 };

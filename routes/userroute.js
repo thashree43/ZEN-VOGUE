@@ -76,6 +76,7 @@ userRoute.get("/orderlist", userAuth.isLogin, orderController.orderlist);
 userRoute.post("/cancelorder", userAuth.isLogin, orderController.cancelorder);
 userRoute.post("/returnOrder", userAuth.isLogin, orderController.returnorder);
 userRoute.get("/orderview", orderController.orderview);
+userRoute.post("/pay",orderController.payorder)
 
 // coupon
 userRoute.post("/applycoupon",userAuth.isLogin,couponController.applycoupon)
