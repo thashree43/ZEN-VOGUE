@@ -9,6 +9,10 @@ const randomstrings = require("randomstring")
 const UserOtpVerification = require("../model/userotpverification");
 const userotpverification = require("../model/userotpverification");
 const { transporter, sendOtpVerificationMail } = require("../utils/sentOtp");
+const fs = require('fs')
+const path = require('path')
+const ejs = require("ejs");
+const puppeteer = require("puppeteer")
 
 
 const { name } = require("ejs");
@@ -512,7 +516,7 @@ const loadshop = async (req, res) => {
 
       // for search
       if (req.query.search) {
-        query.name = { $regex: new RegExp(req.query.search, 'i') }; // Case-insensitive search
+        query.name = { $regex: new RegExp(req.query.search, 'i') };
     }
 
       const productdetail = await Product.find(query).populate({
@@ -558,7 +562,8 @@ const myaccount = async(req,res)=>{
   try {
     const userid = req.session.userId
     const users = await User.findOne({_id:userid})
-    console.log("the user data may here",users);
+    users.walletHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+
 
 
     const userAddress = await Address.findOne({
@@ -595,6 +600,41 @@ const profilesubmit= async(req,res)=>{
   }
 }
 
+const downloadinvoice = async (req, res) => {
+  try {
+   const orderId = req.query.orderId
+   const order = await Order.findOne({_id:orderId}).populate({
+    path: "product.productId",
+    model: "Product",
+   }).populate("user")
+   
+   const date = new Date()
+   const data = {
+    order:order,
+    date,
+   }
+
+   const filepathName = path.resolve(__dirname, "../views/user/invoice.ejs");
+   const html = fs.readFileSync(filepathName).toString();
+   const ejsData = ejs.render(html, data);
+   const browser = await puppeteer.launch({ headless: "new"});
+   const page = await browser.newPage();
+   await page.setContent(ejsData, { waitUntil: "networkidle0" });
+   const pdfBytes = await page.pdf({ format: "Letter" });
+   await browser.close();
+   res.setHeader("Content-Type", "application/pdf");
+   res.setHeader(
+     "Content-Disposition",
+     "attachment; filename= orderInvoice_Zenvogue.pdf"
+   );
+   res.send(pdfBytes);
+
+
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send('Error generating invoice');
+  }
+}
 
 module.exports = {
   userHome,
@@ -617,5 +657,5 @@ module.exports = {
   resetpassword,
   myaccount,
   profilesubmit,
- 
+  downloadinvoice,
 };

@@ -462,7 +462,7 @@
                         <td><%= orderItem.paymentmethod %></td>
                         <td><%= orderItem.status %></td>
                         <td>₹<%= orderItem.subtotal %>/-</td>
-                        <td><%= orderItem.username %></td>
+                        <td><%= orderItem.user.name %></td>
                     </tr>
                 <% }); %>
             </tbody>

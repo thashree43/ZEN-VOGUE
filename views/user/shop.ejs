@@ -228,25 +228,21 @@
   const searchForm = document.getElementById('searchForm');
   const searchInput = document.getElementById('searchInput');
 
-  // Populate the input field with the search query if it exists in the URL
   const urlParams = new URLSearchParams(window.location.search);
   const searchQuery = urlParams.get('search');
   if (searchQuery) {
     searchInput.value = searchQuery;
   }
 
-  // Prevent default form submission behavior and handle it via JavaScript
   searchForm.addEventListener('submit', function (event) {
-    event.preventDefault(); // Prevent default form submission
+    event.preventDefault(); 
 
-    // Get the value from the input field
     const inputValue = searchInput.value.trim();
 
-    // If the input field is not empty, update the URL query parameter
     if (inputValue) {
       const newUrl = new URL(window.location.href);
       newUrl.searchParams.set('search', inputValue);
-      window.location.href = newUrl.href; // Redirect to the updated URL
+      window.location.href = newUrl.href; 
     }
   });
 });

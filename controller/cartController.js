@@ -223,7 +223,7 @@ const coupon = await Coupon.find({
     
     const cartdata = await Cart.findOne({ user: userId }).populate({
       path: "product.productId",
-      model: "Product",
+      model: "Product", 
       populate: [
         { path: "category", model: "Category", populate: { path: "offers" } },
         { path: "offers" }

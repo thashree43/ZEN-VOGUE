@@ -95,7 +95,6 @@
   
     <div class="container grid px-6 mx-auto" id="printThisDiv">
       <div class="customer-section">
-        <button style="background-color: green;" onclick="downloadPDF('printThisDiv')">Download Invoice</button>
         <h4>Customer Address:</h4>
         <p>
      <%= orderdata.deliveryDetails.fname %> <br>
@@ -111,13 +110,6 @@
             
         </h4>
 
-        <!-- <form action="">
-          <div>
-            <h4>Status</h4>
-             
-          </div>
-        </form>
-      </div> -->
 
       
       <% orderdata.product.forEach((value,index)=>{ %>
@@ -158,15 +150,7 @@
     <% }) %>
     </div>
   </main>
-  <script>
-    function downloadPDF(divName) {
-       const printContents = document.getElementById(divName).innerHTML;
-       const originalContents = document.body.innerHTML;
-       document.body.innerHTML = printContents;
-       window.print();
-       document.body.innerHTML = originalContents;
-   }
-</script>
+
 
 
 <%- include("../layouts/userpartials/footer.ejs") %>

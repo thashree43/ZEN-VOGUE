@@ -2,18 +2,18 @@ const mongoose = require("mongoose");
 
 const OrderModel = new mongoose.Schema({
   deliveryDetails: {
-    type: Object,
+    type: Object ,
     required: true,
   },
   user: {
     type: mongoose.Types.ObjectId,
-    ref: "user",
+    ref: "User",
     required: true,
   },
-  username: {
-    type: String,
-    required: true,
-  }, 
+  // username: {
+  //   type: String,
+  //   required: true,
+  // }, 
   paymentmethod: {
     type: String,
   },
@@ -28,11 +28,13 @@ const OrderModel = new mongoose.Schema({
         type: Number,
         required: true,
       },
+      price:{
+        type:Number,
+        required:true,
+      }
     },
   ],
-  // totalamount:{
-  //     type:Number
-  // },
+  
   subtotal: {
     type: Number,
   },

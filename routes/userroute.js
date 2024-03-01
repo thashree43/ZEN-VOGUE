@@ -55,7 +55,7 @@ userRoute.post("/addaddress", addressController.postaddaddress);
 userRoute.get("/editaddress", userAuth.isLogin, addressController.editaddress);
 userRoute.post("/editaddress", addressController.updateaddress);
 userRoute.delete("/deleteaddress", addressController.deleteaddress);
-
+userRoute.get('/invoice',userController.downloadinvoice)
 // cart
 userRoute.get("/cart", userAuth.isLogin, cartController.cartopen);
 userRoute.post("/cart", userAuth.isLogin, cartController.addtocart);

@@ -137,7 +137,16 @@
       <div class="row mb-5">
         <div class="col-md-12">
           <div class="border p-4 rounded" role="alert">
-            Returning customer? <a href="#">Click here</a> to login
+            <h4> Your Order</h4>
+            <% cartdata.product.forEach((product)=>{ %>
+            <h6 style="color: black;"><strong><%= product.productId.name %></strong></h6>
+            <p class="description" style="color: rgb(28, 26, 26);">
+              <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                  <%= product.productId.description %>
+              </span>
+          </p>            <p style="color:black"><strong> Qty :</strong><%= product.quantity%></p>
+            <h7 style="color: black;"><strong>Price : <%= product.total %></strong></h7>
+          <% }) %>
           </div>
         </div>
       </div>

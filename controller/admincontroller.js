@@ -186,7 +186,7 @@ const salepage = async (req, res) => {
       .populate({
         path: "product.productId",
         select: "name", 
-      })
+      }).populate("user")
       ;
     res.render("admin/salesreport", { order: order });
   } catch (error) {

@@ -553,7 +553,10 @@ tbody tr:hover {
                       <td>
                         <%= order._id %>
                         <br /><br />
-                        
+                        <a href="/invoice?orderId=<%=order._id %>" class="invoice-btn" target="_blank">
+                          <span style="font-weight: bold; text-decoration: underline;">Download Invoice</span>
+                      </a>
+                      
                       
                       </td>
                       <td><%= order.paymentmethod %></td>
