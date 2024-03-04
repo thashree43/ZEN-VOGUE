@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const OrderModel = new mongoose.Schema({
   deliveryDetails: {
-    type: Object ,
+    type: Object,
     required: true,
   },
   user: {
@@ -10,11 +10,7 @@ const OrderModel = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  // username: {
-  //   type: String,
-  //   required: true,
-  // }, 
-  paymentmethod: {
+  paymentMethod: {
     type: String,
   },
   product: [
@@ -24,17 +20,28 @@ const OrderModel = new mongoose.Schema({
         ref: "Product",
         required: true,
       },
+      name: {
+        type: String,
+        required: true,
+      },
       quantity: {
         type: Number,
         required: true,
       },
-      price:{
-        type:Number,
-        required:true,
-      }
+      price: {
+        type: Number,
+        required: true,
+      },
+      brand: {
+        type: String,
+        required: true,
+      },
+      category: {
+        type: String,
+        required: true,
+      },
     },
   ],
-  
   subtotal: {
     type: Number,
   },

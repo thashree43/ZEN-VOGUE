@@ -109,8 +109,11 @@ const addtocart = async (req, res) => {
           $push: {
             product: {
               productId: productid,
+              name:productdata.name,
               price: productdata.price,
+              brand:productdata.brand,
               quantity: 1,
+              category:productdata.category,
               total: productdata.price,
             },
           },

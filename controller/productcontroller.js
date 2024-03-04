@@ -36,7 +36,7 @@ const addproduct = async (req, res) => {
       return res.status(404).send("It's already existed");
     }
 
-    const { productName, description, quantity, categories, price } = req.body;
+    const { productName, description, quantity,brand, categories, price } = req.body;
     const filenames = [];
     const existcategory = await category.findOne({ name: categories });
     const Datas = await category.find({ is_listed: 1 });
@@ -63,6 +63,7 @@ const addproduct = async (req, res) => {
       description,
       quantity,
       price,
+      brand,
       Image: filenames,
       category: existcategory._id,
       date: new Date(),
@@ -100,7 +101,7 @@ const loadeditproduct = async (req, res) => {
 const editproduct = async (req, res) => {
   try {
     const id = req.body.id;
-    const { productName, description, quantity, categories, price } = req.body;
+    const { productName, description, quantity,brand, categories, price } = req.body;
 
     const Datas = await products.findOne({ _id: id });
     const productData = await category.find({ is_Listed: 1 });
@@ -142,6 +143,7 @@ const editproduct = async (req, res) => {
         description,
         quantity: quantity,
         price,
+        brand,
         categories: selectcategory._id,
         $push: { Image: { $each: imageData } },
       },

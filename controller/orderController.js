@@ -177,19 +177,25 @@ const placetheorder = async (req, res) => {
 
       console.log("the total price is of the order is this ",totalprice);
     
-
-    const neworder = new Order({
-      deliveryDetails: addressObject,
-      user: userdata._id,
-      username: userdata.name,
-      paymentmethod: paymentMethod,
-      product: products,
-      subtotal: totalprice,
-      status: status,
-      Date: Date.now(),
-      exprdate: exprdate,
-    });
-
+      const neworder = new Order({
+        deliveryDetails: addressObject,
+        user: userdata._id,
+        username: userdata.name,
+        paymentMethod: paymentMethod,
+        product: products.map(product => ({
+          productId: product.productId,
+          name: product.name,  // Make sure to include 'name'
+          brand: product.brand, // Make sure to include 'brand'
+          category: product.category, // Make sure to include 'category'
+          quantity: product.quantity,
+          price: product.price,
+        })),
+        subtotal: totalprice,
+        status: status,
+        Date: Date.now(),
+        exprdate: exprdate,
+      });
+ console.log(" the new order",neworder);
     const saveorder = await neworder.save();
     const orderId = saveorder._id;
     const totalamount = saveorder.subtotal;

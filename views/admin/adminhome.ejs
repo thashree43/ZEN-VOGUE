@@ -1,152 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Corona Admin</title>
-    <!-- plugins:css -->
-    <link rel="stylesheet" href="/admin/vendors/mdi/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="/admin/vendors/css/vendor.bundle.base.css">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="/admin/vendors/jvectormap/jquery-jvectormap.css">
-    <link rel="stylesheet" href="/admin/vendors/flag-icon-css/css/flag-icon.min.css">
-    <link rel="stylesheet" href="/admin/vendors/owl-carousel-2/owl.carousel.min.css">
-    <link rel="stylesheet" href="/admin/vendors/owl-carousel-2/owl.theme.default.min.css">
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- Layout styles -->
-    <link rel="stylesheet" href="/admin/css/style.css">
-    <link rel="shortcut icon" href="/admin/images/favicon.png" />
-  </head>
-  <body>
-    <div class="container-scroller">
-      <!-- partial:partials/_sidebar.html -->
-      <nav class="sidebar sidebar-offcanvas" id="sidebar">
-        <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-          <a class="sidebar-brand brand-logo" href="index.html"><img src="/admin/images/logo.svg" alt="logo" /></a>
-          <a class="sidebar-brand brand-logo-mini" href="index.html"><img src="/admin/images/logo-mini.svg" alt="logo" /></a>
-        </div>
-        <ul class="nav">
-          <li class="nav-item profile">
-            <div class="profile-desc">
-              <div class="profile-pic">
-                <div class="count-indicator">
-                  <img class="img-xs rounded-circle " src="/admin/images/faces/face15.jpg" alt="">
-                  <span class="count bg-success"></span>
-                </div>
-                <div class="profile-name">
-                  <h5 class="mb-0 font-weight-normal">Thashreef Khan</h5>
-                  <span>Gold Member</span>
-                </div>
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Corona Admin</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="/admin/vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="/admin/vendors/css/vendor.bundle.base.css">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <link rel="stylesheet" href="/admin/vendors/jvectormap/jquery-jvectormap.css">
+  <link rel="stylesheet" href="/admin/vendors/flag-icon-css/css/flag-icon.min.css">
+  <link rel="stylesheet" href="/admin/vendors/owl-carousel-2/owl.carousel.min.css">
+  <link rel="stylesheet" href="/admin/vendors/owl-carousel-2/owl.theme.default.min.css">
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <!-- endinject -->
+  <!-- Layout styles -->
+  <link rel="stylesheet" href="/admin/css/style.css">
+  <link rel="shortcut icon" href="/admin/images/favicon.png" />
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:partials/_sidebar.html -->
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+      <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+        <a class="sidebar-brand brand-logo" href="index.html"><img src="/admin/images/logo.svg" alt="logo" /></a>
+        <a class="sidebar-brand brand-logo-mini" href="index.html"><img src="/admin/images/logo-mini.svg"
+            alt="logo" /></a>
+      </div>
+      <ul class="nav">
+        <li class="nav-item profile">
+          <div class="profile-desc">
+            <div class="profile-pic">
+              <div class="count-indicator">
+                <img class="img-xs rounded-circle " src="/admin/images/faces/face15.jpg" alt="">
+                <span class="count bg-success"></span>
               </div>
-              <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
-              <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
-                <a href="#" class="dropdown-item preview-item">
-                  <div class="preview-thumbnail">
-                    <div class="preview-icon bg-dark rounded-circle">
-                      <i class="mdi mdi-settings text-primary"></i>
-                    </div>
-                  </div>
-                  <div class="preview-item-content">
-                    <p class="preview-subject ellipsis mb-1 text-small">Account settings</p>
-                  </div>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item preview-item">
-                  <div class="preview-thumbnail">
-                    <div class="preview-icon bg-dark rounded-circle">
-                      <i class="mdi mdi-onepassword  text-info"></i>
-                    </div>
-                  </div>
-                  <div class="preview-item-content">
-                    <p class="preview-subject ellipsis mb-1 text-small">Change Password</p>
-                  </div>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item preview-item">
-                  <div class="preview-thumbnail">
-                    <div class="preview-icon bg-dark rounded-circle">
-                      <i class="mdi mdi-calendar-today text-success"></i>
-                    </div>
-                  </div>
-                  <div class="preview-item-content">
-                    <p class="preview-subject ellipsis mb-1 text-small">To-do list</p>
-                  </div>
-                </a>
+              <div class="profile-name">
+                <h5 class="mb-0 font-weight-normal">Thashreef Khan</h5>
+                <span>Gold Member</span>
               </div>
             </div>
-          </li>
-          <li class="nav-item nav-category">
-            <span class="nav-link">Navigation</span>
-          </li>
-          <li class="nav-item menu-items">
-            <a class="nav-link" href="/admin/dashboard">
-              <span class="menu-icon">
-                <i class="mdi mdi-speedometer"></i>
-              </span>
-              <span class="menu-title">Dashboard</span>
-            </a>
-          </li>
-          <li class="nav-item menu-items">
-            <a class="nav-link" href="/admin/Users" >
-              <span class="menu-icon">
-                <i class="mdi mdi-laptop"></i>
-              </span>
-              <span class="menu-title">Users</span>
-              <!-- <i class="menu-arrow"></i> -->
-            </a>
-            <!-- <div class="collapse" id="ui-basic">
+            <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
+            <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list"
+              aria-labelledby="profile-dropdown">
+              <a href="#" class="dropdown-item preview-item">
+                <div class="preview-thumbnail">
+                  <div class="preview-icon bg-dark rounded-circle">
+                    <i class="mdi mdi-settings text-primary"></i>
+                  </div>
+                </div>
+                <div class="preview-item-content">
+                  <p class="preview-subject ellipsis mb-1 text-small">Account settings</p>
+                </div>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="#" class="dropdown-item preview-item">
+                <div class="preview-thumbnail">
+                  <div class="preview-icon bg-dark rounded-circle">
+                    <i class="mdi mdi-onepassword  text-info"></i>
+                  </div>
+                </div>
+                <div class="preview-item-content">
+                  <p class="preview-subject ellipsis mb-1 text-small">Change Password</p>
+                </div>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="#" class="dropdown-item preview-item">
+                <div class="preview-thumbnail">
+                  <div class="preview-icon bg-dark rounded-circle">
+                    <i class="mdi mdi-calendar-today text-success"></i>
+                  </div>
+                </div>
+                <div class="preview-item-content">
+                  <p class="preview-subject ellipsis mb-1 text-small">To-do list</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </li>
+        <li class="nav-item nav-category">
+          <span class="nav-link">Navigation</span>
+        </li>
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="/admin/dashboard">
+            <span class="menu-icon">
+              <i class="mdi mdi-speedometer"></i>
+            </span>
+            <span class="menu-title">Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="/admin/Users">
+            <span class="menu-icon">
+              <i class="mdi mdi-laptop"></i>
+            </span>
+            <span class="menu-title">Users</span>
+            <!-- <i class="menu-arrow"></i> -->
+          </a>
+          <!-- <div class="collapse" id="ui-basic">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="/public//admin/pages/ui-features/buttons.html">Buttons</a></li>
                 <li class="nav-item"> <a class="nav-link" href="/public/admin/pages/ui-features/dropdowns.html">Dropdowns</a></li>
                 <li class="nav-item"> <a class="nav-link" href="/public/admin/pages/ui-features/typography.html">Typography</a></li>
               </ul>
             </div> -->
-          </li>
-          <li class="nav-item menu-items">
-            <a class="nav-link" href="/admin/category">
-              <span class="menu-icon">
-                <i class="mdi mdi-playlist-play"></i>
-              </span>
-              <span class="menu-title">Catogories</span>
-            </a>
-          </li>
-          <li class="nav-item menu-items">
-            <a class="nav-link" href="/admin/product">
-              <span class="menu-icon">
-                <i class="mdi mdi-table-large"></i>
-              </span>
-              <span class="menu-title">Products</span>
-            </a>
-          </li>
-          <li class="nav-item menu-items">
-            <a class="nav-link" href="/admin/orderDetail">
-              <span class="menu-icon">
-                <i class="mdi mdi-chart-bar"></i>
-              </span>
-              <span class="menu-title">Orders</span>
-            </a>
-          </li>
-          <li class="nav-item menu-items">
-            <a class="nav-link" href="/admin/coupon">
-              <span class="menu-icon">
-                <i class="mdi mdi-contacts"></i>
-              </span>
-              <span class="menu-title">Coupon</span>
-            </a>
-          </li>
-          <li class="nav-item menu-items">
-            <a class="nav-link"  href="/admin/salesreport" >
-              <span class="menu-icon">
-                <i class="mdi mdi-security"></i>
-              </span>
-              <span class="menu-title">Sales Report</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <!-- <div class="collapse" id="auth">
+        </li>
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="/admin/category">
+            <span class="menu-icon">
+              <i class="mdi mdi-playlist-play"></i>
+            </span>
+            <span class="menu-title">Catogories</span>
+          </a>
+        </li>
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="/admin/product">
+            <span class="menu-icon">
+              <i class="mdi mdi-table-large"></i>
+            </span>
+            <span class="menu-title">Products</span>
+          </a>
+        </li>
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="/admin/orderDetail">
+            <span class="menu-icon">
+              <i class="mdi mdi-chart-bar"></i>
+            </span>
+            <span class="menu-title">Orders</span>
+          </a>
+        </li>
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="/admin/coupon">
+            <span class="menu-icon">
+              <i class="mdi mdi-contacts"></i>
+            </span>
+            <span class="menu-title">Coupon</span>
+          </a>
+        </li>
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="/admin/salesreport">
+            <span class="menu-icon">
+              <i class="mdi mdi-security"></i>
+            </span>
+            <span class="menu-title">Sales Report</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <!-- <div class="collapse" id="auth">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="/admin/pages/samples/blank-page.html"> Blank Page </a></li>
                 <li class="nav-item"> <a class="nav-link" href="/admin/pages/samples/error-404.html"> 404 </a></li>
@@ -155,37 +159,38 @@
                 <li class="nav-item"> <a class="nav-link" href="/admin/pages/samples/register.html"> Register </a></li>
               </ul>
             </div> -->
-          </li>
-          <li class="nav-item menu-items">
-            <a class="nav-link" href="/admin/offer">
-              <span class="menu-icon">
-                <i class="mdi mdi-file-document-box"></i>
-              </span>
-              <span class="menu-title">OFFER</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-      <!-- partial -->
-      <div class="container-fluid page-body-wrapper">
-        <!-- partial:partials/_navbar.html -->
-        <nav class="navbar p-0 fixed-top d-flex flex-row">
-          <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
-            <a class="navbar-brand brand-logo-mini" href="index.html"><img src="/admin/images/logo-mini.svg" alt="logo" /></a>
-          </div>
-          <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
-            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-              <span class="mdi mdi-menu"></span>
-            </button>
-            <ul class="navbar-nav w-100">
-              <li class="nav-item w-100">
-                <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
-                  <input type="text" class="form-control" placeholder="Search products">
-                </form>
-              </li>
-            </ul>
-            <ul class="navbar-nav navbar-nav-right">
-              <!-- <li class="nav-item dropdown d-none d-lg-block">
+        </li>
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="/admin/offer">
+            <span class="menu-icon">
+              <i class="mdi mdi-file-document-box"></i>
+            </span>
+            <span class="menu-title">OFFER</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_navbar.html -->
+      <nav class="navbar p-0 fixed-top d-flex flex-row">
+        <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
+          <a class="navbar-brand brand-logo-mini" href="index.html"><img src="/admin/images/logo-mini.svg"
+              alt="logo" /></a>
+        </div>
+        <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+            <span class="mdi mdi-menu"></span>
+          </button>
+          <ul class="navbar-nav w-100">
+            <li class="nav-item w-100">
+              <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                <input type="text" class="form-control" placeholder="Search products">
+              </form>
+            </li>
+          </ul>
+          <ul class="navbar-nav navbar-nav-right">
+            <!-- <li class="nav-item dropdown d-none d-lg-block">
                 <a class="nav-link btn btn-success create-new-button" id="createbuttonDropdown" data-toggle="dropdown" aria-expanded="false" href="#">+ Create New Project</a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="createbuttonDropdown">
                   <h6 class="p-3 mb-0">Projects</h6>
@@ -226,150 +231,156 @@
                   <p class="p-3 mb-0 text-center">See all projects</p>
                 </div>
               </li> -->
-              <li class="nav-item nav-settings d-none d-lg-block">
-                <a class="nav-link" href="#">
-                  <i class="mdi mdi-view-grid"></i>
-                </a>
-              </li>
-              <li class="nav-item dropdown border-left">
-                <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
-                  <i class="mdi mdi-email"></i>
-                  <span class="count bg-success"></span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
-                  <h6 class="p-3 mb-0">Messages</h6>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item preview-item">
-                    <div class="preview-thumbnail">
-                      <img src="/admin/images/faces/face4.jpg" alt="image" class="rounded-circle profile-pic">
-                    </div>
-                    <div class="preview-item-content">
-                      <p class="preview-subject ellipsis mb-1">Mark send you a message</p>
-                      <p class="text-muted mb-0"> 1 Minutes ago </p>
-                    </div>
-                  </a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item preview-item">
-                    <div class="preview-thumbnail">
-                      <img src="/admin/images/faces/face2.jpg" alt="image" class="rounded-circle profile-pic">
-                    </div>
-                    <div class="preview-item-content">
-                      <p class="preview-subject ellipsis mb-1">Cregh send you a message</p>
-                      <p class="text-muted mb-0"> 15 Minutes ago </p>
-                    </div>
-                  </a>   
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item preview-item">
-                    <div class="preview-thumbnail">
-                      <img src="/admin/images/faces/face3.jpg" alt="image" class="rounded-circle profile-pic">
-                    </div>
-                    <div class="preview-item-content">
-                      <p class="preview-subject ellipsis mb-1">Profile picture updated</p>
-                      <p class="text-muted mb-0"> 18 Minutes ago </p>
-                    </div>
-                  </a>
-                  <div class="dropdown-divider"></div>
-                  <p class="p-3 mb-0 text-center">4 new messages</p>
-                </div>
-              </li>
-              <li class="nav-item dropdown border-left">
-                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
-                  <i class="mdi mdi-bell"></i>
-                  <span class="count bg-danger"></span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
-                  <h6 class="p-3 mb-0">Notifications</h6>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item preview-item">
-                    <div class="preview-thumbnail">
-                      <div class="preview-icon bg-dark rounded-circle">
-                        <i class="mdi mdi-calendar text-success"></i>
-                      </div>
-                    </div>
-                    <div class="preview-item-content">
-                      <p class="preview-subject mb-1">Event today</p>
-                      <p class="text-muted ellipsis mb-0"> Just a reminder that you have an event today </p>
-                    </div>
-                  </a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item preview-item">
-                    <div class="preview-thumbnail">
-                      <div class="preview-icon bg-dark rounded-circle">
-                        <i class="mdi mdi-settings text-danger"></i>
-                      </div>
-                    </div>
-                    <div class="preview-item-content">
-                      <p class="preview-subject mb-1">Settings</p>
-                      <p class="text-muted ellipsis mb-0"> Update dashboard </p>
-                    </div>
-                  </a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item preview-item">
-                    <div class="preview-thumbnail">
-                      <div class="preview-icon bg-dark rounded-circle">
-                        <i class="mdi mdi-link-variant text-warning"></i>
-                      </div>
-                    </div>
-                    <div class="preview-item-content">
-                      <p class="preview-subject mb-1">Launch Admin</p>
-                      <p class="text-muted ellipsis mb-0"> New admin wow! </p>
-                    </div>
-                  </a>
-                  <div class="dropdown-divider"></div>
-                  <p class="p-3 mb-0 text-center">See all notifications</p>
-                </div>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
-                  <div class="navbar-profile">
-                    <img class="img-xs rounded-circle" src="/admin/images/faces/face15.jpg" alt="">
-                    <p class="mb-0 d-none d-sm-block navbar-profile-name">Thashreef Khan</p>
-                    <i class="mdi mdi-menu-down d-none d-sm-block"></i>
+            <li class="nav-item nav-settings d-none d-lg-block">
+              <a class="nav-link" href="#">
+                <i class="mdi mdi-view-grid"></i>
+              </a>
+            </li>
+            <li class="nav-item dropdown border-left">
+              <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown"
+                aria-expanded="false">
+                <i class="mdi mdi-email"></i>
+                <span class="count bg-success"></span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
+                aria-labelledby="messageDropdown">
+                <h6 class="p-3 mb-0">Messages</h6>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <img src="/admin/images/faces/face4.jpg" alt="image" class="rounded-circle profile-pic">
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject ellipsis mb-1">Mark send you a message</p>
+                    <p class="text-muted mb-0"> 1 Minutes ago </p>
                   </div>
                 </a>
-                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
-                  <h6 class="p-3 mb-0">Profile</h6>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item preview-item">
-                    <div class="preview-thumbnail">
-                      <div class="preview-icon bg-dark rounded-circle">
-                        <i class="mdi mdi-settings text-success"></i>
-                      </div>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <img src="/admin/images/faces/face2.jpg" alt="image" class="rounded-circle profile-pic">
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject ellipsis mb-1">Cregh send you a message</p>
+                    <p class="text-muted mb-0"> 15 Minutes ago </p>
+                  </div>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <img src="/admin/images/faces/face3.jpg" alt="image" class="rounded-circle profile-pic">
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject ellipsis mb-1">Profile picture updated</p>
+                    <p class="text-muted mb-0"> 18 Minutes ago </p>
+                  </div>
+                </a>
+                <div class="dropdown-divider"></div>
+                <p class="p-3 mb-0 text-center">4 new messages</p>
+              </div>
+            </li>
+            <li class="nav-item dropdown border-left">
+              <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
+                data-toggle="dropdown">
+                <i class="mdi mdi-bell"></i>
+                <span class="count bg-danger"></span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
+                aria-labelledby="notificationDropdown">
+                <h6 class="p-3 mb-0">Notifications</h6>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-calendar text-success"></i>
                     </div>
-                    <div class="preview-item-content">
-                      <p class="preview-subject mb-1">Settings</p>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject mb-1">Event today</p>
+                    <p class="text-muted ellipsis mb-0"> Just a reminder that you have an event today </p>
+                  </div>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-settings text-danger"></i>
                     </div>
-                  </a>
-                  <div class="dropdown-divider"></div>
-                  <a href="adminlogout" class="dropdown-item preview-item">
-                    <div class="preview-thumbnail">
-                      <div class="preview-icon bg-dark rounded-circle">
-                        <i class="mdi mdi-logout text-danger"></i>
-                      </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject mb-1">Settings</p>
+                    <p class="text-muted ellipsis mb-0"> Update dashboard </p>
+                  </div>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-link-variant text-warning"></i>
                     </div>
-                    <div  class="preview-item-content">
-                    
-                  <p  class="preview-subject mb-1">Log out</p>
-                    </div>
-                  </a>
-                  <div class="dropdown-divider"></div>
-                  <p class="p-3 mb-0 text-center">Advanced settings</p>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject mb-1">Launch Admin</p>
+                    <p class="text-muted ellipsis mb-0"> New admin wow! </p>
+                  </div>
+                </a>
+                <div class="dropdown-divider"></div>
+                <p class="p-3 mb-0 text-center">See all notifications</p>
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
+                <div class="navbar-profile">
+                  <img class="img-xs rounded-circle" src="/admin/images/faces/face15.jpg" alt="">
+                  <p class="mb-0 d-none d-sm-block navbar-profile-name">Thashreef Khan</p>
+                  <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                 </div>
-              </li>
-            </ul>
-            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
-              <span class="mdi mdi-format-line-spacing"></span>
-            </button>
-          </div>
-        </nav>
-        <!-- partial -->
-        <div class="main-panel">
-          <div class="content-wrapper">
-            <div class="row">
-              <div class="col-12 grid-margin stretch-card">
-                <div class="card corona-gradient-card">
-                  <div class="card-body py-0 px-0 px-sm-3">
-                    <!-- <div class="row align-items-center">
+              </a>
+              <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
+                aria-labelledby="profileDropdown">
+                <h6 class="p-3 mb-0">Profile</h6>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-settings text-success"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject mb-1">Settings</p>
+                  </div>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="adminlogout" class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-logout text-danger"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+
+                    <p class="preview-subject mb-1">Log out</p>
+                  </div>
+                </a>
+                <div class="dropdown-divider"></div>
+                <p class="p-3 mb-0 text-center">Advanced settings</p>
+              </div>
+            </li>
+          </ul>
+          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+            data-toggle="offcanvas">
+            <span class="mdi mdi-format-line-spacing"></span>
+          </button>
+        </div>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-12 grid-margin stretch-card">
+              <div class="card corona-gradient-card">
+                <div class="card-body py-0 px-0 px-sm-3">
+                  <!-- <div class="row align-items-center">
                       <div class="col-4 col-sm-3 col-xl-2">
                         <img src="/admin/images/dashboard/Group126@2x.png" class="gradient-corona-img img-fluid" alt="">
                       </div>
@@ -383,96 +394,223 @@
                         </span>
                       </div>
                     </div> -->
-                  </div>
                 </div>
               </div>
             </div>
-            <section class="content-main">
+          </div>
+          <section class="content-main">
+            <div class="content-header">
+              <div>
+                <h2 class="content-title card-title">Dashboard</h2>
+                <p>Whole data about your business here</p>
+              </div>
+              <div>
+                <a href="/admin/salesReport" class="btn btn-primary"><i
+                    class="icon material-icons md-insert_chart"></i><strong>Create Report</strong></a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3">
+                <div class="card card-body mb-4">
+                  <article class="icontext">
+                    <span class="icon icon-sm rounded-circle bg-primary-light"><span
+                        class="icon icon-sm rounded-circle bg-primary-light">&#x20B9;</span>
+                    </span>
+                    <div class="text">
+                      <h6 class="mb-1 card-title">Total Revenue</h6>
+                      <span>₹ </span>
+                      <span class="text-sm"> Shipping fees are not included </span>
+                    </div>
+                  </article>
+                </div>
+              </div>
+              <div class="col-lg-3">
+                <div class="card card-body mb-4">
+                  <article class="icontext">
+                    <span class="icon icon-sm rounded-circle bg-success-light"><i
+                        class="text-success material-icons md-local_shipping"></i></span>
+                    <div class="text">
+                      <h6 class="mb-1 card-title">Orders</h6>
+                      <span></span>
+                      <span class="text-sm"> Excluding orders in transit </span>
+                    </div>
+                  </article>
+                </div>
+              </div>
+              <div class="col-lg-3">
+                <div class="card card-body mb-4">
+                  <article class="icontext">
+                    <span class="icon icon-sm rounded-circle bg-warning-light"><i
+                        class="text-warning material-icons md-qr_code"></i></span>
+                    <div class="text">
+                      <h6 class="mb-1 card-title">Products</h6>
+                      <span></span>
+                      <span class="text-sm"> In Categories </span>
+                    </div>
+                  </article>
+                </div>
+              </div>
+              <div class="col-lg-3">
+                <div class="card card-body mb-4">
+                  <article class="icontext">
+                    <span class="icon icon-sm rounded-circle bg-info-light"><i
+                        class="text-info material-icons md-trending_up"></i>
+                    </span>
+                    <div class="text">
+                      <h6 class="mb-1 card-title">Daily Earnning</h6>
+                      <span>₹ .00</span>
+                      <span class="text-sm"> Based in your local time. </span>
+                    </div>
+                  </article>
+                </div>
+              </div>
+              <div class="col-lg-3">
+                <div class="card card-body mb-4">
+                  <article class="icontext">
+                    <span class="icon icon-sm rounded-circle bg-info-light"><i
+                        class="text-info material-icons md-trending_up"></i></span>
+                    <div class="text">
+                      <h6 class="mb-1 card-title">Weekly Earning</h6>
+                      <span>₹ .00</span>
+                      <span class="text-sm"> Based in your local time. </span>
+                    </div>
+                  </article>
+                </div>
+              </div>
+              <div class="col-lg-3">
+                <div class="card card-body mb-4">
+                  <article class="icontext">
+                    <span class="icon icon-sm rounded-circle bg-info-light"><i
+                        class="text-info material-icons md-trending_up"></i>
 
+                    </span>
+                    <div class="text">
+                      <h6 class="mb-1 card-title">Monthly Earning</h6>
+                      <span>.00</span>
+                      <span class="text-sm"> Based in your local time. </span>
+                    </div>
+                  </article>
+                </div>
+              </div>
+              <div class="col-lg-3">
+                <div class="card card-body mb-4">
+                  <article class="icontext">
+                    <span class="icon icon-sm rounded-circle bg-info-light"><i
+                        class="text-info material-icons md-trending_up"></i>
+                    </span>
+                    <div class="text">
+                      <h6 class="mb-1 card-title">Yearly Earning</h6>
+                      <span>₹ .00</span>
+                      <span class="text-sm"> Based in your local time. </span>
+                    </div>
+                  </article>
+                </div>
+              </div>
+
+
+              <!--  -->
+              <div class="col-xl-8 col-lg-12 col-12">
+                <div class="card mb-4">
+                  <article class="card-body">
+                    <h5 class="card-title">Category by Sales.</h5>
+                    <canvas id="myChart2" height="133px"></canvas>
+                  </article>
+                </div>
+              </div>
+
+              <div class="col-xl-4 col-lg-12 col-12">
+                <div class="card mb-4">
+                  <article class="card-body">
+                    <h5 class="card-title">Payment Method</h5>
+                    <canvas id="myChart3" height="170px"></canvas>
+                  </article>
+                </div>
+              </div>
+
+              <!--  -->
+              <div class="col-lg-12">
+                <div class="card card-body mb-4">
+                  <h5 class="card-title">Sale statistics</h5>
+                  <canvas id="salesReportChart" style="max-height: 400px;"></canvas>
+                </div>
+              </div>
               
-  
-              <div class="row">
-                  <div class="col-lg-3">
-                      <div class="card card-body mb-4">
-                          <article class="icontext">
-                              <span class="icon icon-sm rounded-circle bg-primary-light"><i
-                                      class="text-primary material-icons md-monetization_on"></i></span>
-                              <div class="text">
-                                  <h6 class="mb-1 card-title">Revenue</h6>
-                                  <span>₹</span>
-                                  <span class="text-sm"> Shipping fees are not included </span>
-                              </div>
-                          </article>
-                      </div>
-                  </div>
-                  <div class="col-lg-3">
-                      <div class="card card-body mb-4">
-                          <article class="icontext">
-                              <span class="icon icon-sm rounded-circle bg-success-light"><i
-                                      class="text-success material-icons md-local_shipping"></i></span>
-                              <div class="text">
-                                  <h6 class="mb-1 card-title">Orders</h6>
-                                  <span>
-                                      
-                                  </span>
-                                  <span class="text-sm"> Excluding orders in transit </span>
-                              </div>
-                          </article>
-                      </div>
-                  </div>
-                  <div class="col-lg-3">
-                      <div class="card card-body mb-4">
-                          <article class="icontext">
-                              <span class="icon icon-sm rounded-circle bg-warning-light"><i
-                                      class="text-warning material-icons md-qr_code"></i></span>
-                              <div class="text">
-                                  <h6 class="mb-1 card-title">Products</h6>
-                                  <span>
-                                      
-                                  </span>
-                                  <span class="text-sm"> Including all Categories </span>
-                              </div>
-                          </article>
-                      </div>
-                  </div>
-  
-                  <div class="col-lg-3">
-                      <div class="card card-body mb-4">
-                          <article class="icontext">
-                              <span class="icon icon-sm rounded-circle bg-info-light"><i
-                                      class="text-info material-icons md-shopping_basket"></i></span>
-                              <div class="text">
-                                  <h6 class="mb-1 card-title">
-                                       Earnings
-                                  </h6>
-                                  <span>₹</span>
-                                  <span class="text-sm">monthly revenue </span>
-                              </div>
-                          </article>
-                      </div>
-                  </div>
-              </div>
-  
-              <div class="row">
-                  <div class="col-xl-8 col-lg-12">
-                      <div class="card mb-4">
-                          <article class="card-body">
-                              <h5 class="card-title">Sale statistics</h5>
-                              <canvas id="myChart" height="120px"></canvas>
-                          </article>
-                      </div>
-  
-                  </div>
-                  <div class="col-xl-4 col-lg-12">
-                      <div class="card mb-4">
-                          <article class="card-body">
-                              <h5 class="card-title"> Payment Options</h5>
-                              <canvas id="myChart2" height="217"></canvas>
-                          </article>
-                      </div>
-                  </div>
-              </div>
-          </section>
+              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+              
+              <script>
+              document.addEventListener('DOMContentLoaded', function() {
+                var ctx = document.getElementById('salesReportChart').getContext('2d');
+              
+                // Assume you have an array of month names from your backend, replace this with your actual data
+                var monthLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+              
+                // Replace these with your actual data from the backend
+                var monthlySalesData = <%= JSON.stringify(monthlysales.map(sale => sale.subtotal)) %>;
+                var monthlyUsersData = <%= JSON.stringify(monthlyUserData.map(user => user.count)) %>;
+                var monthlyOrdersData = <%= JSON.stringify(monthlyOrdersData.map(order => order.count)) %>;
+              
+                // Yearly data
+                var yearlySalesData = <%= JSON.stringify(yearlysales.map(sale => sale.subtotal)) %>;
+              
+                var data = {
+                  labels: [...monthLabels, 'Yearly'], // Include 'Yearly' as a label
+                  datasets: [
+                    {
+                      label: 'Monthly Sales',
+                      tension: 0.3,
+                      fill: true,
+                      backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                      borderColor: 'rgba(255, 99, 132, 1)',
+                      borderWidth: 2,
+                      data: [...monthlySalesData, 0], // Add 0 for the 'Yearly' data point
+                    },
+                    {
+                      label: 'Monthly Users',
+                      tension: 0.3,
+                      fill: true,
+                      backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                      borderColor: 'rgba(54, 162, 235, 1)',
+                      borderWidth: 2,
+                      data: [...monthlyUsersData, 0], // Add 0 for the 'Yearly' data point
+                    },
+                    {
+                      label: 'Monthly Orders',
+                      tension: 0.3,
+                      fill: true,
+                      backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                      borderColor: 'rgba(255, 206, 86, 1)',
+                      borderWidth: 2,
+                      data: [...monthlyOrdersData, 0], // Add 0 for the 'Yearly' data point
+                    },
+                    {
+                      label: 'Yearly Sales',
+                      tension: 0.3,
+                      fill: true,
+                      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                      borderColor: 'rgba(75, 192, 192, 1)',
+                      borderWidth: 2,
+                      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, yearlySalesData], // Add yearly sales data
+                    },
+                  ],
+                };
+              
+                var myChart = new Chart(ctx, {
+                  type: 'line',
+                  data: data,
+                  options: {
+                    plugins: {
+                      legend: {
+                        labels: {
+                          usePointStyle: true,
+                        },
+                      },
+                    },
+                  },
+                });
+              });
+              </script>
+              
+              
           <!-- partial -->
         </div>
         <!-- main-panel ends -->
@@ -500,5 +638,6 @@
     <!-- Custom js for this page -->
     <script src="/admin/js/dashboard.js"></script>
     <!-- End custom js for this page -->
-  </body>
+</body>
+
 </html>

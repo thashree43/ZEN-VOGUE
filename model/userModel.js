@@ -29,6 +29,7 @@ const UserSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  
   token: {
     type: String,
     default: "",
@@ -37,6 +38,7 @@ const UserSchema = new mongoose.Schema({
     type: Number,
     default: 0,
 },
+
 walletHistory: [{
     date: {
         type: Date
@@ -50,7 +52,8 @@ walletHistory: [{
 }],
 referralCode: { type: String, unique: true },
 referredBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
-});
+},
+{timestamps:true});
 
 
 
@@ -75,6 +78,8 @@ UserSchema.pre('findOneAndUpdate', async function (next) {
     }
   }
   next();
-});
+},
+
+);
 
 module.exports = mongoose.model("User", UserSchema);

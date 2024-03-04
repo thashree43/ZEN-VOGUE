@@ -1,5 +1,7 @@
 const User = require("../model/userModel");
 const Order = require("../model/orderModel");
+const Product = require("../model/productmodel");
+const Category = require("../model/categoryModel");
 const bcrypt = require("bcrypt");
 const { findByIdAndUpdate } = require("../model/categoryModel");
 
@@ -50,7 +52,151 @@ const adminlogout = async (req, res) => {
 
 const admindashboard = async (req, res) => {
   try {
-    res.render("admin/adminhome");
+    const usercount = await User.countDocuments();
+    const productcount = await Product.countDocuments();
+    const categorycount = await Category.countDocuments();
+    const ordercount = await Order.countDocuments();
+    const categorylist = await Category.find({ is_Listed: 1 });
+    const productlist = await Product.find({ is_Listed: true });
+    const orderlist = await Order.find({ status: "delivered" });
+
+    // const today = new Date();
+    // const starttoday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    // const oneweekago = new Date();
+    // oneweekago.setDate(today.getDate() - 7);
+    // const onemonthago = new Date();
+    // onemonthago.setDate(today.getDate() - 30);
+    // const oneyearago = new Date();
+    // oneyearago.setFullYear(today.getFullYear() - 1);
+
+    // const dailyorder = orderlist.filter((order) => order.Date >= starttoday)
+    // const weeklyorder = orderlist.filter((order) => order.Date >= oneweekago)
+    // const monthlyorder = orderlist.filter((order) => order.Date >= onemonthago);
+    // const yearlyorder = orderlist.filter((order) => order.Date >= oneyearago);
+
+    // const dailysales = dailyorder.map((order) => order.subtotal || 0);
+    // const weeklysales = weeklyorder.map((order) => order.subtotal)
+    // const monthlysales = monthlyorder.map((order) => order.subtotal)
+    // const yearlysales = yearlyorder.map((order) => order.subtotal)
+    const dailysales = await Order.find({ status: "delivered" })
+      .sort({ Date: -1 })
+      .limit(3);
+    const weeklysales = await Order.aggregate([
+      {
+        $match: {
+          Date: {
+            $gte: new Date(new Date().setDate(new Date().getDate() - 7)),
+          },
+        },
+      },
+      { $group: { _id: "$_id", subtotal: { $sum: "$subtotal" } } },
+    ]);
+    const monthlysales = await Order.aggregate([
+      {
+        $match: {
+          Date: {
+            $gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: { $month: "$Date" },
+          subtotal: { $sum: "$subtotal" },
+        },
+      },
+    ]);
+    const monthlyUserData = await User.aggregate([
+      {
+        $match: {
+          createdAt: {
+            $gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+          },
+        },
+      },
+      { $group: { _id: "$_id", count: { $sum: 1 } } },
+    ]);
+    const monthlyOrdersData = await Order.aggregate([
+      {
+        $match: {
+          Date: {
+            $gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: { $month: "$Date" },
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+    const yearlysales = await Order.aggregate([
+      {
+        $match: {
+          Date: {
+            $gte: new Date(
+              new Date().setFullYear(new Date().getFullYear() - 1)
+            ),
+          },
+        },
+      },
+      { $group: { _id: "$_id", subtotal: { $sum: "$subtotal" } } },
+    ]);
+
+    const topproduct = await Order.aggregate([
+      { $unwind: "$product" },
+      {
+        $group: {
+          _id: "$product.productId",
+          name: { $first: "$product.name" },
+          brand: { $first: "$product.brand" },
+          category: { $first: "$product.category" },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { count: -1 } },
+    ]);
+
+    console.log("the top product list may here", topproduct);
+
+    const topcategory = await Order.aggregate([
+      { $unwind: "$product" },
+      {
+        $group: {
+          _id: "$product.category",
+          category: { $first: "$product.category" },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { count: -1 } },
+    ]);
+    console.log("top category is these all ", topcategory);
+
+    const topbrand = await Order.aggregate([
+      { $unwind: "$product" },
+      {
+        $group: {
+          _id: "$product.brand",
+          brand: { $first: "$product.brand" },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { count: -1 } },
+    ]);
+
+    console.log("top brands ", topbrand);
+    res.render("admin/adminhome", {
+      dailysales,
+      weeklysales,
+      monthlysales,
+      monthlyUserData,
+      monthlyOrdersData,
+      yearlysales,
+      topbrand,
+      topcategory,
+      topproduct,
+    });
   } catch (error) {
     console.log(error.message);
   }
@@ -182,53 +328,56 @@ const orderdelivered = async (req, res) => {
 
 const salepage = async (req, res) => {
   try {
-    const order = await Order.find()
+    const order = await Order.find({ status: "delivered" })
       .populate({
         path: "product.productId",
-        select: "name", 
-      }).populate("user")
-      ;
+        select: "name",
+      })
+      .populate("user")
+      .sort({ Date: -1 });
     res.render("admin/salesreport", { order: order });
   } catch (error) {
     console.log(error.message);
   }
 };
 
-const salefilter =async(req,res)=>{
+const salefilter = async (req, res) => {
   try {
-    const fromdate =req.body.fromdate ? new Date(req.body.fromdate) : null
+    const fromdate = req.body.fromdate ? new Date(req.body.fromdate) : null;
     fromdate.setHours(0, 0, 0, 0);
-    const todate=req.body.todate ? new Date(req.body.todate) :null
+    const todate = req.body.todate ? new Date(req.body.todate) : null;
     todate.setHours(23, 59, 59, 999);
 
-    const currentdate= new Date ()
+    const currentdate = new Date();
 
-    console.log("the from date br like this ",fromdate);
-    console.log("the to date be like this ",todate);
+    console.log("the from date br like this ", fromdate);
+    console.log("the to date be like this ", todate);
 
-    if(fromdate && todate){
-    if(todate < fromdate){
-      let temp =fromdate
-      fromdate = todate
-      todate=temp
+    if (fromdate && todate) {
+      if (todate < fromdate) {
+        let temp = fromdate;
+        fromdate = todate;
+        todate = temp;
+      }
+    } else if (fromdate) {
+      todate = currentdate;
+    } else if (todate) {
+      fromdate = currentdate;
     }
-    }else if(fromdate){
-      todate = currentdate
-    }else if(todate){
-      fromdate = currentdate
-    }
-    
-    const order = await Order.find({Date:{$gte:fromdate,$lte:todate},status:"delivered"})
-    .populate({
+
+    const order = await Order.find({
+      Date: { $gte: fromdate, $lte: todate },
+      status: "delivered",
+    }).populate({
       path: "product.productId",
-      select: "name", 
+      select: "name",
     });
-    console.log("the order based on filter",order);
-    res.render("admin/salesreport",{order})
+    console.log("the order based on filter", order);
+    res.render("admin/salesreport", { order });
   } catch (error) {
     console.log(error.message);
   }
-}
+};
 module.exports = {
   adminlogin,
   verifyadminlogin,

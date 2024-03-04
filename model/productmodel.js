@@ -13,11 +13,15 @@ const ProductsModel = new mongoose.Schema({
   },
   offers: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'offers', // Corrected reference to match the exported model name
+    ref: 'offers', 
   }],
   Image: {
     type: [String],
     required: true,
+  },
+  brand:{
+    type:String,
+    required:true
   },
   price: {
     type: Number,

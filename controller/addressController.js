@@ -8,7 +8,7 @@ const addaddress = async (req, res) => {
   try {
     const loadlogin = req.session.userId;
     const userid = await User.findOne({ _id: req.session.userId });
-    res.render("user/addaddress", { loadlogin });
+    res.render("user/addaddress", { loadlogin,user:req.session.userId });
   } catch (error) {
     console.log(error.message);
   }

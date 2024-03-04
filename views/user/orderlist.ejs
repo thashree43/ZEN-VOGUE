@@ -126,7 +126,7 @@
             <% } %>
             <td><%= order._id %></td>
             <td><%= order.subtotal %></td>
-            <td><%= order.paymentmethod %></td>
+            <td><%= order.paymentMethod %></td>
             <td><%= order.status %></td>
             <td>
               <% if (order.status !== "cancelled" && order.status !== "delivered" && order.status !== "Return Approved" && order.status !== "pending" && order.status !== "waiting for approval") { %>
