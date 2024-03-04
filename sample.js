@@ -14,6 +14,25 @@ const forgetpasswordload = async (req,res)=>{
   }
 
 
+   // const today = new Date();
+    // const starttoday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    // const oneweekago = new Date();
+    // oneweekago.setDate(today.getDate() - 7);
+    // const onemonthago = new Date();
+    // onemonthago.setDate(today.getDate() - 30);
+    // const oneyearago = new Date();
+    // oneyearago.setFullYear(today.getFullYear() - 1);
+
+    // const dailyorder = orderlist.filter((order) => order.Date >= starttoday)
+    // const weeklyorder = orderlist.filter((order) => order.Date >= oneweekago)
+    // const monthlyorder = orderlist.filter((order) => order.Date >= onemonthago);
+    // const yearlyorder = orderlist.filter((order) => order.Date >= oneyearago);
+
+    // const dailysales = dailyorder.map((order) => order.subtotal || 0);
+    // const weeklysales = weeklyorder.map((order) => order.subtotal)
+    // const monthlysales = monthlyorder.map((order) => order.subtotal)
+    // const yearlysales = yearlyorder.map((order) => order.subtotal)
+
 
 
   

@@ -60,24 +60,7 @@ const admindashboard = async (req, res) => {
     const productlist = await Product.find({ is_Listed: true });
     const orderlist = await Order.find({ status: "delivered" });
 
-    // const today = new Date();
-    // const starttoday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    // const oneweekago = new Date();
-    // oneweekago.setDate(today.getDate() - 7);
-    // const onemonthago = new Date();
-    // onemonthago.setDate(today.getDate() - 30);
-    // const oneyearago = new Date();
-    // oneyearago.setFullYear(today.getFullYear() - 1);
-
-    // const dailyorder = orderlist.filter((order) => order.Date >= starttoday)
-    // const weeklyorder = orderlist.filter((order) => order.Date >= oneweekago)
-    // const monthlyorder = orderlist.filter((order) => order.Date >= onemonthago);
-    // const yearlyorder = orderlist.filter((order) => order.Date >= oneyearago);
-
-    // const dailysales = dailyorder.map((order) => order.subtotal || 0);
-    // const weeklysales = weeklyorder.map((order) => order.subtotal)
-    // const monthlysales = monthlyorder.map((order) => order.subtotal)
-    // const yearlysales = yearlyorder.map((order) => order.subtotal)
+   
     const dailysales = await Order.find({ status: "delivered" })
       .sort({ Date: -1 })
       .limit(3);
@@ -91,6 +74,10 @@ const admindashboard = async (req, res) => {
       },
       { $group: { _id: "$_id", subtotal: { $sum: "$subtotal" } } },
     ]);
+    const weeklyearnings = weeklysales.reduce(
+      (sum,order)=>sum + order.subtotal,
+      0
+    )
     const monthlysales = await Order.aggregate([
       {
         $match: {
@@ -106,6 +93,10 @@ const admindashboard = async (req, res) => {
         },
       },
     ]);
+    const monthlyearnings = monthlysales.reduce(
+      (sum,order)=>sum + order.subtotal,
+      0
+    )
     const monthlyUserData = await User.aggregate([
       {
         $match: {
@@ -143,7 +134,10 @@ const admindashboard = async (req, res) => {
       },
       { $group: { _id: "$_id", subtotal: { $sum: "$subtotal" } } },
     ]);
-
+    const yearlyearnings = yearlysales.reduce(
+      (sum,order)=>sum + order.subtotal,
+      0
+    )
     const topproduct = await Order.aggregate([
       { $unwind: "$product" },
       {
@@ -169,9 +163,21 @@ const admindashboard = async (req, res) => {
           count: { $sum: 1 },
         },
       },
+      { $lookup: { from: "categories", localField: "_id", foreignField: "_id", as: "categoryDetails" } },
       { $sort: { count: -1 } },
+      {
+        $project: {
+          _id: 0,
+          category: "$categoryDetails.name", 
+          count: 1,
+        },
+      },
     ]);
-    console.log("top category is these all ", topcategory);
+    
+
+    
+
+
 
     const topbrand = await Order.aggregate([
       { $unwind: "$product" },
@@ -186,6 +192,20 @@ const admindashboard = async (req, res) => {
     ]);
 
     console.log("top brands ", topbrand);
+
+
+    const totalRevenue = await Order.aggregate([
+      {
+        $match:{status:{$eq:"delivered"}}
+      },
+      {$group:{
+        _id:null,
+        revenue:{$sum:"$subtotal"}
+      }}
+    ])
+    
+    const totalrevenue =  totalRevenue[0].revenue
+    console.log("total revenue",totalrevenue);
     res.render("admin/adminhome", {
       dailysales,
       weeklysales,
@@ -194,8 +214,15 @@ const admindashboard = async (req, res) => {
       monthlyOrdersData,
       yearlysales,
       topbrand,
-      topcategory,
+      topcategory ,
       topproduct,
+      totalrevenue,
+      ordercount,
+      productcount,
+      usercount,
+      weeklyearnings,
+      monthlyearnings,
+      yearlyearnings
     });
   } catch (error) {
     console.log(error.message);

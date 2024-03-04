@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
 
 const OrderModel = new mongoose.Schema({
@@ -37,7 +38,8 @@ const OrderModel = new mongoose.Schema({
         required: true,
       },
       category: {
-        type: String,
+        type:mongoose.Types.ObjectId ,
+        ref:"Category",
         required: true,
       },
     },
