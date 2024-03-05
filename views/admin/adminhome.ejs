@@ -8,6 +8,8 @@
   <title>Corona Admin</title>
   <!-- plugins:css -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.17.0/font/bootstrap-icons.css">
+
 
   <link rel="stylesheet" href="/admin/vendors/mdi/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="/admin/vendors/css/vendor.bundle.base.css">
@@ -24,6 +26,23 @@
   <!-- Layout styles -->
   <link rel="stylesheet" href="/admin/css/style.css">
   <link rel="shortcut icon" href="/admin/images/favicon.png" />
+  <style>
+    .icontext {
+      display: flex;
+      align-items: center;
+    }
+  
+    .icon {
+      font-size: 24px; /* Adjust the size as needed */
+      margin-right: 10px; /* Adjust spacing */
+    }
+  
+    .card-title {
+      margin-bottom: 5px; /* Adjust spacing */
+    }
+  
+    /* Additional styling as needed */
+  </style>
 </head>
 
 <body>
@@ -449,7 +468,7 @@
                     <div class="text">
                       <h6 class="mb-1 card-title">Products</h6>
                       <span><%= productcount %></span><br>
-                      <span class="text-sm"> In Categories </span>
+                      <span class="text-sm">  </span>
                     </div>
                   </article>
                 </div>
@@ -639,8 +658,7 @@
               <script>
                 document.addEventListener('DOMContentLoaded', function () {
                   var categories = (<%- JSON.stringify(topcategory.map(item => item.category)) %>);
-                  var counts = (<%- JSON.stringify(topcategory.map(item => item.count)) %>);
-                  console.log(categories, counts, "before checking");
+                  var counts = (<%- JSON.stringify(topcategory.map(item => item.count)) %>).map(Number);                  console.log(categories, counts, "before checking");
               
                   if (document.getElementById('myChartCategory')) {
                     var ctx = document.getElementById("myChartCategory");
@@ -665,6 +683,7 @@
                         },
                         scales: {
                           y: {
+                            min: 0, // Set the minimum value to 0
                             suggestedMin: 0,
                             beginAtZero: true,
                             stepSize: 2,

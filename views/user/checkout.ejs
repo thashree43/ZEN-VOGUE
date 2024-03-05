@@ -409,32 +409,21 @@
                   <label for="c_code" class="text-black mb-3">Enter your coupon code if you have one</label>
 
                   <div class="input-group w-75">
-
-
-
                     <div class="input-group-append">
-                      <%if(cartC.coupondiscount){%>
-
-                        <input type="text" class="form-control" id="c_code" placeholder="Coupon Code"
-                          aria-label="Coupon Code" aria-describedby="button-addon2"
-                          value="<%=cartC.coupondiscount.couponcode%>">
-                        <button type="button" onclick="remove('<%=cartC.coupondiscount._id %>')"
-                          class="btn btn-primary">
+                      <% if (cartC.coupondiscount) { %>
+                        <input type="text" class="form-control" id="c_code" placeholder="Coupon Code" aria-label="Coupon Code" aria-describedby="button-addon2" value="<%= cartC.coupondiscount.couponcode %>">
+                        <button type="button" onclick="remove('<%= cartC.coupondiscount._id %>')" class="btn btn-primary">
                           REMOVE
                         </button>
-                        <%}else{%>
-
-                          <input type="text" class="form-control" id="c_code" placeholder="Coupon Code"
-                            aria-label="Coupon Code" aria-describedby="button-addon2">
-                          <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal">
-                            SELECT
-                          </button>
-                          <%}%>
+                      <% } else { %>
+                        <input type="text" class="form-control" id="c_code" placeholder="Coupon Code" aria-label="Coupon Code" aria-describedby="button-addon2">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                          SELECT
+                        </button>
+                      <% } %>
                     </div>
-
-
                   </div>
+                  
 
                 </div>
               </div>

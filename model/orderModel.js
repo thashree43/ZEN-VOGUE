@@ -2,10 +2,37 @@ const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
 
 const OrderModel = new mongoose.Schema({
-  deliveryDetails: {
-    type: Object,
-    required: true,
-  },
+  
+    deliveryDetails: {
+      fname: {
+        type: String,
+        required: true,
+      },
+      sname: {
+        type: String,
+        required: true,
+      },
+      mobile: {
+        type: Number,
+        required: true,
+      },
+      email: {
+        type: String,
+        required: true,
+      },
+      address: {
+        type: String,
+        required: true,
+      },
+      city: {
+        type: String,
+        required: true,
+      },
+      pin: {
+        type: String,
+        required: true,
+      },
+    },
   user: {
     type: mongoose.Types.ObjectId,
     ref: "User",

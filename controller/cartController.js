@@ -6,6 +6,7 @@ const Cart = require("../model/cartModel");
 const Wishlist = require("../model/wishlistModel")
 const Coupon=require("../model/couponModel");
 const { Long } = require("mongodb");
+const axios = require('axios');
 
 
 // cart for opening
@@ -208,81 +209,107 @@ const updatecart = async (req, res) => {
   };
 
 // checkout page
-const loadcheckoutpage = async (req, res) => {
+const loadcheckoutpage  = async (req, res) => {
   try {
     const userId = req.session.userId;
     const currentdate = new Date();
-currentdate.setUTCHours(0, 0, 0, 0);
+    currentdate.setUTCHours(0, 0, 0, 0);
 
-
-const Wallet = await User.findOne({_id:userId})
-
-const coupon = await Coupon.find({
-  expiryDate: { $gt: currentdate },
-});
+    const Wallet = await User.findOne({ _id: userId });
+    const coupon = await Coupon.find({
+      expiryDate: { $gt: currentdate },
+    });
 
     const address1 = await Address.findOne({ user: userId });
-    
-    
+    const address = address1.address;
+
     const cartdata = await Cart.findOne({ user: userId }).populate({
-      path: "product.productId",
-      model: "Product", 
+      path: 'product.productId',
+      model: 'Product',
       populate: [
-        { path: "category", model: "Category", populate: { path: "offers" } },
-        { path: "offers" }
+        { path: 'category', model: 'Category', populate: { path: 'offers' } },
+        { path: 'offers' },
       ],
     });
 
-    const cartC = await Cart.findOne({ user: userId }).populate('coupondiscount');
+    const cartC = await Cart.findOneAndUpdate({ user: userId }, { shippingCharge: 0 }).populate('coupondiscount');
 
-
-    const address = address1.address;
-    
     let subtotal = 0;
+    let shippingCharge = 0;
 
     cartdata.product.forEach((product) => {
       let offer;
       if (product.productId.offers?.length > 0) {
-          offer = product.productId.offers[0].discount;
+        offer = product.productId.offers[0].discount;
       } else if (product.productId.category?.offers?.length > 0) {
-          offer = product.productId.category.offers[0].discount;
+        offer = product.productId.category.offers[0].discount;
       }
-  
+
       if (offer !== undefined) {
-          subtotal += (product.productId.price - ((product.productId.price * offer) / 100)) * product.quantity;
+        subtotal += (product.productId.price - ((product.productId.price * offer) / 100)) * product.quantity;
       } else {
-          subtotal += product.productId.price * product.quantity;
+        subtotal += product.productId.price * product.quantity;
       }
-  });
-
-      let shippingCharge = 0;
-      if (subtotal > 1000) {
-      shippingCharge = 50;
-      }
-
-      await Cart.findOneAndUpdate({ user: userId }, { shippingCharge: shippingCharge });
+    });
 
     const couponDiscount = cartC.coupondiscount ? cartC.coupondiscount.discountamount : 0;
+    const discountAmount = subtotal - couponDiscount;
+
+    // Get user's location using Google Maps Geocoding API
+    const haversineDistance = (lat1, lon1, lat2, lon2) => {
+      const R = 6371; // Radius of the Earth in km
+      const dLat = deg2rad(lat2 - lat1);
+      const dLon = deg2rad(lon2 - lon1);
+      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c; // Distance in km
+    };
     
-    const discountAmount = subtotal-couponDiscount
-    
-  
+    const deg2rad = (deg) => {
+      return deg * (Math.PI / 180);
+    };
 
+    const apiKey = process.env.Google_Api_Key;
+    const locationResponse = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`);
 
+    if (locationResponse.data.status === 'OK') {
+  const location = locationResponse.data.results[0].geometry.location;
 
-    res.render("user/checkout", {
-      Wallet,
-      address,
-      cartdata,
-      cartC,
-      subtotal,
-      coupon,
-      discountAmount,
-      shippingCharge,
-      user: req.session.userId,
-    });
+  if (subtotal < 1000 ) {
+    shippingCharge = 50;
+  } else {
+    const distanceToLocation1 = haversineDistance(location.lat, location.lng, 12.9715987, 77.5937756);
+    const distanceToLocation2 = haversineDistance(location.lat, location.lng, 13.777417, 77.7074214);
+
+    if (distanceToLocation1 <= 10) {
+      shippingCharge = 100; 
+    } else if (distanceToLocation2 <= 10) {
+      shippingCharge = 150; // Example: Add 150 for another specific location
+    }
+  }
+
+  console.log('Calculated shipping charge:', shippingCharge);
+  console.log('User location:', location);
+  await Cart.findOneAndUpdate({ user: userId }, { shippingCharge: shippingCharge });
+
+  res.render('user/checkout', {
+    Wallet,
+    address,
+    cartdata,
+    cartC,
+    subtotal,
+    coupon,
+    discountAmount,
+    shippingCharge,
+    user: req.session.userId,
+  });
+} else {
+  console.error('Geocoding API error:', locationResponse.data.status);
+  res.status(500).send('Internal Server Error');
+}
   } catch (error) {
-    console.log(error.message);
+    console.error('Unexpected error:', error.message);
+    res.status(500).send('Internal Server Error');
   }
 };
 
