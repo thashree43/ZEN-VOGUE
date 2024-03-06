@@ -659,7 +659,7 @@
                 document.addEventListener('DOMContentLoaded', function () {
                   var categories = (<%- JSON.stringify(topcategory.map(item => item.category)) %>);
                   var counts = (<%- JSON.stringify(topcategory.map(item => item.count)) %>).map(Number);                  console.log(categories, counts, "before checking");
-              
+                      
                   if (document.getElementById('myChartCategory')) {
                     var ctx = document.getElementById("myChartCategory");
                     var myChart = new Chart(ctx, {
@@ -683,9 +683,9 @@
                         },
                         scales: {
                           y: {
-                            min: 0, // Set the minimum value to 0
-                            suggestedMin: 0,
-                            beginAtZero: true,
+                            min: 8, // Set the minimum value to 0
+                            suggestedMin: 8,
+                            beginAtZero: false,
                             stepSize: 2,
                             callback: function (value, index, values) {
                               return value % 2 === 0 ? value : '';
