@@ -553,10 +553,11 @@ tbody tr:hover {
                       <td>
                         <%= order._id %>
                         <br /><br />
+                        <% if(order.status === 'delivered' ){ %>
                         <a href="/invoice?orderId=<%=order._id %>" class="invoice-btn" target="_blank">
                           <span style="font-weight: bold; text-decoration: underline;">Download Invoice</span>
                       </a>
-                      
+                      <% } %>
                       
                       </td>
                       <td><%= order.paymentMethod %></td>
@@ -589,7 +590,7 @@ tbody tr:hover {
                             >Return</a
                           >
                           <% } %> <% if (order.status !== 'cancelled' &&
-                          order.status !== "Return Approved") { %>
+                          order.status !== "Return Approved" && order.status !== "delivered") { %>
                           <a
                             onclick="cancelOrder('<%= order._id %>')"
                             class="action-button danger-border"

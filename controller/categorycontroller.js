@@ -87,7 +87,7 @@ const editedcategory = async (req, res) => {
       { name: name, description: description },
       { new: true }
     );
-
+    
     if (!updatedCategory) {
       return res.render("admin/editcategory", {
         messages: { message: "Category not found" },

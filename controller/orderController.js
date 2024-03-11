@@ -192,6 +192,7 @@ const placetheorder = async (req, res) => {
         })),
         subtotal: totalprice,
         status: status,
+        
         Date: Date.now(),
         exprdate: exprdate,
       });

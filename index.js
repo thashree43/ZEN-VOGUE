@@ -13,7 +13,7 @@ const flash =require('express-flash')
 const app = express();
 const nocache = require("nocache");
 require("dotenv").config();
-const port =9000;
+const port =3000;
 
 // view engine---------------------------------------
 app.set("views", path.join(__dirname, "views"));
