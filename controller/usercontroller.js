@@ -99,78 +99,79 @@ function generateReferralCode() {
  
 const verifyRegister = async (req, res) => {
   try {
-    const existuser = await User.findOne({ email: req.body.email });
-    if (existuser && existuser.is_Verified) {
-      const message = "Email already registered";
-      return res.render("user/Register", { message });
-    } else if (existuser && !existuser.is_Verified) {
-      const message =
-        "Email already registered but not verified. So send OTP to email and verify the email";
-      return res.render("user/Register", { message });
-    } else {
-      const { name, email, mobileNumber, password, confirmPassword, referralCode } = req.body;
+    const { email, mobileNumber, password, confirmPassword, referralCode } = req.body;
 
-      
-      if (password !== confirmPassword) {
-        return res.render("user/Register", { message: "Passwords do not match" });
+    const existUser = await User.findOne({ email });
+
+    if (existUser) {
+      if (existUser.is_Verified) {
+        return res.render("user/Register", { message: "Email already registered" });
+      } else {
+        return res.render("user/Register", { message: "Email already registered but not verified. So send OTP to email and verify the email" });
       }
-
-      let referredBy = null;
-      if (referralCode) {
-        referredBy = await User.findOne({ referralCode });
-        if (!referredBy) {
-          return res.render("user/Register", { message: "Invalid referral code" });
-        }
-      }
-
-      
-      const referralCodeForNewUser = generateReferralCode();
-
-      const spassword = await securepassword(password);
-      const user = new User({
-        name,
-        email,
-        mobile: mobileNumber,
-        password: spassword,
-        confirmPassword,
-        is_Admin: 0,
-        referralCode: referralCodeForNewUser,
-        referredBy: referredBy ? referredBy._id : null,
-      });
-
-
-      const userdata = await user.save();
-      req.session.email = email;
-      await sendOtpVerificationMail(userdata, res);
-
-      if (referredBy) {
-   
-        referredBy.wallet += 100; 
-        await referredBy.save();
-       
-        user.wallet += 50;
-        await user.save();
-      }
-
-     
-      // req.session.email = email;
-      // await sendOtpVerificationMail(userdata, res);
     }
+
+    if (password !== confirmPassword) {
+      return res.render("user/Register", { message: "Passwords do not match" });
+    }
+
+    let referredBy = null;
+
+    if (referralCode) {
+      referredBy = await User.findOne({ referralCode });
+
+      if (!referredBy) {
+        return res.render("user/Register", { message: "Invalid referral code" });
+      }
+    }
+
+    const referralCodeForNewUser = generateReferralCode();
+    const spassword = await securepassword(password);
+
+    const user = new User({
+      name: req.body.name,
+      email,
+      mobile: mobileNumber,
+      password: spassword,
+      confirmPassword,
+      is_Admin: 0,
+      referralCode: referralCodeForNewUser,
+      referredBy: referredBy ? referredBy._id : null,
+    });
+
+    const userData = await user.save();
+    req.session.email = email;
+    await sendOtpVerificationMail(userData, res);
+
+    if (referredBy) {
+      referredBy.wallet += 100;
+      await referredBy.save();
+
+      user.wallet += 50;
+      await user.save();
+    }
+
   } catch (error) {
-    console.log(error.message);
+    console.error("Error in verifyRegister:", error.message);
     res.render("user/Register", { message: "An error occurred" });
   }
 };
 
 
 // impoting from utilis
-const getSentOtp = async(req,res)=>{
+const getSentOtp = async (req, res) => {
   try {
-    await sendOtpVerificationMail({email:req.session.email},res)
+    if (req.session.email) {
+      await sendOtpVerificationMail({ email: req.session.email }, res);
+    } else {
+      res.status(400).send("Email not found in session");
+    }
   } catch (error) {
-    console.log(error.message);
+    console.error("Error in getSentOtp:", error.message);
+    res.status(500).send("Internal Server Error");
   }
-}
+};
+
 
 // Load otp-------------------
 const loadotp = async (req, res) => {
