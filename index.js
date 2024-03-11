@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://127.0.0.1:27017/zenvogue");
+mongoose.connect("mongodb+srv://thashreefkhan4:thashree6343@cluster0.c2rose9.mongodb.net/zenvogue");
 
 
 // Import required modules-------------------------- 
