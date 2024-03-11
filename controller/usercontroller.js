@@ -96,7 +96,7 @@ function generateReferralCode() {
   return referralCode;
 }
 
-// after implementing referal 
+ 
 const verifyRegister = async (req, res) => {
   try {
     const existuser = await User.findOne({ email: req.body.email });
@@ -110,12 +110,11 @@ const verifyRegister = async (req, res) => {
     } else {
       const { name, email, mobileNumber, password, confirmPassword, referralCode } = req.body;
 
-      // Check if passwords match
+      
       if (password !== confirmPassword) {
         return res.render("user/Register", { message: "Passwords do not match" });
       }
 
-      // Check if referral code is provided
       let referredBy = null;
       if (referralCode) {
         referredBy = await User.findOne({ referralCode });
@@ -124,10 +123,9 @@ const verifyRegister = async (req, res) => {
         }
       }
 
-      // Generate referral code for new user
+      
       const referralCodeForNewUser = generateReferralCode();
 
-      // Create new user
       const spassword = await securepassword(password);
       const user = new User({
         name,
@@ -140,22 +138,23 @@ const verifyRegister = async (req, res) => {
         referredBy: referredBy ? referredBy._id : null,
       });
 
-      // Save user to database
-      const userdata = await user.save();
 
-      // Award bonuses for referral
+      const userdata = await user.save();
+      req.session.email = email;
+      await sendOtpVerificationMail(userdata, res);
+
       if (referredBy) {
-        // Add bonus amount to the referrer's wallet
+   
         referredBy.wallet += 100; 
         await referredBy.save();
-        // Add bonus amount to the new user's wallet
+       
         user.wallet += 50;
         await user.save();
       }
 
-      // Send verification email
-      req.session.email = email;
-      await sendOtpVerificationMail(userdata, res);
+     
+      // req.session.email = email;
+      // await sendOtpVerificationMail(userdata, res);
     }
   } catch (error) {
     console.log(error.message);
@@ -430,7 +429,7 @@ const sendforgetemail =async(name,email,token)=>{
       from: process.env.Email_USERNAME,
       to: email,
       subject: "For Reset Password",
-      html: '<p>Hii '+name+', please click here to <a href="http://127.0.0.1:9000/forgetpassword?token='+token+'">Reset</a> your password.',
+      html: '<p>Hii '+name+', please click here to <a href="http://zenvogue.online/forgetpassword?token='+token+'">Reset</a> your password.',
     };
      transporter.sendMail(mailoption)
      console.log("helo namaste");
