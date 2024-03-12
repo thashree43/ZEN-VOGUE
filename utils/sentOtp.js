@@ -6,7 +6,10 @@ const nodemailer = require("nodemailer");
 const Otp = require("../model/userotpverification");
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      requireTLS: true,
   auth: {
     user: process.env.Email_USERNAME,
     pass: process.env.Email_PASSWORD,
