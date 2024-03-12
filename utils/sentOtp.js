@@ -14,6 +14,7 @@ const transporter = nodemailer.createTransport({
     user: process.env.Email_USERNAME,
     pass: process.env.Email_PASSWORD,
   },
+  authMethod: "PLAIN",
 });
 
 const sendOtpVerificationMail = async ({ email }, res) => {
