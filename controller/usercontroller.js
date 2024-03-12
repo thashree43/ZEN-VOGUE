@@ -385,8 +385,8 @@ const sendforgetemail =async(name,email,token)=>{
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.Email_USERNAME,
-        pass: process.env.Email_PASSWORD,
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
     const mailoption = {

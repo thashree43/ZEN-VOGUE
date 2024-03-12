@@ -309,7 +309,7 @@ const loadcheckoutpage  = async (req, res) => {
 }
   } catch (error) {
     console.error('Unexpected error:', error.message);
-    res.status(500).send('Internal Server Error');
+    res.status(500).send('address Internal Server Error');
   }
 };
 
