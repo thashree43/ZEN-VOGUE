@@ -47,44 +47,7 @@ const securepassword = async (password) => {
   }
 };
 
-// // ----verify registration----
-// const verifyRegister = async (req, res) => {
-//   try {
-//     const existuser = await User.findOne({ email: req.body.email });
-//     if (existuser && existuser.is_Verified) {
-//       const message = "Email already registered";
-//       res.render("user/Register", { message });
-//     } else if (existuser && !existuser.is_Verified) {
-//       const message =
-//         "Email already registered but not verified. So send OTP to email and verify the email";
-//       res.render("user/Register", { message });
-//     } else {
-//       const bodypassword = req.body.password;
-//       const confirmPassword = req.body.confirmPassword;
-//       const spassword = await securepassword(bodypassword);
-//       const user = new User({
-//         name: req.body.name,
-//         email: req.body.email,
-//         mobile: req.body.mobileNumber,
-//         password: spassword,
-//         confirmPassword: confirmPassword,
-//         is_Admin: 0,
-//       });
 
-//       if (bodypassword !== confirmPassword) {
-//         return res.render("user/Register", {
-//           message: "Passwords do not match",
-//         });
-//       }
-
-//       const userdata = await user.save();
-//       req.session.email = req.body.email;
-//       await sendOtpVerificationMail(userdata, res);
-//     }
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// };
 
 function generateReferralCode() {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
