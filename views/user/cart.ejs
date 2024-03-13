@@ -102,8 +102,23 @@
             </div>
           </div>
           <div class="row">
+         
             <div class="col-md-12">
-              <button class="btn btn-primary btn-lg btn-block" onclick="window.location='/checkout'">Proceed To Checkout</button>
+              <% if(!address){ %>
+                <button onclick="showError()" class="btn btn-primary btn-lg btn-block" >Proceed To Checkout</button>
+                <span style="color: red; font-size: small;" id="addressError"></span>
+
+                <script>
+                  function showError(){
+                    let addressError = document.getElementById('addressError');
+                    addressError.innerHTML = 'Please add an Address from your profile'
+                  }
+                </script>
+                
+                <% }else{ %>
+                  <button class="btn btn-primary btn-lg btn-block" onclick="window.location='/checkout'">Proceed To Checkout</button>
+             
+              <% } %>
             </div>
           </div>
         </div>

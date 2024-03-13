@@ -338,7 +338,8 @@
       $.ajax({
         url: "/cart",
         method: "post",
-        dataType: "json", // Specify that you expect JSON in the response
+        dataType: "json", 
+        headers:"application/json",// Specify that you expect JSON in the response
         data: {
           productId: id, // Use "productId" as the key to match the server-side code
         },
@@ -352,7 +353,18 @@
               showConfirmButton: false,
               timer: 1500,
             });
-          } else {
+
+          } else if(data.success == false){
+            Swal.fire({
+              position: "center",
+              icon: "info",
+              title: "oops",
+              text:data.error,
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+          else {
             if (data.redirectToLogin) {
               window.location.href = '/login';
             } else {

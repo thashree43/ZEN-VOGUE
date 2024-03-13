@@ -16,6 +16,7 @@ const cartopen = async (req, res) => {
     console.log(
       "hdgj yhee useId may in cart open",userId
     );
+    const addresses = await Address.findOne({user:userId});
     if (userId) {
       const cartdata = await Cart.findOne({ user: userId }).populate({
         path: "product.productId",
@@ -49,8 +50,9 @@ const cartopen = async (req, res) => {
         }
       });
       console.log('discountTotal:',total);
+      console.log('heyman:',addresses);
 
-      res.render("user/cart", { cartdata, subtotal,total, user: req.session.userId });
+      res.render("user/cart", { cartdata, subtotal,total, user: req.session.userId,address:addresses.address[0],messages:{message:"Please Add Address"} });
     } else {
       res.redirect("/login");
     }
@@ -59,70 +61,181 @@ const cartopen = async (req, res) => {
   }
 };
 
+// const addtocart = async (req, res) => {
+//   try {
+//     const { userId } = req.session;
+
+//     if (!userId) {
+//       return res.json({ session: false, error: "Please login first" });
+//     }
+
+//     const userdata = await User.findOne({ _id: userId });
+
+//     if (!userdata) {
+//       return res.json({ session: false, error: "User not found" });
+//     }
+
+//     const productid = req.body.productId;
+//     const productdata = await Product.findById(productid);
+// console.log("product quantity",productdata.quantity);
+//     if (!productdata || productdata.quantity === 0) {
+//       return res.json({
+//         quantity: false,
+//         error: "Product not found or out of stock",
+//       });
+//     }
+
+//     const existingproduct = await Cart.findOne({
+//       user: userId,
+//       "product.productId": productid,
+//     });
+
+// //  console.log("the exist",existingproduct.product.quantity);
+
+// //     //changed afte naseeh 
+// //     if(existingproduct.product.quantity > productdata.quantity ){
+// //       res.json({success:false})
+// //     }
+
+//     if(existingproduct){
+//       const currentquantity = existingproduct.product.find(
+//         (p)=> p.productId == productid).quantity
+//         if(currentquantity + 1 > productdata.quantity){
+//           res.json({success:false,error:"cannot add more than available quantity"})
+//         }
+
+//     }
+
+//     if (existingproduct) {
+//       const updatedCart = await Cart.findOneAndUpdate(
+//         {
+//           user: userId,
+//           "product.productId": productid,
+//         },
+//         {
+//           $inc: { "product.$.quantity": 1 },
+//         },
+//         { new: true }
+//       );
+//       return res.json({ success: true, stock: true, updatedCart });
+//     } else {
+//       const cartdata = await Cart.findOneAndUpdate(
+//         {
+//           user: userId,
+//         },
+//         {
+//           $set: { user: userId },
+//           $push: {
+//             product: {
+//               productId: productid,
+//               name:productdata.name,
+//               price: productdata.price,
+//               brand:productdata.brand,
+//               quantity: 1,
+//               category:productdata.category,
+//               total: productdata.price,
+//             },
+//           },
+//         },
+//         { upsert: true, new: true }
+//       );
+//       return res.json({ success: true, stock: true, cartdata });
+//     }
+//   } catch (error) {
+//     console.log(error.message);
+//     return res
+//       .status(500)
+//       .json({ success: false, error: "Internal Server Error" });
+//   }
+// };
+
 const addtocart = async (req, res) => {
   try {
+    let responseData;
+
     const { userId } = req.session;
 
     if (!userId) {
-      return res.json({ session: false, error: "Please login first" });
-    }
-
-    const userdata = await User.findOne({ _id: userId });
-
-    if (!userdata) {
-      return res.json({ session: false, error: "User not found" });
-    }
-
-    const productid = req.body.productId;
-    const productdata = await Product.findById(productid);
-
-    if (!productdata || productdata.quantity === 0) {
-      return res.json({
-        quantity: false,
-        error: "Product not found or out of stock",
-      });
-    }
-
-    const existingproduct = await Cart.findOne({
-      user: userId,
-      "product.productId": productid,
-    });
-
-    if (existingproduct) {
-      const updatedCart = await Cart.findOneAndUpdate(
-        {
-          user: userId,
-          "product.productId": productid,
-        },
-        {
-          $inc: { "product.$.quantity": 1 },
-        },
-        { new: true }
-      );
-      return res.json({ success: true, stock: true, updatedCart });
+      responseData = { session: false, error: "Please login first" };
     } else {
-      const cartdata = await Cart.findOneAndUpdate(
-        {
-          user: userId,
-        },
-        {
-          $set: { user: userId },
-          $push: {
-            product: {
-              productId: productid,
-              name:productdata.name,
-              price: productdata.price,
-              brand:productdata.brand,
-              quantity: 1,
-              category:productdata.category,
-              total: productdata.price,
-            },
-          },
-        },
-        { upsert: true, new: true }
-      );
-      return res.json({ success: true, stock: true, cartdata });
+      const userdata = await User.findOne({ _id: userId });
+
+      if (!userdata) {
+        responseData = { session: false, error: "User not found" };
+      } else {
+        const productid = req.body.productId;
+        const productdata = await Product.findById(productid);
+        console.log("product quantity", productdata.quantity);
+
+        if (!productdata || productdata.quantity === 0) {
+          responseData = {
+            quantity: false,
+            error: "Product not found or out of stock",
+          };
+        } else {
+          const existingproduct = await Cart.findOne({
+            user: userId,
+            "product.productId": productid,
+          });
+
+          if (existingproduct) {
+            const currentquantity = existingproduct.product.find(
+              (p) => p.productId == productid
+            ).quantity;
+            if (currentquantity + 1 > productdata.quantity) {
+              responseData = {
+                success: false,
+                error: "Cannot add more than available quantity",
+              };
+            } else {
+              const updatedCart = await Cart.findOneAndUpdate(
+                {
+                  user: userId,
+                  "product.productId": productid,
+                },
+                {
+                  $inc: { "product.$.quantity": 1 },
+                },
+                { new: true }
+              );
+              responseData = {
+                success: true,
+                stock: true,
+                updatedCart,
+              };
+            }
+          } else {
+            const cartdata = await Cart.findOneAndUpdate(
+              {
+                user: userId,
+              },
+              {
+                $set: { user: userId },
+                $push: {
+                  product: {
+                    productId: productid,
+                    name: productdata.name,
+                    price: productdata.price,
+                    brand: productdata.brand,
+                    quantity: 1,
+                    category: productdata.category,
+                    total: productdata.price,
+                  },
+                },
+              },
+              { upsert: true, new: true }
+            );
+            responseData = {
+              success: true,
+              stock: true,
+              cartdata,
+            };
+          }
+        }
+      }
     }
+
+    return res.json(responseData);
   } catch (error) {
     console.log(error.message);
     return res
@@ -130,6 +243,7 @@ const addtocart = async (req, res) => {
       .json({ success: false, error: "Internal Server Error" });
   }
 };
+
 
 
 const updatecart = async (req, res) => {
@@ -255,23 +369,25 @@ const loadcheckoutpage  = async (req, res) => {
     const couponDiscount = cartC.coupondiscount ? cartC.coupondiscount.discountamount : 0;
     const discountAmount = subtotal - couponDiscount;
 
-    // Get user's location using Google Maps Geocoding API
     const haversineDistance = (lat1, lon1, lat2, lon2) => {
-      const R = 6371; // Radius of the Earth in km
+      const R = 6371; 
       const dLat = deg2rad(lat2 - lat1);
       const dLon = deg2rad(lon2 - lon1);
       const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      return R * c; // Distance in km
+      return R * c; 
     };
     
     const deg2rad = (deg) => {
       return deg * (Math.PI / 180);
     };
 
+
+    if(address){
     const apiKey = process.env.Google_Api_Key;
     const locationResponse = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`);
 
+   
     if (locationResponse.data.status === 'OK') {
   const location = locationResponse.data.results[0].geometry.location;
 
@@ -284,14 +400,16 @@ const loadcheckoutpage  = async (req, res) => {
     if (distanceToLocation1 <= 10) {
       shippingCharge = 100; 
     } else if (distanceToLocation2 <= 10) {
-      shippingCharge = 150; // Example: Add 150 for another specific location
+      shippingCharge = 150; 
     }
   }
 
   console.log('Calculated shipping charge:', shippingCharge);
   console.log('User location:', location);
   await Cart.findOneAndUpdate({ user: userId }, { shippingCharge: shippingCharge });
-
+    }else{
+      let shippingCharge = 50;
+    }
   res.render('user/checkout', {
     Wallet,
     address,
@@ -309,9 +427,12 @@ const loadcheckoutpage  = async (req, res) => {
 }
   } catch (error) {
     console.error('Unexpected error:', error.message);
+    
     res.status(500).send('address Internal Server Error');
   }
 };
+
+
 
 // delete address from the checkout page
 const deleteaddresscheckout = async (req, res) => {

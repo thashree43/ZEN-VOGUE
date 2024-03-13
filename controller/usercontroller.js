@@ -546,15 +546,20 @@ const profilesubmit= async(req,res)=>{
     const name= req.body.name
     const email=req.body.email
     const mobile=req.body.mobile
+    console.log("name in profile",name);
+    console.log("mobile number",mobile);
+
 
      const userid = req.session.userId
 
     const alemail = await User.findOne({email:email})
     if(alemail){
-      await User.updateOne({_id:userid},{$set:{
+     const sde= await User.updateOne({_id:userid},{$set:{
         name:name,
         mobile:mobile
+       
       }})
+      console.log("sde",sde);
     }
 
     res.redirect("/myaccount")

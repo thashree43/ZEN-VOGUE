@@ -464,7 +464,7 @@ a {
   background-repeat: no-repeat;
   background-position: center center;
   background: #f9f9f9;
-  position: relative;
+  
   overflow: hidden;
   z-index: 9; }
   .site-blocks-cover, .site-blocks-cover .row {
