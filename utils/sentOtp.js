@@ -6,7 +6,10 @@ const nodemailer = require("nodemailer");
 const Otp = require("../model/userotpverification");
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      requireTLS: true,
   auth: {
     user: process.env.EMAIL_USERNAME,
     pass: process.env.EMAIL_PASSWORD,
@@ -15,6 +18,10 @@ const transporter = nodemailer.createTransport({
 
 const sendOtpVerificationMail = async ({ email }, res) => {
   try {
+    if (!email) {
+      throw new Error("Email address is required");
+    }
+
     const otp = Math.floor(1000 + Math.random() * 9000).toString();
     console.log("Generated OTP:", otp);
 
@@ -30,14 +37,16 @@ const sendOtpVerificationMail = async ({ email }, res) => {
       },
       { upsert: true }
     );
+    console.log("naseeh");
 
     const mailoption = {
-      from: process.env.Email_USERNAME,
+      from: process.env.EMAIL_USERNAME,
       to: email,
       subject: "Welcome,Verify your email ",
       html: `<p> Enter otp <b> ${otp}</b> in the above to verify your email`,
     };
 
+    console.log("nahaba");
     await transporter.sendMail(mailoption);
 
     console.log("OTP Email sent successfully");

@@ -896,35 +896,42 @@ tbody tr:hover {
 </script>
 <script>
   function validateForm() {
-    // Get the values of the first name and mobile number inputs
-    var firstName = document.getElementById("firstName").value;
-    var mobileNumber = document.getElementById("mobile").value;
+  // Get the values of the first name, last name, and mobile number inputs
+  var firstName = document.getElementById("firstName").value.trim();
+  var mobileNumber = document.getElementById("mobile").value.trim();
 
-    // Get the elements to display validation messages
-    var firstNameMessage = document.getElementById("firstNameMessage");
-    var mobileMessage = document.getElementById("mobileMessage");
+  // Get the elements to display validation messages
+  var firstNameMessage = document.getElementById("firstNameMessage");
+  var mobileMessage = document.getElementById("mobileMessage");
 
-    // Check if the first name value is only spaces
-    if (/^\s*$/.test(firstName)) {
-      firstNameMessage.innerHTML = "First name cannot be just spaces";
-      return false;
-    } else {
-      firstNameMessage.innerHTML = ""; // Clear previous messages
-    }
-
-    // Check if the mobile number value is only spaces or contains non-numeric characters
-    if (/^\s*$/.test(mobileNumber) || !/^\d+$/.test(mobileNumber)) {
-      mobileMessage.innerHTML =
-        "Mobile number should contain only numeric characters";
-      return false;
-    } else {
-      mobileMessage.innerHTML = ""; // Clear previous messages
-    }
-
-    // Additional validation logic can be added for other fields if needed
-
-    return true; // Allow the form submission
+  // Check if the first name value is empty or contains non-alphabetic characters
+  if (firstName === "") {
+    firstNameMessage.innerHTML = "First name cannot be empty";
+    return false;
+  } else if (!/^[a-zA-Z]+$/.test(firstName)) {
+    firstNameMessage.innerHTML = "First name should contain only alphabetic characters";
+    return false;
+  } else {
+    firstNameMessage.innerHTML = ""; // Clear previous messages
   }
+
+  
+
+  // Check if the mobile number value is empty or contains non-numeric characters
+  if (mobileNumber === "") {
+    mobileMessage.innerHTML = "Mobile number cannot be empty";
+    return false;
+  } else if (!/^\d+$/.test(mobileNumber)) {
+    mobileMessage.innerHTML = "Mobile number should contain only numeric characters";
+    return false;
+  } else {
+    mobileMessage.innerHTML = ""; // Clear previous messages
+  }
+
+  // Additional validation logic can be added for other fields if needed
+
+  return true; // Allow the form submission
+}
 </script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="your_script.js"></script>
