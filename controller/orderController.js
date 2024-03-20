@@ -120,7 +120,8 @@ const placetheorder = async (req, res) => {
     
     const userId = req.session.userId;
     const { addressId, subtotal, paymentMethod ,shippingCharge} = req.body;
-    console.log("oiihfohihfsoidfhfhsoidfhsoifhiohfo",shippingCharge);
+
+    console.log("oiihfohihfsoidfhfhsoidfhsoifhiohfo");
     console.log("the subtotal value ",subtotal);
 
     if (!addressId || !paymentMethod) {
@@ -141,7 +142,7 @@ const placetheorder = async (req, res) => {
       });
     }
 
-    const addressObject = userAddress.address[0];
+    const addressObject = userAddress.address[1];
 
     const userdata = await User.findOne({ _id: req.session.userId });
 

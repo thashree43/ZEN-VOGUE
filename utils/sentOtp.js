@@ -5,29 +5,31 @@ const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const Otp = require("../model/userotpverification");
 
+// Create a transporter with appropriate configurations
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      requireTLS: true,
+  service: 'gmail',
   auth: {
     user: process.env.EMAIL_USERNAME,
-    pass: process.env.EMAIL_PASSWORD,
-  },
+    pass: process.env.EMAIL_PASSWORD
+  }
 });
 
+// Function to send OTP verification email
 const sendOtpVerificationMail = async ({ email }, res) => {
   try {
     if (!email) {
       throw new Error("Email address is required");
     }
 
+    // Generate OTP
     const otp = Math.floor(1000 + Math.random() * 9000).toString();
     console.log("Generated OTP:", otp);
 
+    // Hash OTP for security
     const saltRounds = 10;
     const hashedOtp = await bcrypt.hash(otp, saltRounds);
 
+    // Save hashed OTP in the database
     await Otp.updateOne(
       { email },
       {
@@ -37,23 +39,26 @@ const sendOtpVerificationMail = async ({ email }, res) => {
       },
       { upsert: true }
     );
-    console.log("naseeh");
 
-    const mailoption = {
+    // Compose email options
+    const mailOptions = {
       from: process.env.EMAIL_USERNAME,
       to: email,
-      subject: "Welcome,Verify your email ",
-      html: `<p> Enter otp <b> ${otp}</b> in the above to verify your email`,
+      subject: "Welcome, Verify your email",
+      html: `<p>Enter OTP <b>${otp}</b> to verify your email</p>`
     };
 
-    console.log("nahaba");
-    await transporter.sendMail(mailoption);
+    // Send email
+    await transporter.sendMail(mailOptions);
 
     console.log("OTP Email sent successfully");
 
+    // Redirect user to OTP verification page
     res.redirect("/user/verifyotp?email=" + email);
   } catch (error) {
+    // Handle errors
     console.log("Error sending OTP email:", error.message);
+    res.status(500).json({ error: "Error sending OTP email" });
   }
 };
 

@@ -214,7 +214,7 @@ const deleteimage = async (req, res) => {
         .send({ success: false, error: "Image is required." });
     }
 
-    fs.unlink(path.join(__dirname, "/public/proImage", img), () => {});
+     fs.unlink(path.join(__dirname, "/public/proImage", img), () => {});
 
     await product.updateOne({ _id: prdtid }, { $pull: { Image: img } });
 
