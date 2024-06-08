@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 mongoose.connect("mongodb+srv://thashreefkhan4:thashree6343@cluster0.c2rose9.mongodb.net/zenvogue");
 
-
+ 
 // Import required modules-------------------------- 
 const express = require("express");
 const path = require("path");

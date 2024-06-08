@@ -354,6 +354,7 @@ const loadforgetpassword = async(req,res)=>{
     res.render("user/forgetpassword")
   } catch (error) {
     console.log(error.message);
+    
   }
 }
 
@@ -419,7 +420,7 @@ const forgetpasswordload = async (req,res)=>{
   }
 }
 
-
+ 
 const resetpassword = async(req,res)=>{
     try {
       
